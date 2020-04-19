@@ -1,10 +1,9 @@
 BIN_DIR ?= $(CURDIR)/bin
 #DOCS_DIR ?= $(CURDIR)/docs
-VERSION ?=
-
-ifeq ($(VERSION),)
-  VERSION = $(shell cargo metadata --no-deps --format-version=1 | jq -r '.packages[] | select(.name=="meteora") | .version')
-endif
+VERSION ?= $(shell cargo metadata --no-deps --format-version=1 | jq -r '.packages[] | select(.name=="meteora") | .version')
+PROTO_VERSION ?= $(shell cargo metadata --no-deps --format-version=1 | jq -r '.packages[] | select(.name=="meteora-proto") | .version')
+SERVER_VERSION ?= $(shell cargo metadata --no-deps --format-version=1 | jq -r '.packages[] | select(.name=="meteora-server") | .version')
+CLIENT_VERSION ?= $(shell cargo metadata --no-deps --format-version=1 | jq -r '.packages[] | select(.name=="meteora-client") | .version')
 
 .DEFAULT_GOAL := build
 
@@ -22,6 +21,28 @@ build:
 
 test:
 	cargo test
+
+tag:
+	git tag v$(VERSION)
+	git push origin v$(VERSION)
+
+publish:
+ifeq ($(shell cargo show --json meteora-proto | jq -r '.versions[].num' | grep $(PROTO_VERSION)),)
+	(cd meteora-proto && cargo package && cargo publish)
+	sleep 10
+endif
+ifeq ($(shell cargo show --json meteora-server | jq -r '.versions[].num' | grep $(SERVER_VERSION)),)
+	(cd meteora-server && cargo package && cargo publish)
+	sleep 10
+endif
+ifeq ($(shell cargo show --json meteora-client | jq -r '.versions[].num' | grep $(CLIENT_VERSION)),)
+	(cd meteora-client && cargo package && cargo publish)
+	sleep 10
+endif
+ifeq ($(shell cargo show --json meteora-client | jq -r '.versions[].num' | grep $(VERSION)),)
+	(cd meteora && cargo package && cargo publish)
+	sleep 10
+endif
 
 docker-build:
 	docker build -t mosuka/meteora:latest .
