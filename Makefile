@@ -41,7 +41,6 @@ ifeq ($(shell cargo show --json meteora-client | jq -r '.versions[].num' | grep 
 endif
 ifeq ($(shell cargo show --json meteora-client | jq -r '.versions[].num' | grep $(VERSION)),)
 	(cd meteora && cargo package && cargo publish)
-	sleep 10
 endif
 
 docker-build:
