@@ -57,14 +57,14 @@ pub fn run_start_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
     let env_kv = Arc::new(Environment::new(10));
     let env_raft = Arc::new(Environment::new(10));
 
-    let db_path = Path::new(data_directory)
-        .join("db")
+    let kv_path = Path::new(data_directory)
+        .join("kv")
         .to_str()
         .unwrap()
         .to_string();
     let raft_storage = MemStorage::new();
 
-    let (kv, raft) = KVServer::new(db_path, raft_storage, id, node_address, addresses);
+    let (kv, raft) = KVServer::new(kv_path, raft_storage, id, node_address, addresses);
 
     let kv_service = kvpb_grpc::create_kv_service(kv);
     let raft_service = raftpb_grpc::create_raft_service(raft);
