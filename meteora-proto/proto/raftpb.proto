@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "eraftpb.proto";
+import "commonpb.proto";
+
+package meteora.raft;
+
+service RaftService {
+    rpc Snapshot(eraftpb.Snapshot) returns(Null) {}
+    rpc ChangeConfig(eraftpb.ConfChange) returns(ChangeReply) {}
+    rpc SendMsg(eraftpb.Message) returns(Null) {}
+    rpc SendAddress(AddressState) returns(Null) {}
+}
+
+message Null {}
+
+message AddressState {
+    bytes address_map = 1;
+}
+
+message ChangeReply {
+    meteora.common.State state = 1;
+    bytes address_map = 2;
+    uint64 leader_id = 3;
+}

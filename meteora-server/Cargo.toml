@@ -1,0 +1,25 @@
+[package]
+name = "meteora-server"
+version = "0.1.0"
+authors = ["MinoruOsuka <minoru.osuka@gmail.com>"]
+edition = "2018"
+description = "Meteora is a distributed key-value store."
+documentation = "https://github.com/mosuka/meteora"
+homepage = "https://github.com/mosuka/meteora"
+repository = "https://github.com/mosuka/meteora"
+readme = "README.md"
+keywords = ["kvs", "key", "value", "store"]
+categories = ["database"]
+license = "MIT"
+
+[dependencies]
+bincode = "1.2.1"
+futures = "0.1.29"
+grpcio = { version = "0.4.7", features = [ "secure" ] }
+log = "0.4.8"
+protobuf = "2.14.0"
+raft = "0.4.3"
+rocksdb = "0.13.0"
+serde = { version = "1.0.104", features = ["derive"] }
+
+meteora-proto = { version = "0.1.0", path = "../meteora-proto" }

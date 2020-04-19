@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "meteora-server",
+    "meteora-proto",
+    "meteora-client",
+    "meteora",
+]

@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+import "commonpb.proto";
+
+package meteora.kv;
+
+service KvService {
+    rpc Get(GetReq) returns (GetReply) {}
+    rpc Set(SetReq) returns (SetReply) {}
+    rpc Delete(DeleteReq) returns (DeleteReply) {}
+}
+
+message GetReq {
+    string key = 1;
+    uint64 client_id = 2;
+}
+
+message GetReply {
+    meteora.common.State state = 1;
+    string value = 2;
+    bytes address_map = 3;
+    uint64 leader_id = 4;
+}
+
+message SetReq {
+    string key = 1;
+    string value = 2;
+    uint64 client_id = 3;
+}
+
+message SetReply {
+    meteora.common.State state = 1;
+    bytes address_map = 2;
+    uint64 leader_id = 3;
+}
+
+message DeleteReq {
+    string key = 1;
+    uint64 client_id = 2;
+}
+
+message DeleteReply {
+    meteora.common.State state = 1;
+    bytes address_map = 2;
+    uint64 leader_id = 3;
+}
