@@ -17,7 +17,7 @@ bincode = "1.2.1"
 futures = "0.1.29"
 grpcio = { version = "0.4.7", features = [ "secure" ] }
 log = "0.4.8"
-protobuf = "2.14.0"
+protobuf = "2.22.0"
 raft = "0.4.3"
 rocksdb = "0.13.0"
 serde = { version = "1.0.104", features = ["derive"] }

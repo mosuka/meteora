@@ -27,19 +27,19 @@ tag:
 	git push origin v$(VERSION)
 
 publish:
-ifeq ($(shell cargo show --json meteora-proto | jq -r '.versions[].num' | grep $(PROTO_VERSION)),)
+ifeq ($(shell curl -s -XGET https://crates.io/api/v1/crates/meteora-proto | jq -r '.versions[].num' | grep $(PROTO_VERSION)),)
 	(cd meteora-proto && cargo package && cargo publish)
 	sleep 10
 endif
-ifeq ($(shell cargo show --json meteora-server | jq -r '.versions[].num' | grep $(SERVER_VERSION)),)
+ifeq ($(shell curl -s -XGET https://crates.io/api/v1/crates/meteora-server | jq -r '.versions[].num' | grep $(SERVER_VERSION)),)
 	(cd meteora-server && cargo package && cargo publish)
 	sleep 10
 endif
-ifeq ($(shell cargo show --json meteora-client | jq -r '.versions[].num' | grep $(CLIENT_VERSION)),)
+ifeq ($(shell curl -s -XGET https://crates.io/api/v1/crates/meteora-client | jq -r '.versions[].num' | grep $(CLIENT_VERSION)),)
 	(cd meteora-client && cargo package && cargo publish)
 	sleep 10
 endif
-ifeq ($(shell cargo show --json meteora-client | jq -r '.versions[].num' | grep $(VERSION)),)
+ifeq ($(shell curl -s -XGET https://crates.io/api/v1/crates/meteora-client | jq -r '.versions[].num' | grep $(VERSION)),)
 	(cd meteora && cargo package && cargo publish)
 endif
 
