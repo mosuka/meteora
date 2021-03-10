@@ -1,11 +1,12 @@
 // This file is generated. Do not edit
 // @generated
 
-// https://github.com/Manishearth/rust-clippy/issues/702
+// https://github.com/rust-lang/rust-clippy/issues/702
 #![allow(unknown_lints)]
 #![allow(clippy::all)]
 
-#![cfg_attr(rustfmt, rustfmt_skip)]
+#![allow(unused_attributes)]
+#![rustfmt::skip]
 
 #![allow(box_pointers)]
 #![allow(dead_code)]
@@ -14,34 +15,33 @@
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(trivial_casts)]
-#![allow(unsafe_code)]
 #![allow(unused_imports)]
 #![allow(unused_results)]
 
 const METHOD_RAFT_SERVICE_SNAPSHOT: ::grpcio::Method<super::eraftpb::Snapshot, super::raftpb::Null> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
-    name: "/kelpie.raft.RaftService/Snapshot",
+    name: "/meteora.raft.RaftService/Snapshot",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
 const METHOD_RAFT_SERVICE_CHANGE_CONFIG: ::grpcio::Method<super::eraftpb::ConfChange, super::raftpb::ChangeReply> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
-    name: "/kelpie.raft.RaftService/ChangeConfig",
+    name: "/meteora.raft.RaftService/ChangeConfig",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
 const METHOD_RAFT_SERVICE_SEND_MSG: ::grpcio::Method<super::eraftpb::Message, super::raftpb::Null> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
-    name: "/kelpie.raft.RaftService/SendMsg",
+    name: "/meteora.raft.RaftService/SendMsg",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
 const METHOD_RAFT_SERVICE_SEND_ADDRESS: ::grpcio::Method<super::raftpb::AddressState, super::raftpb::Null> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
-    name: "/kelpie.raft.RaftService/SendAddress",
+    name: "/meteora.raft.RaftService/SendAddress",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };

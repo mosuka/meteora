@@ -1,11 +1,12 @@
 // This file is generated. Do not edit
 // @generated
 
-// https://github.com/Manishearth/rust-clippy/issues/702
+// https://github.com/rust-lang/rust-clippy/issues/702
 #![allow(unknown_lints)]
 #![allow(clippy::all)]
 
-#![cfg_attr(rustfmt, rustfmt_skip)]
+#![allow(unused_attributes)]
+#![rustfmt::skip]
 
 #![allow(box_pointers)]
 #![allow(dead_code)]
@@ -14,27 +15,26 @@
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(trivial_casts)]
-#![allow(unsafe_code)]
 #![allow(unused_imports)]
 #![allow(unused_results)]
 
 const METHOD_KV_SERVICE_GET: ::grpcio::Method<super::kvpb::GetReq, super::kvpb::GetReply> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
-    name: "/kelpie.kv.KvService/Get",
+    name: "/meteora.kv.KvService/Get",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
 const METHOD_KV_SERVICE_SET: ::grpcio::Method<super::kvpb::SetReq, super::kvpb::SetReply> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
-    name: "/kelpie.kv.KvService/Set",
+    name: "/meteora.kv.KvService/Set",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
 const METHOD_KV_SERVICE_DELETE: ::grpcio::Method<super::kvpb::DeleteReq, super::kvpb::DeleteReply> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
-    name: "/kelpie.kv.KvService/Delete",
+    name: "/meteora.kv.KvService/Delete",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
