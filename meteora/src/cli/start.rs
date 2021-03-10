@@ -10,9 +10,10 @@ use log::*;
 use raft::storage::MemStorage;
 
 use meteora_client::raft::client::RaftClient;
-use meteora_proto::proto::{kvpb_grpc, raftpb_grpc};
 use meteora_server::kv::server::KVServer;
 use meteora_server::raft::config::NodeAddress;
+use meteora_proto::proto::kv_grpc::create_kv_service;
+use meteora_proto::proto::raft_grpc::create_raft_service;
 
 use crate::log::set_logger;
 use crate::signal::sigterm_channel;
@@ -66,8 +67,8 @@ pub fn run_start_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
 
     let (kv, raft) = KVServer::new(kv_path, raft_storage, id, node_address, addresses);
 
-    let kv_service = kvpb_grpc::create_kv_service(kv);
-    let raft_service = raftpb_grpc::create_raft_service(raft);
+    let kv_service = create_kv_service(kv);
+    let raft_service = create_raft_service(raft);
 
     let mut kv_server = ServerBuilder::new(env_kv)
         .register_service(kv_service)

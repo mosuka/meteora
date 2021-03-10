@@ -6,9 +6,9 @@ use bincode::deserialize;
 use grpcio::{ChannelBuilder, EnvBuilder};
 use log::*;
 
-use meteora_proto::proto::commonpb::State;
-use meteora_proto::proto::kvpb::{DeleteReq, GetReq, SetReq};
-use meteora_proto::proto::kvpb_grpc::KvServiceClient;
+use meteora_proto::proto::common::State;
+use meteora_proto::proto::kv::{DeleteReq, GetReq, SetReq};
+use meteora_proto::proto::kv_grpc::KvServiceClient;
 use meteora_server::raft::config::NodeAddress;
 
 fn create_client(address: String) -> KvServiceClient {

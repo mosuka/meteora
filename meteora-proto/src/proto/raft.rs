@@ -17,127 +17,11 @@
 #![allow(trivial_casts)]
 #![allow(unused_imports)]
 #![allow(unused_results)]
-//! Generated file from `raftpb.proto`
+//! Generated file from `raft.proto`
 
 /// Generated files are compatible only with the same version
 /// of protobuf runtime.
 // const _PROTOBUF_VERSION_CHECK: () = ::protobuf::VERSION_2_22_0;
-
-#[derive(PartialEq,Clone,Default)]
-pub struct Null {
-    // special fields
-    pub unknown_fields: ::protobuf::UnknownFields,
-    pub cached_size: ::protobuf::CachedSize,
-}
-
-impl<'a> ::std::default::Default for &'a Null {
-    fn default() -> &'a Null {
-        <Null as ::protobuf::Message>::default_instance()
-    }
-}
-
-impl Null {
-    pub fn new() -> Null {
-        ::std::default::Default::default()
-    }
-}
-
-impl ::protobuf::Message for Null {
-    fn is_initialized(&self) -> bool {
-        true
-    }
-
-    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        while !is.eof()? {
-            let (field_number, wire_type) = is.read_tag_unpack()?;
-            match field_number {
-                _ => {
-                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
-                },
-            };
-        }
-        ::std::result::Result::Ok(())
-    }
-
-    // Compute sizes of nested messages
-    #[allow(unused_variables)]
-    fn compute_size(&self) -> u32 {
-        let mut my_size = 0;
-        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
-        self.cached_size.set(my_size);
-        my_size
-    }
-
-    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        os.write_unknown_fields(self.get_unknown_fields())?;
-        ::std::result::Result::Ok(())
-    }
-
-    fn get_cached_size(&self) -> u32 {
-        self.cached_size.get()
-    }
-
-    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
-        &self.unknown_fields
-    }
-
-    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
-        &mut self.unknown_fields
-    }
-
-    fn as_any(&self) -> &dyn (::std::any::Any) {
-        self as &dyn (::std::any::Any)
-    }
-    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
-        self as &mut dyn (::std::any::Any)
-    }
-    fn into_any(self: ::std::boxed::Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
-        self
-    }
-
-    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
-        Self::descriptor_static()
-    }
-
-    fn new() -> Null {
-        Null::new()
-    }
-
-    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
-        static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
-        descriptor.get(|| {
-            let fields = ::std::vec::Vec::new();
-            ::protobuf::reflect::MessageDescriptor::new_pb_name::<Null>(
-                "Null",
-                fields,
-                file_descriptor_proto()
-            )
-        })
-    }
-
-    fn default_instance() -> &'static Null {
-        static instance: ::protobuf::rt::LazyV2<Null> = ::protobuf::rt::LazyV2::INIT;
-        instance.get(Null::new)
-    }
-}
-
-impl ::protobuf::Clear for Null {
-    fn clear(&mut self) {
-        self.unknown_fields.clear();
-    }
-}
-
-impl ::std::fmt::Debug for Null {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
-        ::protobuf::text_format::fmt(self, f)
-    }
-}
-
-impl ::protobuf::reflect::ProtobufValue for Null {
-    fn as_ref(&self) -> ::protobuf::reflect::ReflectValueRef {
-        ::protobuf::reflect::ReflectValueRef::Message(self)
-    }
-}
 
 #[derive(PartialEq,Clone,Default)]
 pub struct AddressState {
@@ -301,7 +185,7 @@ impl ::protobuf::reflect::ProtobufValue for AddressState {
 #[derive(PartialEq,Clone,Default)]
 pub struct ChangeReply {
     // message fields
-    pub state: super::commonpb::State,
+    pub state: super::common::State,
     pub address_map: ::std::vec::Vec<u8>,
     pub leader_id: u64,
     // special fields
@@ -323,15 +207,15 @@ impl ChangeReply {
     // .meteora.common.State state = 1;
 
 
-    pub fn get_state(&self) -> super::commonpb::State {
+    pub fn get_state(&self) -> super::common::State {
         self.state
     }
     pub fn clear_state(&mut self) {
-        self.state = super::commonpb::State::OK;
+        self.state = super::common::State::OK;
     }
 
     // Param is passed by value, moved
-    pub fn set_state(&mut self, v: super::commonpb::State) {
+    pub fn set_state(&mut self, v: super::common::State) {
         self.state = v;
     }
 
@@ -411,7 +295,7 @@ impl ::protobuf::Message for ChangeReply {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.state != super::commonpb::State::OK {
+        if self.state != super::common::State::OK {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
         if !self.address_map.is_empty() {
@@ -426,7 +310,7 @@ impl ::protobuf::Message for ChangeReply {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if self.state != super::commonpb::State::OK {
+        if self.state != super::common::State::OK {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
         if !self.address_map.is_empty() {
@@ -473,7 +357,7 @@ impl ::protobuf::Message for ChangeReply {
         static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::commonpb::State>>(
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::common::State>>(
                 "state",
                 |m: &ChangeReply| { &m.state },
                 |m: &mut ChangeReply| { &mut m.state },
@@ -504,7 +388,7 @@ impl ::protobuf::Message for ChangeReply {
 
 impl ::protobuf::Clear for ChangeReply {
     fn clear(&mut self) {
-        self.state = super::commonpb::State::OK;
+        self.state = super::common::State::OK;
         self.address_map.clear();
         self.leader_id = 0;
         self.unknown_fields.clear();
@@ -524,48 +408,47 @@ impl ::protobuf::reflect::ProtobufValue for ChangeReply {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x0craftpb.proto\x12\x0cmeteora.raft\x1a\reraftpb.proto\x1a\x0ecommonp\
-    b.proto\"\x06\n\x04Null\"/\n\x0cAddressState\x12\x1f\n\x0baddress_map\
-    \x18\x01\x20\x01(\x0cR\naddressMap\"x\n\x0bChangeReply\x12+\n\x05state\
-    \x18\x01\x20\x01(\x0e2\x15.meteora.common.StateR\x05state\x12\x1f\n\x0ba\
-    ddress_map\x18\x02\x20\x01(\x0cR\naddressMap\x12\x1b\n\tleader_id\x18\
-    \x03\x20\x01(\x04R\x08leaderId2\xf8\x01\n\x0bRaftService\x123\n\x08Snaps\
-    hot\x12\x11.eraftpb.Snapshot\x1a\x12.meteora.raft.Null\"\0\x12@\n\x0cCha\
-    ngeConfig\x12\x13.eraftpb.ConfChange\x1a\x19.meteora.raft.ChangeReply\"\
-    \0\x121\n\x07SendMsg\x12\x10.eraftpb.Message\x1a\x12.meteora.raft.Null\"\
-    \0\x12?\n\x0bSendAddress\x12\x1a.meteora.raft.AddressState\x1a\x12.meteo\
-    ra.raft.Null\"\0J\x85\x05\n\x06\x12\x04\0\0\x18\x01\n\x08\n\x01\x0c\x12\
-    \x03\0\0\x12\n\t\n\x02\x03\0\x12\x03\x02\x07\x16\n\t\n\x02\x03\x01\x12\
-    \x03\x03\x07\x17\n\x08\n\x01\x02\x12\x03\x05\x08\x14\n\n\n\x02\x06\0\x12\
-    \x04\x07\0\x0c\x01\n\n\n\x03\x06\0\x01\x12\x03\x07\x08\x13\n\x0b\n\x04\
-    \x06\0\x02\0\x12\x03\x08\x043\n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\x08\
-    \x08\x10\n\x0c\n\x05\x06\0\x02\0\x02\x12\x03\x08\x11!\n\x0c\n\x05\x06\0\
-    \x02\0\x03\x12\x03\x08+/\n\x0b\n\x04\x06\0\x02\x01\x12\x03\t\x04@\n\x0c\
-    \n\x05\x06\0\x02\x01\x01\x12\x03\t\x08\x14\n\x0c\n\x05\x06\0\x02\x01\x02\
-    \x12\x03\t\x15'\n\x0c\n\x05\x06\0\x02\x01\x03\x12\x03\t1<\n\x0b\n\x04\
-    \x06\0\x02\x02\x12\x03\n\x041\n\x0c\n\x05\x06\0\x02\x02\x01\x12\x03\n\
-    \x08\x0f\n\x0c\n\x05\x06\0\x02\x02\x02\x12\x03\n\x10\x1f\n\x0c\n\x05\x06\
-    \0\x02\x02\x03\x12\x03\n)-\n\x0b\n\x04\x06\0\x02\x03\x12\x03\x0b\x042\n\
-    \x0c\n\x05\x06\0\x02\x03\x01\x12\x03\x0b\x08\x13\n\x0c\n\x05\x06\0\x02\
-    \x03\x02\x12\x03\x0b\x14\x20\n\x0c\n\x05\x06\0\x02\x03\x03\x12\x03\x0b*.\
-    \n\t\n\x02\x04\0\x12\x03\x0e\0\x0f\n\n\n\x03\x04\0\x01\x12\x03\x0e\x08\
-    \x0c\n\n\n\x02\x04\x01\x12\x04\x10\0\x12\x01\n\n\n\x03\x04\x01\x01\x12\
-    \x03\x10\x08\x14\n\x0b\n\x04\x04\x01\x02\0\x12\x03\x11\x04\x1a\n\r\n\x05\
-    \x04\x01\x02\0\x04\x12\x04\x11\x04\x10\x16\n\x0c\n\x05\x04\x01\x02\0\x05\
-    \x12\x03\x11\x04\t\n\x0c\n\x05\x04\x01\x02\0\x01\x12\x03\x11\n\x15\n\x0c\
-    \n\x05\x04\x01\x02\0\x03\x12\x03\x11\x18\x19\n\n\n\x02\x04\x02\x12\x04\
-    \x14\0\x18\x01\n\n\n\x03\x04\x02\x01\x12\x03\x14\x08\x13\n\x0b\n\x04\x04\
-    \x02\x02\0\x12\x03\x15\x04#\n\r\n\x05\x04\x02\x02\0\x04\x12\x04\x15\x04\
-    \x14\x15\n\x0c\n\x05\x04\x02\x02\0\x06\x12\x03\x15\x04\x18\n\x0c\n\x05\
-    \x04\x02\x02\0\x01\x12\x03\x15\x19\x1e\n\x0c\n\x05\x04\x02\x02\0\x03\x12\
-    \x03\x15!\"\n\x0b\n\x04\x04\x02\x02\x01\x12\x03\x16\x04\x1a\n\r\n\x05\
-    \x04\x02\x02\x01\x04\x12\x04\x16\x04\x15#\n\x0c\n\x05\x04\x02\x02\x01\
-    \x05\x12\x03\x16\x04\t\n\x0c\n\x05\x04\x02\x02\x01\x01\x12\x03\x16\n\x15\
-    \n\x0c\n\x05\x04\x02\x02\x01\x03\x12\x03\x16\x18\x19\n\x0b\n\x04\x04\x02\
-    \x02\x02\x12\x03\x17\x04\x19\n\r\n\x05\x04\x02\x02\x02\x04\x12\x04\x17\
-    \x04\x16\x1a\n\x0c\n\x05\x04\x02\x02\x02\x05\x12\x03\x17\x04\n\n\x0c\n\
-    \x05\x04\x02\x02\x02\x01\x12\x03\x17\x0b\x14\n\x0c\n\x05\x04\x02\x02\x02\
-    \x03\x12\x03\x17\x17\x18b\x06proto3\
+    \n\nraft.proto\x12\x0cmeteora.raft\x1a\reraftpb.proto\x1a\x0ccommon.prot\
+    o\"/\n\x0cAddressState\x12\x1f\n\x0baddress_map\x18\x01\x20\x01(\x0cR\na\
+    ddressMap\"x\n\x0bChangeReply\x12+\n\x05state\x18\x01\x20\x01(\x0e2\x15.\
+    meteora.common.StateR\x05state\x12\x1f\n\x0baddress_map\x18\x02\x20\x01(\
+    \x0cR\naddressMap\x12\x1b\n\tleader_id\x18\x03\x20\x01(\x04R\x08leaderId\
+    2\xfe\x01\n\x0bRaftService\x125\n\x08Snapshot\x12\x11.eraftpb.Snapshot\
+    \x1a\x14.meteora.common.Null\"\0\x12@\n\x0cChangeConfig\x12\x13.eraftpb.\
+    ConfChange\x1a\x19.meteora.raft.ChangeReply\"\0\x123\n\x07SendMsg\x12\
+    \x10.eraftpb.Message\x1a\x14.meteora.common.Null\"\0\x12A\n\x0bSendAddre\
+    ss\x12\x1a.meteora.raft.AddressState\x1a\x14.meteora.common.Null\"\0J\
+    \xee\x04\n\x06\x12\x04\0\0\x16\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\
+    \x02\x03\0\x12\x03\x02\x07\x16\n\t\n\x02\x03\x01\x12\x03\x03\x07\x15\n\
+    \x08\n\x01\x02\x12\x03\x05\x08\x14\n\n\n\x02\x06\0\x12\x04\x07\0\x0c\x01\
+    \n\n\n\x03\x06\0\x01\x12\x03\x07\x08\x13\n\x0b\n\x04\x06\0\x02\0\x12\x03\
+    \x08\x04:\n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\x08\x08\x10\n\x0c\n\x05\
+    \x06\0\x02\0\x02\x12\x03\x08\x11!\n\x0c\n\x05\x06\0\x02\0\x03\x12\x03\
+    \x08+6\n\x0b\n\x04\x06\0\x02\x01\x12\x03\t\x04@\n\x0c\n\x05\x06\0\x02\
+    \x01\x01\x12\x03\t\x08\x14\n\x0c\n\x05\x06\0\x02\x01\x02\x12\x03\t\x15'\
+    \n\x0c\n\x05\x06\0\x02\x01\x03\x12\x03\t1<\n\x0b\n\x04\x06\0\x02\x02\x12\
+    \x03\n\x048\n\x0c\n\x05\x06\0\x02\x02\x01\x12\x03\n\x08\x0f\n\x0c\n\x05\
+    \x06\0\x02\x02\x02\x12\x03\n\x10\x1f\n\x0c\n\x05\x06\0\x02\x02\x03\x12\
+    \x03\n)4\n\x0b\n\x04\x06\0\x02\x03\x12\x03\x0b\x049\n\x0c\n\x05\x06\0\
+    \x02\x03\x01\x12\x03\x0b\x08\x13\n\x0c\n\x05\x06\0\x02\x03\x02\x12\x03\
+    \x0b\x14\x20\n\x0c\n\x05\x06\0\x02\x03\x03\x12\x03\x0b*5\n\n\n\x02\x04\0\
+    \x12\x04\x0e\0\x10\x01\n\n\n\x03\x04\0\x01\x12\x03\x0e\x08\x14\n\x0b\n\
+    \x04\x04\0\x02\0\x12\x03\x0f\x04\x1a\n\r\n\x05\x04\0\x02\0\x04\x12\x04\
+    \x0f\x04\x0e\x16\n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\x0f\x04\t\n\x0c\n\
+    \x05\x04\0\x02\0\x01\x12\x03\x0f\n\x15\n\x0c\n\x05\x04\0\x02\0\x03\x12\
+    \x03\x0f\x18\x19\n\n\n\x02\x04\x01\x12\x04\x12\0\x16\x01\n\n\n\x03\x04\
+    \x01\x01\x12\x03\x12\x08\x13\n\x0b\n\x04\x04\x01\x02\0\x12\x03\x13\x04#\
+    \n\r\n\x05\x04\x01\x02\0\x04\x12\x04\x13\x04\x12\x15\n\x0c\n\x05\x04\x01\
+    \x02\0\x06\x12\x03\x13\x04\x18\n\x0c\n\x05\x04\x01\x02\0\x01\x12\x03\x13\
+    \x19\x1e\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x13!\"\n\x0b\n\x04\x04\
+    \x01\x02\x01\x12\x03\x14\x04\x1a\n\r\n\x05\x04\x01\x02\x01\x04\x12\x04\
+    \x14\x04\x13#\n\x0c\n\x05\x04\x01\x02\x01\x05\x12\x03\x14\x04\t\n\x0c\n\
+    \x05\x04\x01\x02\x01\x01\x12\x03\x14\n\x15\n\x0c\n\x05\x04\x01\x02\x01\
+    \x03\x12\x03\x14\x18\x19\n\x0b\n\x04\x04\x01\x02\x02\x12\x03\x15\x04\x19\
+    \n\r\n\x05\x04\x01\x02\x02\x04\x12\x04\x15\x04\x14\x1a\n\x0c\n\x05\x04\
+    \x01\x02\x02\x05\x12\x03\x15\x04\n\n\x0c\n\x05\x04\x01\x02\x02\x01\x12\
+    \x03\x15\x0b\x14\n\x0c\n\x05\x04\x01\x02\x02\x03\x12\x03\x15\x17\x18b\
+    \x06proto3\
 ";
 
 static file_descriptor_proto_lazy: ::protobuf::rt::LazyV2<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::rt::LazyV2::INIT;
