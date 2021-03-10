@@ -25,9 +25,9 @@ const METHOD_KV_SERVICE_GET: ::grpcio::Method<super::kv::GetReq, super::kv::GetR
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
-const METHOD_KV_SERVICE_SET: ::grpcio::Method<super::kv::SetReq, super::kv::SetReply> = ::grpcio::Method {
+const METHOD_KV_SERVICE_PUT: ::grpcio::Method<super::kv::PutReq, super::kv::PutReply> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
-    name: "/meteora.kv.KvService/Set",
+    name: "/meteora.kv.KvService/Put",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
@@ -67,20 +67,20 @@ impl KvServiceClient {
         self.get_async_opt(req, ::grpcio::CallOption::default())
     }
 
-    pub fn set_opt(&self, req: &super::kv::SetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kv::SetReply> {
-        self.client.unary_call(&METHOD_KV_SERVICE_SET, req, opt)
+    pub fn put_opt(&self, req: &super::kv::PutReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kv::PutReply> {
+        self.client.unary_call(&METHOD_KV_SERVICE_PUT, req, opt)
     }
 
-    pub fn set(&self, req: &super::kv::SetReq) -> ::grpcio::Result<super::kv::SetReply> {
-        self.set_opt(req, ::grpcio::CallOption::default())
+    pub fn put(&self, req: &super::kv::PutReq) -> ::grpcio::Result<super::kv::PutReply> {
+        self.put_opt(req, ::grpcio::CallOption::default())
     }
 
-    pub fn set_async_opt(&self, req: &super::kv::SetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::SetReply>> {
-        self.client.unary_call_async(&METHOD_KV_SERVICE_SET, req, opt)
+    pub fn put_async_opt(&self, req: &super::kv::PutReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::PutReply>> {
+        self.client.unary_call_async(&METHOD_KV_SERVICE_PUT, req, opt)
     }
 
-    pub fn set_async(&self, req: &super::kv::SetReq) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::SetReply>> {
-        self.set_async_opt(req, ::grpcio::CallOption::default())
+    pub fn put_async(&self, req: &super::kv::PutReq) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::PutReply>> {
+        self.put_async_opt(req, ::grpcio::CallOption::default())
     }
 
     pub fn delete_opt(&self, req: &super::kv::DeleteReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kv::DeleteReply> {
@@ -105,7 +105,7 @@ impl KvServiceClient {
 
 pub trait KvService {
     fn get(&mut self, ctx: ::grpcio::RpcContext, req: super::kv::GetReq, sink: ::grpcio::UnarySink<super::kv::GetReply>);
-    fn set(&mut self, ctx: ::grpcio::RpcContext, req: super::kv::SetReq, sink: ::grpcio::UnarySink<super::kv::SetReply>);
+    fn put(&mut self, ctx: ::grpcio::RpcContext, req: super::kv::PutReq, sink: ::grpcio::UnarySink<super::kv::PutReply>);
     fn delete(&mut self, ctx: ::grpcio::RpcContext, req: super::kv::DeleteReq, sink: ::grpcio::UnarySink<super::kv::DeleteReply>);
 }
 
@@ -116,8 +116,8 @@ pub fn create_kv_service<S: KvService + Send + Clone + 'static>(s: S) -> ::grpci
         instance.get(ctx, req, resp)
     });
     let mut instance = s.clone();
-    builder = builder.add_unary_handler(&METHOD_KV_SERVICE_SET, move |ctx, req, resp| {
-        instance.set(ctx, req, resp)
+    builder = builder.add_unary_handler(&METHOD_KV_SERVICE_PUT, move |ctx, req, resp| {
+        instance.put(ctx, req, resp)
     });
     let mut instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_KV_SERVICE_DELETE, move |ctx, req, resp| {

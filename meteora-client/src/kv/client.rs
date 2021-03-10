@@ -7,7 +7,7 @@ use grpcio::{ChannelBuilder, EnvBuilder};
 use log::*;
 
 use meteora_proto::proto::common::State;
-use meteora_proto::proto::kv::{DeleteReq, GetReq, SetReq};
+use meteora_proto::proto::kv::{DeleteReq, GetReq, PutReq};
 use meteora_proto::proto::kv_grpc::KvServiceClient;
 use meteora_server::raft::config::NodeAddress;
 
@@ -150,8 +150,8 @@ impl KVClient {
         }
     }
 
-    pub fn set(&mut self, key: String, value: String) -> Result<(), std::io::Error> {
-        let mut req = SetReq::new();
+    pub fn put(&mut self, key: String, value: String) -> Result<(), std::io::Error> {
+        let mut req = PutReq::new();
         req.set_key(key);
         req.set_value(value);
 
@@ -176,7 +176,7 @@ impl KVClient {
                 }
             };
 
-            let reply = match client.set(&req) {
+            let reply = match client.put(&req) {
                 Ok(r) => r,
                 _ => {
                     return Err(Error::new(

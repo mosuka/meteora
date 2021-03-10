@@ -485,7 +485,7 @@ impl ::protobuf::reflect::ProtobufValue for GetReply {
 }
 
 #[derive(PartialEq,Clone,Default)]
-pub struct SetReq {
+pub struct PutReq {
     // message fields
     pub key: ::std::string::String,
     pub value: ::std::string::String,
@@ -495,14 +495,14 @@ pub struct SetReq {
     pub cached_size: ::protobuf::CachedSize,
 }
 
-impl<'a> ::std::default::Default for &'a SetReq {
-    fn default() -> &'a SetReq {
-        <SetReq as ::protobuf::Message>::default_instance()
+impl<'a> ::std::default::Default for &'a PutReq {
+    fn default() -> &'a PutReq {
+        <PutReq as ::protobuf::Message>::default_instance()
     }
 }
 
-impl SetReq {
-    pub fn new() -> SetReq {
+impl PutReq {
+    pub fn new() -> PutReq {
         ::std::default::Default::default()
     }
 
@@ -574,7 +574,7 @@ impl SetReq {
     }
 }
 
-impl ::protobuf::Message for SetReq {
+impl ::protobuf::Message for PutReq {
     fn is_initialized(&self) -> bool {
         true
     }
@@ -662,8 +662,8 @@ impl ::protobuf::Message for SetReq {
         Self::descriptor_static()
     }
 
-    fn new() -> SetReq {
-        SetReq::new()
+    fn new() -> PutReq {
+        PutReq::new()
     }
 
     fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
@@ -672,34 +672,34 @@ impl ::protobuf::Message for SetReq {
             let mut fields = ::std::vec::Vec::new();
             fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
                 "key",
-                |m: &SetReq| { &m.key },
-                |m: &mut SetReq| { &mut m.key },
+                |m: &PutReq| { &m.key },
+                |m: &mut PutReq| { &mut m.key },
             ));
             fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
                 "value",
-                |m: &SetReq| { &m.value },
-                |m: &mut SetReq| { &mut m.value },
+                |m: &PutReq| { &m.value },
+                |m: &mut PutReq| { &mut m.value },
             ));
             fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeUint64>(
                 "client_id",
-                |m: &SetReq| { &m.client_id },
-                |m: &mut SetReq| { &mut m.client_id },
+                |m: &PutReq| { &m.client_id },
+                |m: &mut PutReq| { &mut m.client_id },
             ));
-            ::protobuf::reflect::MessageDescriptor::new_pb_name::<SetReq>(
-                "SetReq",
+            ::protobuf::reflect::MessageDescriptor::new_pb_name::<PutReq>(
+                "PutReq",
                 fields,
                 file_descriptor_proto()
             )
         })
     }
 
-    fn default_instance() -> &'static SetReq {
-        static instance: ::protobuf::rt::LazyV2<SetReq> = ::protobuf::rt::LazyV2::INIT;
-        instance.get(SetReq::new)
+    fn default_instance() -> &'static PutReq {
+        static instance: ::protobuf::rt::LazyV2<PutReq> = ::protobuf::rt::LazyV2::INIT;
+        instance.get(PutReq::new)
     }
 }
 
-impl ::protobuf::Clear for SetReq {
+impl ::protobuf::Clear for PutReq {
     fn clear(&mut self) {
         self.key.clear();
         self.value.clear();
@@ -708,20 +708,20 @@ impl ::protobuf::Clear for SetReq {
     }
 }
 
-impl ::std::fmt::Debug for SetReq {
+impl ::std::fmt::Debug for PutReq {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
-impl ::protobuf::reflect::ProtobufValue for SetReq {
+impl ::protobuf::reflect::ProtobufValue for PutReq {
     fn as_ref(&self) -> ::protobuf::reflect::ReflectValueRef {
         ::protobuf::reflect::ReflectValueRef::Message(self)
     }
 }
 
 #[derive(PartialEq,Clone,Default)]
-pub struct SetReply {
+pub struct PutReply {
     // message fields
     pub state: super::common::State,
     pub address_map: ::std::vec::Vec<u8>,
@@ -731,14 +731,14 @@ pub struct SetReply {
     pub cached_size: ::protobuf::CachedSize,
 }
 
-impl<'a> ::std::default::Default for &'a SetReply {
-    fn default() -> &'a SetReply {
-        <SetReply as ::protobuf::Message>::default_instance()
+impl<'a> ::std::default::Default for &'a PutReply {
+    fn default() -> &'a PutReply {
+        <PutReply as ::protobuf::Message>::default_instance()
     }
 }
 
-impl SetReply {
-    pub fn new() -> SetReply {
+impl PutReply {
+    pub fn new() -> PutReply {
         ::std::default::Default::default()
     }
 
@@ -799,7 +799,7 @@ impl SetReply {
     }
 }
 
-impl ::protobuf::Message for SetReply {
+impl ::protobuf::Message for PutReply {
     fn is_initialized(&self) -> bool {
         true
     }
@@ -887,8 +887,8 @@ impl ::protobuf::Message for SetReply {
         Self::descriptor_static()
     }
 
-    fn new() -> SetReply {
-        SetReply::new()
+    fn new() -> PutReply {
+        PutReply::new()
     }
 
     fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
@@ -897,34 +897,34 @@ impl ::protobuf::Message for SetReply {
             let mut fields = ::std::vec::Vec::new();
             fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::common::State>>(
                 "state",
-                |m: &SetReply| { &m.state },
-                |m: &mut SetReply| { &mut m.state },
+                |m: &PutReply| { &m.state },
+                |m: &mut PutReply| { &mut m.state },
             ));
             fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                 "address_map",
-                |m: &SetReply| { &m.address_map },
-                |m: &mut SetReply| { &mut m.address_map },
+                |m: &PutReply| { &m.address_map },
+                |m: &mut PutReply| { &mut m.address_map },
             ));
             fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeUint64>(
                 "leader_id",
-                |m: &SetReply| { &m.leader_id },
-                |m: &mut SetReply| { &mut m.leader_id },
+                |m: &PutReply| { &m.leader_id },
+                |m: &mut PutReply| { &mut m.leader_id },
             ));
-            ::protobuf::reflect::MessageDescriptor::new_pb_name::<SetReply>(
-                "SetReply",
+            ::protobuf::reflect::MessageDescriptor::new_pb_name::<PutReply>(
+                "PutReply",
                 fields,
                 file_descriptor_proto()
             )
         })
     }
 
-    fn default_instance() -> &'static SetReply {
-        static instance: ::protobuf::rt::LazyV2<SetReply> = ::protobuf::rt::LazyV2::INIT;
-        instance.get(SetReply::new)
+    fn default_instance() -> &'static PutReply {
+        static instance: ::protobuf::rt::LazyV2<PutReply> = ::protobuf::rt::LazyV2::INIT;
+        instance.get(PutReply::new)
     }
 }
 
-impl ::protobuf::Clear for SetReply {
+impl ::protobuf::Clear for PutReply {
     fn clear(&mut self) {
         self.state = super::common::State::OK;
         self.address_map.clear();
@@ -933,13 +933,13 @@ impl ::protobuf::Clear for SetReply {
     }
 }
 
-impl ::std::fmt::Debug for SetReply {
+impl ::std::fmt::Debug for PutReply {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         ::protobuf::text_format::fmt(self, f)
     }
 }
 
-impl ::protobuf::reflect::ProtobufValue for SetReply {
+impl ::protobuf::reflect::ProtobufValue for PutReply {
     fn as_ref(&self) -> ::protobuf::reflect::ReflectValueRef {
         ::protobuf::reflect::ReflectValueRef::Message(self)
     }
@@ -1371,9 +1371,9 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x01\x20\x01(\x0e2\x15.meteora.common.StateR\x05state\x12\x14\n\x05value\
     \x18\x02\x20\x01(\tR\x05value\x12\x1f\n\x0baddress_map\x18\x03\x20\x01(\
     \x0cR\naddressMap\x12\x1b\n\tleader_id\x18\x04\x20\x01(\x04R\x08leaderId\
-    \"M\n\x06SetReq\x12\x10\n\x03key\x18\x01\x20\x01(\tR\x03key\x12\x14\n\
+    \"M\n\x06PutReq\x12\x10\n\x03key\x18\x01\x20\x01(\tR\x03key\x12\x14\n\
     \x05value\x18\x02\x20\x01(\tR\x05value\x12\x1b\n\tclient_id\x18\x03\x20\
-    \x01(\x04R\x08clientId\"u\n\x08SetReply\x12+\n\x05state\x18\x01\x20\x01(\
+    \x01(\x04R\x08clientId\"u\n\x08PutReply\x12+\n\x05state\x18\x01\x20\x01(\
     \x0e2\x15.meteora.common.StateR\x05state\x12\x1f\n\x0baddress_map\x18\
     \x02\x20\x01(\x0cR\naddressMap\x12\x1b\n\tleader_id\x18\x03\x20\x01(\x04\
     R\x08leaderId\":\n\tDeleteReq\x12\x10\n\x03key\x18\x01\x20\x01(\tR\x03ke\
@@ -1382,7 +1382,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     state\x12\x1f\n\x0baddress_map\x18\x02\x20\x01(\x0cR\naddressMap\x12\x1b\
     \n\tleader_id\x18\x03\x20\x01(\x04R\x08leaderId2\xad\x01\n\tKvService\
     \x121\n\x03Get\x12\x12.meteora.kv.GetReq\x1a\x14.meteora.kv.GetReply\"\0\
-    \x121\n\x03Set\x12\x12.meteora.kv.SetReq\x1a\x14.meteora.kv.SetReply\"\0\
+    \x121\n\x03Put\x12\x12.meteora.kv.PutReq\x1a\x14.meteora.kv.PutReply\"\0\
     \x12:\n\x06Delete\x12\x15.meteora.kv.DeleteReq\x1a\x17.meteora.kv.Delete\
     Reply\"\0J\x9a\x0c\n\x06\x12\x04\0\0-\x01\n\x08\n\x01\x0c\x12\x03\0\0\
     \x12\n\t\n\x02\x03\0\x12\x03\x02\x07\x15\n\x08\n\x01\x02\x12\x03\x04\x08\

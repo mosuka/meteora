@@ -49,7 +49,7 @@ $ ls ./bin
 Running node in standalone mode is easy. You can start node with the following command:
 
 ```bash
-$ ./bin/meteora start 1
+$ ./bin/meteora start
 ```
 
 
@@ -59,7 +59,7 @@ $ ./bin/meteora start 1
 You can set data with the following command:
 
 ```bash
-$ ./bin/meteora set 1 "Meteora is a distributed key-value store."
+$ ./bin/meteora put key1 "Meteora is a distributed key-value store."
 ```
 
 
@@ -69,7 +69,7 @@ $ ./bin/meteora set 1 "Meteora is a distributed key-value store."
 You can get data with the following command:
 
 ```bash
-$ ./bin/meteora get 1
+$ ./bin/meteora get key1
 ```
 
 You'll see the result of the above command like follows:
@@ -84,5 +84,5 @@ Meteora is a distributed key-value store.
 You can delete data with the following command:
 
 ```bash
-$ ./bin/meteora delete 1
+$ ./bin/meteora delete key1
 ```
