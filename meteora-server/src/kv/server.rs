@@ -12,7 +12,7 @@ use rocksdb::DB;
 use serde::{Deserialize, Serialize};
 
 use meteora_proto::proto::common::State;
-use meteora_proto::proto::kv::{DeleteReply, DeleteReq, GetReply, GetReq, SetReply, SetReq};
+use meteora_proto::proto::kv::{DeleteReply, DeleteReq, GetReply, GetReq, PutReq, PutReply};
 use meteora_proto::proto::kv_grpc::KvService;
 
 use crate::raft::config;
@@ -119,7 +119,7 @@ impl KvService for KVServer {
         ctx.spawn(f);
     }
 
-    fn set(&mut self, ctx: RpcContext, req: SetReq, sink: UnarySink<SetReply>) {
+    fn put(&mut self, ctx: RpcContext, req: PutReq, sink: UnarySink<PutReply>) {
         let (s1, r1) = mpsc::channel();
         let sender = self.sender.clone();
         let op = Op::Put {
@@ -134,7 +134,7 @@ impl KvService for KVServer {
                 seq,
                 op,
                 cb: Box::new(move |leader_id: i32, addresses: Vec<u8>| {
-                    let mut reply = SetReply::new();
+                    let mut reply = PutReply::new();
                     if leader_id >= 0 {
                         reply.set_state(State::WRONG_LEADER);
                         reply.set_leader_id(leader_id as u64);
@@ -151,7 +151,7 @@ impl KvService for KVServer {
         let reply = match r1.recv_timeout(Duration::from_secs(2)) {
             Ok(r) => r,
             Err(_e) => {
-                let mut r = SetReply::new();
+                let mut r = PutReply::new();
                 r.set_state(State::IO_ERROR);
                 r
             }

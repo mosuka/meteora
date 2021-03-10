@@ -6,7 +6,7 @@ package meteora.kv;
 
 service KvService {
     rpc Get(GetReq) returns (GetReply) {}
-    rpc Set(SetReq) returns (SetReply) {}
+    rpc Put(PutReq) returns (PutReply) {}
     rpc Delete(DeleteReq) returns (DeleteReply) {}
 }
 
@@ -22,13 +22,13 @@ message GetReply {
     uint64 leader_id = 4;
 }
 
-message SetReq {
+message PutReq {
     string key = 1;
     string value = 2;
     uint64 client_id = 3;
 }
 
-message SetReply {
+message PutReply {
     meteora.common.State state = 1;
     bytes address_map = 2;
     uint64 leader_id = 3;

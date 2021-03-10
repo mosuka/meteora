@@ -10,10 +10,10 @@ use log::*;
 use raft::storage::MemStorage;
 
 use meteora_client::raft::client::RaftClient;
-use meteora_server::kv::server::KVServer;
-use meteora_server::raft::config::NodeAddress;
 use meteora_proto::proto::kv_grpc::create_kv_service;
 use meteora_proto::proto::raft_grpc::create_raft_service;
+use meteora_server::kv::server::KVServer;
+use meteora_server::raft::config::NodeAddress;
 
 use crate::log::set_logger;
 use crate::signal::sigterm_channel;
@@ -22,7 +22,7 @@ pub fn run_start_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
     set_logger();
 
     let id = matches.value_of("ID").unwrap().parse::<u64>().unwrap();
-    let host = matches.value_of("HOST").unwrap();
+    let address = matches.value_of("ADDRESS").unwrap();
     let raft_port = matches
         .value_of("RAFT_PORT")
         .unwrap()
@@ -35,8 +35,8 @@ pub fn run_start_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
     }
     let data_directory = matches.value_of("DATA_DIRECTORY").unwrap();
 
-    let raft_address = format!("{}:{}", host, raft_port);
-    let kv_address = format!("{}:{}", host, kv_port);
+    let raft_address = format!("{}:{}", address, raft_port);
+    let kv_address = format!("{}:{}", address, kv_port);
 
     let node_address = NodeAddress {
         kv_address: kv_address,
@@ -72,12 +72,12 @@ pub fn run_start_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
 
     let mut kv_server = ServerBuilder::new(env_kv)
         .register_service(kv_service)
-        .bind(host, kv_port)
+        .bind(address, kv_port)
         .build()
         .unwrap();
     let mut raft_server = ServerBuilder::new(env_raft)
         .register_service(raft_service)
-        .bind(host, raft_port)
+        .bind(address, raft_port)
         .build()
         .unwrap();
 
@@ -105,13 +105,13 @@ pub fn run_start_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
 
     match kv_server.shutdown().wait() {
         Ok(_) => {
-            info!("stop key-value service on {}:{}", host, kv_port);
+            info!("stop key-value service on {}:{}", address, kv_port);
         }
         Err(e) => error!("{}", e),
     }
     match raft_server.shutdown().wait() {
         Ok(_) => {
-            info!("stop Raft service on {}:{}", host, raft_port);
+            info!("stop Raft service on {}:{}", address, raft_port);
         }
         Err(e) => error!("{}", e),
     }
