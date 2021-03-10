@@ -5,7 +5,7 @@ use std::time::Duration;
 use futures::Future;
 use grpcio::{RpcContext, UnarySink};
 use log::*;
-use raft::eraftpb::{ConfChange, Message, Snapshot};
+use raft::eraftpb::{ConfChange, Message};
 
 use meteora_proto::proto::common::{Null, State};
 use meteora_proto::proto::raft::{AddressState, ChangeReply};
@@ -26,10 +26,6 @@ impl RaftServer {
 }
 
 impl RaftService for RaftServer {
-    fn snapshot(&mut self, _ctx: RpcContext, _req: Snapshot, _sink: UnarySink<Null>) {
-        // TODO:
-    }
-
     fn change_config(&mut self, ctx: RpcContext, req: ConfChange, sink: UnarySink<ChangeReply>) {
         let (s1, r1) = mpsc::channel();
         let sender = self.sender.clone();
