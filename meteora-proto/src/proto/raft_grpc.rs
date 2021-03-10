@@ -18,13 +18,6 @@
 #![allow(unused_imports)]
 #![allow(unused_results)]
 
-const METHOD_RAFT_SERVICE_SNAPSHOT: ::grpcio::Method<super::eraftpb::Snapshot, super::common::Null> = ::grpcio::Method {
-    ty: ::grpcio::MethodType::Unary,
-    name: "/meteora.raft.RaftService/Snapshot",
-    req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
-    resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
-};
-
 const METHOD_RAFT_SERVICE_CHANGE_CONFIG: ::grpcio::Method<super::eraftpb::ConfChange, super::raft::ChangeReply> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
     name: "/meteora.raft.RaftService/ChangeConfig",
@@ -56,22 +49,6 @@ impl RaftServiceClient {
         RaftServiceClient {
             client: ::grpcio::Client::new(channel),
         }
-    }
-
-    pub fn snapshot_opt(&self, req: &super::eraftpb::Snapshot, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::common::Null> {
-        self.client.unary_call(&METHOD_RAFT_SERVICE_SNAPSHOT, req, opt)
-    }
-
-    pub fn snapshot(&self, req: &super::eraftpb::Snapshot) -> ::grpcio::Result<super::common::Null> {
-        self.snapshot_opt(req, ::grpcio::CallOption::default())
-    }
-
-    pub fn snapshot_async_opt(&self, req: &super::eraftpb::Snapshot, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::Null>> {
-        self.client.unary_call_async(&METHOD_RAFT_SERVICE_SNAPSHOT, req, opt)
-    }
-
-    pub fn snapshot_async(&self, req: &super::eraftpb::Snapshot) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::common::Null>> {
-        self.snapshot_async_opt(req, ::grpcio::CallOption::default())
     }
 
     pub fn change_config_opt(&self, req: &super::eraftpb::ConfChange, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::raft::ChangeReply> {
@@ -127,7 +104,6 @@ impl RaftServiceClient {
 }
 
 pub trait RaftService {
-    fn snapshot(&mut self, ctx: ::grpcio::RpcContext, req: super::eraftpb::Snapshot, sink: ::grpcio::UnarySink<super::common::Null>);
     fn change_config(&mut self, ctx: ::grpcio::RpcContext, req: super::eraftpb::ConfChange, sink: ::grpcio::UnarySink<super::raft::ChangeReply>);
     fn send_msg(&mut self, ctx: ::grpcio::RpcContext, req: super::eraftpb::Message, sink: ::grpcio::UnarySink<super::common::Null>);
     fn send_address(&mut self, ctx: ::grpcio::RpcContext, req: super::raft::AddressState, sink: ::grpcio::UnarySink<super::common::Null>);
@@ -135,10 +111,6 @@ pub trait RaftService {
 
 pub fn create_raft_service<S: RaftService + Send + Clone + 'static>(s: S) -> ::grpcio::Service {
     let mut builder = ::grpcio::ServiceBuilder::new();
-    let mut instance = s.clone();
-    builder = builder.add_unary_handler(&METHOD_RAFT_SERVICE_SNAPSHOT, move |ctx, req, resp| {
-        instance.snapshot(ctx, req, resp)
-    });
     let mut instance = s.clone();
     builder = builder.add_unary_handler(&METHOD_RAFT_SERVICE_CHANGE_CONFIG, move |ctx, req, resp| {
         instance.change_config(ctx, req, resp)

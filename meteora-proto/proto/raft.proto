@@ -6,7 +6,6 @@ import "common.proto";
 package meteora.raft;
 
 service RaftService {
-    rpc Snapshot(eraftpb.Snapshot) returns(common.Null) {}
     rpc ChangeConfig(eraftpb.ConfChange) returns(ChangeReply) {}
     rpc SendMsg(eraftpb.Message) returns(common.Null) {}
     rpc SendAddress(AddressState) returns(common.Null) {}
