@@ -7,9 +7,9 @@ use grpcio::{RpcContext, UnarySink};
 use log::*;
 use raft::eraftpb::{ConfChange, Message, Snapshot};
 
-use meteora_proto::proto::commonpb::State;
-use meteora_proto::proto::raftpb::{AddressState, ChangeReply, Null};
-use meteora_proto::proto::raftpb_grpc::RaftService;
+use meteora_proto::proto::common::{Null, State};
+use meteora_proto::proto::raft::{AddressState, ChangeReply};
+use meteora_proto::proto::raft_grpc::RaftService;
 
 use crate::raft::config;
 

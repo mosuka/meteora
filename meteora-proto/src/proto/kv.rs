@@ -17,7 +17,7 @@
 #![allow(trivial_casts)]
 #![allow(unused_imports)]
 #![allow(unused_results)]
-//! Generated file from `kvpb.proto`
+//! Generated file from `kv.proto`
 
 /// Generated files are compatible only with the same version
 /// of protobuf runtime.
@@ -220,7 +220,7 @@ impl ::protobuf::reflect::ProtobufValue for GetReq {
 #[derive(PartialEq,Clone,Default)]
 pub struct GetReply {
     // message fields
-    pub state: super::commonpb::State,
+    pub state: super::common::State,
     pub value: ::std::string::String,
     pub address_map: ::std::vec::Vec<u8>,
     pub leader_id: u64,
@@ -243,15 +243,15 @@ impl GetReply {
     // .meteora.common.State state = 1;
 
 
-    pub fn get_state(&self) -> super::commonpb::State {
+    pub fn get_state(&self) -> super::common::State {
         self.state
     }
     pub fn clear_state(&mut self) {
-        self.state = super::commonpb::State::OK;
+        self.state = super::common::State::OK;
     }
 
     // Param is passed by value, moved
-    pub fn set_state(&mut self, v: super::commonpb::State) {
+    pub fn set_state(&mut self, v: super::common::State) {
         self.state = v;
     }
 
@@ -360,7 +360,7 @@ impl ::protobuf::Message for GetReply {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.state != super::commonpb::State::OK {
+        if self.state != super::common::State::OK {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
         if !self.value.is_empty() {
@@ -378,7 +378,7 @@ impl ::protobuf::Message for GetReply {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if self.state != super::commonpb::State::OK {
+        if self.state != super::common::State::OK {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
         if !self.value.is_empty() {
@@ -428,7 +428,7 @@ impl ::protobuf::Message for GetReply {
         static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::commonpb::State>>(
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::common::State>>(
                 "state",
                 |m: &GetReply| { &m.state },
                 |m: &mut GetReply| { &mut m.state },
@@ -464,7 +464,7 @@ impl ::protobuf::Message for GetReply {
 
 impl ::protobuf::Clear for GetReply {
     fn clear(&mut self) {
-        self.state = super::commonpb::State::OK;
+        self.state = super::common::State::OK;
         self.value.clear();
         self.address_map.clear();
         self.leader_id = 0;
@@ -723,7 +723,7 @@ impl ::protobuf::reflect::ProtobufValue for SetReq {
 #[derive(PartialEq,Clone,Default)]
 pub struct SetReply {
     // message fields
-    pub state: super::commonpb::State,
+    pub state: super::common::State,
     pub address_map: ::std::vec::Vec<u8>,
     pub leader_id: u64,
     // special fields
@@ -745,15 +745,15 @@ impl SetReply {
     // .meteora.common.State state = 1;
 
 
-    pub fn get_state(&self) -> super::commonpb::State {
+    pub fn get_state(&self) -> super::common::State {
         self.state
     }
     pub fn clear_state(&mut self) {
-        self.state = super::commonpb::State::OK;
+        self.state = super::common::State::OK;
     }
 
     // Param is passed by value, moved
-    pub fn set_state(&mut self, v: super::commonpb::State) {
+    pub fn set_state(&mut self, v: super::common::State) {
         self.state = v;
     }
 
@@ -833,7 +833,7 @@ impl ::protobuf::Message for SetReply {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.state != super::commonpb::State::OK {
+        if self.state != super::common::State::OK {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
         if !self.address_map.is_empty() {
@@ -848,7 +848,7 @@ impl ::protobuf::Message for SetReply {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if self.state != super::commonpb::State::OK {
+        if self.state != super::common::State::OK {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
         if !self.address_map.is_empty() {
@@ -895,7 +895,7 @@ impl ::protobuf::Message for SetReply {
         static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::commonpb::State>>(
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::common::State>>(
                 "state",
                 |m: &SetReply| { &m.state },
                 |m: &mut SetReply| { &mut m.state },
@@ -926,7 +926,7 @@ impl ::protobuf::Message for SetReply {
 
 impl ::protobuf::Clear for SetReply {
     fn clear(&mut self) {
-        self.state = super::commonpb::State::OK;
+        self.state = super::common::State::OK;
         self.address_map.clear();
         self.leader_id = 0;
         self.unknown_fields.clear();
@@ -1142,7 +1142,7 @@ impl ::protobuf::reflect::ProtobufValue for DeleteReq {
 #[derive(PartialEq,Clone,Default)]
 pub struct DeleteReply {
     // message fields
-    pub state: super::commonpb::State,
+    pub state: super::common::State,
     pub address_map: ::std::vec::Vec<u8>,
     pub leader_id: u64,
     // special fields
@@ -1164,15 +1164,15 @@ impl DeleteReply {
     // .meteora.common.State state = 1;
 
 
-    pub fn get_state(&self) -> super::commonpb::State {
+    pub fn get_state(&self) -> super::common::State {
         self.state
     }
     pub fn clear_state(&mut self) {
-        self.state = super::commonpb::State::OK;
+        self.state = super::common::State::OK;
     }
 
     // Param is passed by value, moved
-    pub fn set_state(&mut self, v: super::commonpb::State) {
+    pub fn set_state(&mut self, v: super::common::State) {
         self.state = v;
     }
 
@@ -1252,7 +1252,7 @@ impl ::protobuf::Message for DeleteReply {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.state != super::commonpb::State::OK {
+        if self.state != super::common::State::OK {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
         if !self.address_map.is_empty() {
@@ -1267,7 +1267,7 @@ impl ::protobuf::Message for DeleteReply {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if self.state != super::commonpb::State::OK {
+        if self.state != super::common::State::OK {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
         if !self.address_map.is_empty() {
@@ -1314,7 +1314,7 @@ impl ::protobuf::Message for DeleteReply {
         static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::commonpb::State>>(
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::common::State>>(
                 "state",
                 |m: &DeleteReply| { &m.state },
                 |m: &mut DeleteReply| { &mut m.state },
@@ -1345,7 +1345,7 @@ impl ::protobuf::Message for DeleteReply {
 
 impl ::protobuf::Clear for DeleteReply {
     fn clear(&mut self) {
-        self.state = super::commonpb::State::OK;
+        self.state = super::common::State::OK;
         self.address_map.clear();
         self.leader_id = 0;
         self.unknown_fields.clear();
@@ -1365,7 +1365,7 @@ impl ::protobuf::reflect::ProtobufValue for DeleteReply {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\nkvpb.proto\x12\nmeteora.kv\x1a\x0ecommonpb.proto\"7\n\x06GetReq\x12\
+    \n\x08kv.proto\x12\nmeteora.kv\x1a\x0ccommon.proto\"7\n\x06GetReq\x12\
     \x10\n\x03key\x18\x01\x20\x01(\tR\x03key\x12\x1b\n\tclient_id\x18\x02\
     \x20\x01(\x04R\x08clientId\"\x8b\x01\n\x08GetReply\x12+\n\x05state\x18\
     \x01\x20\x01(\x0e2\x15.meteora.common.StateR\x05state\x12\x14\n\x05value\
@@ -1385,7 +1385,7 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x121\n\x03Set\x12\x12.meteora.kv.SetReq\x1a\x14.meteora.kv.SetReply\"\0\
     \x12:\n\x06Delete\x12\x15.meteora.kv.DeleteReq\x1a\x17.meteora.kv.Delete\
     Reply\"\0J\x9a\x0c\n\x06\x12\x04\0\0-\x01\n\x08\n\x01\x0c\x12\x03\0\0\
-    \x12\n\t\n\x02\x03\0\x12\x03\x02\x07\x17\n\x08\n\x01\x02\x12\x03\x04\x08\
+    \x12\n\t\n\x02\x03\0\x12\x03\x02\x07\x15\n\x08\n\x01\x02\x12\x03\x04\x08\
     \x12\n\n\n\x02\x06\0\x12\x04\x06\0\n\x01\n\n\n\x03\x06\0\x01\x12\x03\x06\
     \x08\x11\n\x0b\n\x04\x06\0\x02\0\x12\x03\x07\x04)\n\x0c\n\x05\x06\0\x02\
     \0\x01\x12\x03\x07\x08\x0b\n\x0c\n\x05\x06\0\x02\0\x02\x12\x03\x07\x0c\

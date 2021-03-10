@@ -18,21 +18,21 @@
 #![allow(unused_imports)]
 #![allow(unused_results)]
 
-const METHOD_KV_SERVICE_GET: ::grpcio::Method<super::kvpb::GetReq, super::kvpb::GetReply> = ::grpcio::Method {
+const METHOD_KV_SERVICE_GET: ::grpcio::Method<super::kv::GetReq, super::kv::GetReply> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
     name: "/meteora.kv.KvService/Get",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
-const METHOD_KV_SERVICE_SET: ::grpcio::Method<super::kvpb::SetReq, super::kvpb::SetReply> = ::grpcio::Method {
+const METHOD_KV_SERVICE_SET: ::grpcio::Method<super::kv::SetReq, super::kv::SetReply> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
     name: "/meteora.kv.KvService/Set",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
     resp_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
 };
 
-const METHOD_KV_SERVICE_DELETE: ::grpcio::Method<super::kvpb::DeleteReq, super::kvpb::DeleteReply> = ::grpcio::Method {
+const METHOD_KV_SERVICE_DELETE: ::grpcio::Method<super::kv::DeleteReq, super::kv::DeleteReply> = ::grpcio::Method {
     ty: ::grpcio::MethodType::Unary,
     name: "/meteora.kv.KvService/Delete",
     req_mar: ::grpcio::Marshaller { ser: ::grpcio::pb_ser, de: ::grpcio::pb_de },
@@ -51,51 +51,51 @@ impl KvServiceClient {
         }
     }
 
-    pub fn get_opt(&self, req: &super::kvpb::GetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kvpb::GetReply> {
+    pub fn get_opt(&self, req: &super::kv::GetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kv::GetReply> {
         self.client.unary_call(&METHOD_KV_SERVICE_GET, req, opt)
     }
 
-    pub fn get(&self, req: &super::kvpb::GetReq) -> ::grpcio::Result<super::kvpb::GetReply> {
+    pub fn get(&self, req: &super::kv::GetReq) -> ::grpcio::Result<super::kv::GetReply> {
         self.get_opt(req, ::grpcio::CallOption::default())
     }
 
-    pub fn get_async_opt(&self, req: &super::kvpb::GetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvpb::GetReply>> {
+    pub fn get_async_opt(&self, req: &super::kv::GetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::GetReply>> {
         self.client.unary_call_async(&METHOD_KV_SERVICE_GET, req, opt)
     }
 
-    pub fn get_async(&self, req: &super::kvpb::GetReq) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvpb::GetReply>> {
+    pub fn get_async(&self, req: &super::kv::GetReq) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::GetReply>> {
         self.get_async_opt(req, ::grpcio::CallOption::default())
     }
 
-    pub fn set_opt(&self, req: &super::kvpb::SetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kvpb::SetReply> {
+    pub fn set_opt(&self, req: &super::kv::SetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kv::SetReply> {
         self.client.unary_call(&METHOD_KV_SERVICE_SET, req, opt)
     }
 
-    pub fn set(&self, req: &super::kvpb::SetReq) -> ::grpcio::Result<super::kvpb::SetReply> {
+    pub fn set(&self, req: &super::kv::SetReq) -> ::grpcio::Result<super::kv::SetReply> {
         self.set_opt(req, ::grpcio::CallOption::default())
     }
 
-    pub fn set_async_opt(&self, req: &super::kvpb::SetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvpb::SetReply>> {
+    pub fn set_async_opt(&self, req: &super::kv::SetReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::SetReply>> {
         self.client.unary_call_async(&METHOD_KV_SERVICE_SET, req, opt)
     }
 
-    pub fn set_async(&self, req: &super::kvpb::SetReq) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvpb::SetReply>> {
+    pub fn set_async(&self, req: &super::kv::SetReq) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::SetReply>> {
         self.set_async_opt(req, ::grpcio::CallOption::default())
     }
 
-    pub fn delete_opt(&self, req: &super::kvpb::DeleteReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kvpb::DeleteReply> {
+    pub fn delete_opt(&self, req: &super::kv::DeleteReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<super::kv::DeleteReply> {
         self.client.unary_call(&METHOD_KV_SERVICE_DELETE, req, opt)
     }
 
-    pub fn delete(&self, req: &super::kvpb::DeleteReq) -> ::grpcio::Result<super::kvpb::DeleteReply> {
+    pub fn delete(&self, req: &super::kv::DeleteReq) -> ::grpcio::Result<super::kv::DeleteReply> {
         self.delete_opt(req, ::grpcio::CallOption::default())
     }
 
-    pub fn delete_async_opt(&self, req: &super::kvpb::DeleteReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvpb::DeleteReply>> {
+    pub fn delete_async_opt(&self, req: &super::kv::DeleteReq, opt: ::grpcio::CallOption) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::DeleteReply>> {
         self.client.unary_call_async(&METHOD_KV_SERVICE_DELETE, req, opt)
     }
 
-    pub fn delete_async(&self, req: &super::kvpb::DeleteReq) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kvpb::DeleteReply>> {
+    pub fn delete_async(&self, req: &super::kv::DeleteReq) -> ::grpcio::Result<::grpcio::ClientUnaryReceiver<super::kv::DeleteReply>> {
         self.delete_async_opt(req, ::grpcio::CallOption::default())
     }
     pub fn spawn<F>(&self, f: F) where F: ::futures::Future<Item = (), Error = ()> + Send + 'static {
@@ -104,9 +104,9 @@ impl KvServiceClient {
 }
 
 pub trait KvService {
-    fn get(&mut self, ctx: ::grpcio::RpcContext, req: super::kvpb::GetReq, sink: ::grpcio::UnarySink<super::kvpb::GetReply>);
-    fn set(&mut self, ctx: ::grpcio::RpcContext, req: super::kvpb::SetReq, sink: ::grpcio::UnarySink<super::kvpb::SetReply>);
-    fn delete(&mut self, ctx: ::grpcio::RpcContext, req: super::kvpb::DeleteReq, sink: ::grpcio::UnarySink<super::kvpb::DeleteReply>);
+    fn get(&mut self, ctx: ::grpcio::RpcContext, req: super::kv::GetReq, sink: ::grpcio::UnarySink<super::kv::GetReply>);
+    fn set(&mut self, ctx: ::grpcio::RpcContext, req: super::kv::SetReq, sink: ::grpcio::UnarySink<super::kv::SetReply>);
+    fn delete(&mut self, ctx: ::grpcio::RpcContext, req: super::kv::DeleteReq, sink: ::grpcio::UnarySink<super::kv::DeleteReply>);
 }
 
 pub fn create_kv_service<S: KvService + Send + Clone + 'static>(s: S) -> ::grpcio::Service {

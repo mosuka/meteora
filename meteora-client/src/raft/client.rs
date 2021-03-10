@@ -7,8 +7,8 @@ use grpcio::{ChannelBuilder, EnvBuilder};
 use log::*;
 use raft::eraftpb::{ConfChange, ConfChangeType};
 
-use meteora_proto::proto::commonpb::State;
-use meteora_proto::proto::raftpb_grpc::RaftServiceClient;
+use meteora_proto::proto::common::State;
+use meteora_proto::proto::raft_grpc::RaftServiceClient;
 use meteora_server::raft::config::NodeAddress;
 
 fn create_client(address: String) -> RaftServiceClient {

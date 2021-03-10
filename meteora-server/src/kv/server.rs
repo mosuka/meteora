@@ -11,9 +11,9 @@ use raft::storage::MemStorage;
 use rocksdb::DB;
 use serde::{Deserialize, Serialize};
 
-use meteora_proto::proto::commonpb::State;
-use meteora_proto::proto::kvpb::{DeleteReply, DeleteReq, GetReply, GetReq, SetReply, SetReq};
-use meteora_proto::proto::kvpb_grpc::KvService;
+use meteora_proto::proto::common::State;
+use meteora_proto::proto::kv::{DeleteReply, DeleteReq, GetReply, GetReq, SetReply, SetReq};
+use meteora_proto::proto::kv_grpc::KvService;
 
 use crate::raft::config;
 use crate::raft::config::NodeAddress;

@@ -12,8 +12,8 @@ use raft::prelude::*;
 use raft::storage::MemStorage;
 use serde::{Deserialize, Serialize};
 
-use meteora_proto::proto::raftpb::AddressState;
-use meteora_proto::proto::raftpb_grpc::RaftServiceClient;
+use meteora_proto::proto::raft::AddressState;
+use meteora_proto::proto::raft_grpc::RaftServiceClient;
 
 use crate::kv::server::Op;
 

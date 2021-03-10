@@ -8,3 +8,5 @@ enum State {
     NOT_FOUND = 2;
     IO_ERROR = 3;
 }
+
+message Null {}

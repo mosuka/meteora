@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+- Rename protobuf #3 @mosuka
 - Move to edition 2018 #2 @mosuka
 - Upgrade protobuf #1 @mosuka
 

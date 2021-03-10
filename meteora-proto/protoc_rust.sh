@@ -17,7 +17,7 @@ RS_FILES=$(find ./src/proto -name '*.rs' -print0 | xargs -0 -n1 basename | sort 
 echo "// This file is generated. Do not edit" > ${MODULE_FILE}
 echo "" >> ${MODULE_FILE}
 
-echo "use raft::eraftpb;" >> ${MODULE_FILE}
+echo "use ::raft::eraftpb;" >> ${MODULE_FILE}
 
 echo "" >> ${MODULE_FILE}
 for RS_FILE in ${RS_FILES}
