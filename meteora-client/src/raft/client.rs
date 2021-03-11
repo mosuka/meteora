@@ -44,11 +44,11 @@ impl RaftClient {
 
     pub fn join(
         &mut self,
-        id: u64,
+        node_id: u64,
         node_address: NodeAddress,
     ) -> Result<HashMap<u64, NodeAddress>, std::io::Error> {
         let mut req = ConfChange::new();
-        req.set_node_id(id);
+        req.set_node_id(node_id);
         req.set_change_type(ConfChangeType::AddNode);
         req.set_context(serialize(&node_address).unwrap());
 

@@ -12,9 +12,9 @@ pub fn run_get_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
 
     let mut kv_client = KVClient::new(server);
 
-    match kv_client.get(key.to_string()) {
+    match kv_client.get(key.as_bytes().to_vec()) {
         Ok(v) => {
-            println!("{}", v);
+            println!("{:?}", v);
             Ok(())
         }
         Err(e) => {

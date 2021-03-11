@@ -17,7 +17,7 @@ use meteora_proto::proto::raft_grpc::RaftServiceClient;
 
 use crate::kv::server::Op;
 
-type ProposeCallback = Box<dyn Fn(i32, Vec<u8>) + Send>; // return -1 if is leader, else return leader's id, vec is serialized address map
+type ProposeCallback = Box<dyn Fn(i32, Vec<u8>) + Send>;
 
 pub enum Msg {
     Propose {
@@ -47,28 +47,27 @@ pub fn init_and_run(
     storage: MemStorage,
     receiver: Receiver<Msg>,
     apply_sender: Sender<Op>,
-    id: u64,
+    node_id: u64,
     node_address: NodeAddress,
     addresses: HashMap<u64, NodeAddress>,
 ) {
-    // create communication clients
     let mut peers = vec![];
-    let mut addresses = addresses; // id:address
+    let mut addresses = addresses;
     let mut rpc_clients = HashMap::new();
     for (id, address) in &addresses {
         peers.push(id.clone());
         insert_client(id.clone(), address.raft_address.as_str(), &mut rpc_clients);
     }
     if peers.is_empty() {
-        addresses.insert(id, node_address);
-        peers.push(id);
+        addresses.insert(node_id, node_address);
+        peers.push(node_id);
     }
     debug!("{:?}", peers);
 
     // Create the configuration for the Raft node.
     let cfg = Config {
         // The unique ID for the Raft node.
-        id,
+        id: node_id,
         // The Raft node list.
         // Mostly, the peers need to be saved in the storage
         peers,
@@ -104,35 +103,41 @@ pub fn init_and_run(
     loop {
         match receiver.recv_timeout(timeout) {
             Ok(Msg::Propose { seq, op, cb }) => {
+                debug!("receive propose message");
                 let leader_id = r.raft.leader_id;
                 if r.raft.leader_id != r.raft.id {
                     // not leader, callback to notify client
-                    debug!("leader is {}, i'm {}", leader_id, r.raft.id);
+                    debug!("not a leader");
                     cb(leader_id as i32, serialize(&addresses).unwrap());
                     continue;
                 }
-                let se_op = serialize(&op).unwrap();
+                let serialized_op = serialize(&op).unwrap();
                 cbs.insert(seq, cb);
-                r.propose(serialize(&seq).unwrap(), se_op).unwrap();
+                debug!("propose");
+                r.propose(serialize(&seq).unwrap(), serialized_op).unwrap();
             }
             Ok(Msg::ConfigChange { seq, change, cb }) => {
+                debug!("receive config change message");
                 let leader_id = r.raft.leader_id;
                 if r.raft.leader_id != r.raft.id {
+                    // not leader, callback to notify client
+                    debug!("not a leader");
                     cb(leader_id as i32, serialize(&addresses).unwrap());
                     continue;
                 } else {
                     // TODO add address to map
                     cbs.insert(seq, cb);
-                    debug!("propose conf");
+                    debug!("propose config change");
                     r.propose_conf_change(serialize(&seq).unwrap(), change)
                         .unwrap();
                 }
             }
             Ok(Msg::Raft(m)) => {
-                debug!("{} got raft msg from {}", r.raft.id, m.from);
+                debug!("receive raft message");
                 if let Ok(_a) = r.step(m) {};
             }
             Ok(Msg::Address(address_state)) => {
+                debug!("receive address message");
                 let new_addresses: HashMap<u64, NodeAddress> =
                     deserialize(address_state.get_address_map()).unwrap();
                 for (id, address) in &new_addresses {
@@ -152,8 +157,12 @@ pub fn init_and_run(
                 }
                 addresses = new_addresses;
             }
-            Err(RecvTimeoutError::Timeout) => (),
-            Err(RecvTimeoutError::Disconnected) => return (),
+            Err(RecvTimeoutError::Timeout) => {
+                debug!("timeout");
+            }
+            Err(RecvTimeoutError::Disconnected) => {
+                debug!("disconnected");
+            }
         }
 
         let d = t.elapsed();
@@ -278,16 +287,16 @@ fn on_ready(
                 let mut change = ConfChange::new();
                 change.merge_from_bytes(entry.get_data()).unwrap();
                 let seq: u64 = deserialize(entry.get_context()).unwrap();
-                let id = change.get_node_id();
+                let node_id = change.get_node_id();
 
                 let change_type = change.get_change_type();
                 if change_type == ConfChangeType::AddNode {
-                    let address: NodeAddress = deserialize(change.get_context()).unwrap();
-                    insert_client(id, address.raft_address.as_str(), clients);
-                    addresses.insert(id, address);
+                    let node_address: NodeAddress = deserialize(change.get_context()).unwrap();
+                    insert_client(node_id, node_address.raft_address.as_str(), clients);
+                    addresses.insert(node_id, node_address);
                 } else if change_type == ConfChangeType::RemoveNode {
-                    if let Some(_client) = clients.remove(&id) {
-                        addresses.remove(&id);
+                    if let Some(_client) = clients.remove(&node_id) {
+                        addresses.remove(&node_id);
                     }
                 }
 
@@ -303,9 +312,13 @@ fn on_ready(
     r.advance(ready);
 }
 
-fn insert_client(id: u64, address: &str, clients: &mut HashMap<u64, Arc<RaftServiceClient>>) {
+fn insert_client(
+    node_id: u64,
+    node_address: &str,
+    clients: &mut HashMap<u64, Arc<RaftServiceClient>>,
+) {
     let env = Arc::new(EnvBuilder::new().build());
-    let ch = ChannelBuilder::new(env).connect(address);
+    let ch = ChannelBuilder::new(env).connect(node_address);
     let client = RaftServiceClient::new(ch);
-    clients.insert(id.clone(), Arc::new(client));
+    clients.insert(node_id.clone(), Arc::new(client));
 }

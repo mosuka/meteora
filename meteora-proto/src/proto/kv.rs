@@ -26,8 +26,7 @@
 #[derive(PartialEq,Clone,Default)]
 pub struct GetReq {
     // message fields
-    pub key: ::std::string::String,
-    pub client_id: u64,
+    pub key: ::std::vec::Vec<u8>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -44,10 +43,10 @@ impl GetReq {
         ::std::default::Default::default()
     }
 
-    // string key = 1;
+    // bytes key = 1;
 
 
-    pub fn get_key(&self) -> &str {
+    pub fn get_key(&self) -> &[u8] {
         &self.key
     }
     pub fn clear_key(&mut self) {
@@ -55,34 +54,19 @@ impl GetReq {
     }
 
     // Param is passed by value, moved
-    pub fn set_key(&mut self, v: ::std::string::String) {
+    pub fn set_key(&mut self, v: ::std::vec::Vec<u8>) {
         self.key = v;
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_key(&mut self) -> &mut ::std::string::String {
+    pub fn mut_key(&mut self) -> &mut ::std::vec::Vec<u8> {
         &mut self.key
     }
 
     // Take field
-    pub fn take_key(&mut self) -> ::std::string::String {
-        ::std::mem::replace(&mut self.key, ::std::string::String::new())
-    }
-
-    // uint64 client_id = 2;
-
-
-    pub fn get_client_id(&self) -> u64 {
-        self.client_id
-    }
-    pub fn clear_client_id(&mut self) {
-        self.client_id = 0;
-    }
-
-    // Param is passed by value, moved
-    pub fn set_client_id(&mut self, v: u64) {
-        self.client_id = v;
+    pub fn take_key(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.key, ::std::vec::Vec::new())
     }
 }
 
@@ -96,14 +80,7 @@ impl ::protobuf::Message for GetReq {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.key)?;
-                },
-                2 => {
-                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
-                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
-                    }
-                    let tmp = is.read_uint64()?;
-                    self.client_id = tmp;
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.key)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -118,10 +95,7 @@ impl ::protobuf::Message for GetReq {
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
         if !self.key.is_empty() {
-            my_size += ::protobuf::rt::string_size(1, &self.key);
-        }
-        if self.client_id != 0 {
-            my_size += ::protobuf::rt::value_size(2, self.client_id, ::protobuf::wire_format::WireTypeVarint);
+            my_size += ::protobuf::rt::bytes_size(1, &self.key);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -130,10 +104,7 @@ impl ::protobuf::Message for GetReq {
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
         if !self.key.is_empty() {
-            os.write_string(1, &self.key)?;
-        }
-        if self.client_id != 0 {
-            os.write_uint64(2, self.client_id)?;
+            os.write_bytes(1, &self.key)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -173,15 +144,10 @@ impl ::protobuf::Message for GetReq {
         static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                 "key",
                 |m: &GetReq| { &m.key },
                 |m: &mut GetReq| { &mut m.key },
-            ));
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeUint64>(
-                "client_id",
-                |m: &GetReq| { &m.client_id },
-                |m: &mut GetReq| { &mut m.client_id },
             ));
             ::protobuf::reflect::MessageDescriptor::new_pb_name::<GetReq>(
                 "GetReq",
@@ -200,7 +166,6 @@ impl ::protobuf::Message for GetReq {
 impl ::protobuf::Clear for GetReq {
     fn clear(&mut self) {
         self.key.clear();
-        self.client_id = 0;
         self.unknown_fields.clear();
     }
 }
@@ -220,8 +185,8 @@ impl ::protobuf::reflect::ProtobufValue for GetReq {
 #[derive(PartialEq,Clone,Default)]
 pub struct GetReply {
     // message fields
+    pub value: ::std::vec::Vec<u8>,
     pub state: super::common::State,
-    pub value: ::std::string::String,
     pub address_map: ::std::vec::Vec<u8>,
     pub leader_id: u64,
     // special fields
@@ -240,25 +205,10 @@ impl GetReply {
         ::std::default::Default::default()
     }
 
-    // .meteora.common.State state = 1;
+    // bytes value = 1;
 
 
-    pub fn get_state(&self) -> super::common::State {
-        self.state
-    }
-    pub fn clear_state(&mut self) {
-        self.state = super::common::State::OK;
-    }
-
-    // Param is passed by value, moved
-    pub fn set_state(&mut self, v: super::common::State) {
-        self.state = v;
-    }
-
-    // string value = 2;
-
-
-    pub fn get_value(&self) -> &str {
+    pub fn get_value(&self) -> &[u8] {
         &self.value
     }
     pub fn clear_value(&mut self) {
@@ -266,19 +216,34 @@ impl GetReply {
     }
 
     // Param is passed by value, moved
-    pub fn set_value(&mut self, v: ::std::string::String) {
+    pub fn set_value(&mut self, v: ::std::vec::Vec<u8>) {
         self.value = v;
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_value(&mut self) -> &mut ::std::string::String {
+    pub fn mut_value(&mut self) -> &mut ::std::vec::Vec<u8> {
         &mut self.value
     }
 
     // Take field
-    pub fn take_value(&mut self) -> ::std::string::String {
-        ::std::mem::replace(&mut self.value, ::std::string::String::new())
+    pub fn take_value(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.value, ::std::vec::Vec::new())
+    }
+
+    // .meteora.common.State state = 2;
+
+
+    pub fn get_state(&self) -> super::common::State {
+        self.state
+    }
+    pub fn clear_state(&mut self) {
+        self.state = super::common::State::UNKNOWN;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_state(&mut self, v: super::common::State) {
+        self.state = v;
     }
 
     // bytes address_map = 3;
@@ -333,10 +298,10 @@ impl ::protobuf::Message for GetReply {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_proto3_enum_with_unknown_fields_into(wire_type, is, &mut self.state, 1, &mut self.unknown_fields)?
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.value)?;
                 },
                 2 => {
-                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.value)?;
+                    ::protobuf::rt::read_proto3_enum_with_unknown_fields_into(wire_type, is, &mut self.state, 2, &mut self.unknown_fields)?
                 },
                 3 => {
                     ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.address_map)?;
@@ -360,11 +325,11 @@ impl ::protobuf::Message for GetReply {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.state != super::common::State::OK {
-            my_size += ::protobuf::rt::enum_size(1, self.state);
-        }
         if !self.value.is_empty() {
-            my_size += ::protobuf::rt::string_size(2, &self.value);
+            my_size += ::protobuf::rt::bytes_size(1, &self.value);
+        }
+        if self.state != super::common::State::UNKNOWN {
+            my_size += ::protobuf::rt::enum_size(2, self.state);
         }
         if !self.address_map.is_empty() {
             my_size += ::protobuf::rt::bytes_size(3, &self.address_map);
@@ -378,11 +343,11 @@ impl ::protobuf::Message for GetReply {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if self.state != super::common::State::OK {
-            os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
-        }
         if !self.value.is_empty() {
-            os.write_string(2, &self.value)?;
+            os.write_bytes(1, &self.value)?;
+        }
+        if self.state != super::common::State::UNKNOWN {
+            os.write_enum(2, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
         if !self.address_map.is_empty() {
             os.write_bytes(3, &self.address_map)?;
@@ -428,15 +393,15 @@ impl ::protobuf::Message for GetReply {
         static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+                "value",
+                |m: &GetReply| { &m.value },
+                |m: &mut GetReply| { &mut m.value },
+            ));
             fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::common::State>>(
                 "state",
                 |m: &GetReply| { &m.state },
                 |m: &mut GetReply| { &mut m.state },
-            ));
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
-                "value",
-                |m: &GetReply| { &m.value },
-                |m: &mut GetReply| { &mut m.value },
             ));
             fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                 "address_map",
@@ -464,8 +429,8 @@ impl ::protobuf::Message for GetReply {
 
 impl ::protobuf::Clear for GetReply {
     fn clear(&mut self) {
-        self.state = super::common::State::OK;
         self.value.clear();
+        self.state = super::common::State::UNKNOWN;
         self.address_map.clear();
         self.leader_id = 0;
         self.unknown_fields.clear();
@@ -487,9 +452,8 @@ impl ::protobuf::reflect::ProtobufValue for GetReply {
 #[derive(PartialEq,Clone,Default)]
 pub struct PutReq {
     // message fields
-    pub key: ::std::string::String,
-    pub value: ::std::string::String,
-    pub client_id: u64,
+    pub key: ::std::vec::Vec<u8>,
+    pub value: ::std::vec::Vec<u8>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -506,10 +470,10 @@ impl PutReq {
         ::std::default::Default::default()
     }
 
-    // string key = 1;
+    // bytes key = 1;
 
 
-    pub fn get_key(&self) -> &str {
+    pub fn get_key(&self) -> &[u8] {
         &self.key
     }
     pub fn clear_key(&mut self) {
@@ -517,25 +481,25 @@ impl PutReq {
     }
 
     // Param is passed by value, moved
-    pub fn set_key(&mut self, v: ::std::string::String) {
+    pub fn set_key(&mut self, v: ::std::vec::Vec<u8>) {
         self.key = v;
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_key(&mut self) -> &mut ::std::string::String {
+    pub fn mut_key(&mut self) -> &mut ::std::vec::Vec<u8> {
         &mut self.key
     }
 
     // Take field
-    pub fn take_key(&mut self) -> ::std::string::String {
-        ::std::mem::replace(&mut self.key, ::std::string::String::new())
+    pub fn take_key(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.key, ::std::vec::Vec::new())
     }
 
-    // string value = 2;
+    // bytes value = 2;
 
 
-    pub fn get_value(&self) -> &str {
+    pub fn get_value(&self) -> &[u8] {
         &self.value
     }
     pub fn clear_value(&mut self) {
@@ -543,34 +507,19 @@ impl PutReq {
     }
 
     // Param is passed by value, moved
-    pub fn set_value(&mut self, v: ::std::string::String) {
+    pub fn set_value(&mut self, v: ::std::vec::Vec<u8>) {
         self.value = v;
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_value(&mut self) -> &mut ::std::string::String {
+    pub fn mut_value(&mut self) -> &mut ::std::vec::Vec<u8> {
         &mut self.value
     }
 
     // Take field
-    pub fn take_value(&mut self) -> ::std::string::String {
-        ::std::mem::replace(&mut self.value, ::std::string::String::new())
-    }
-
-    // uint64 client_id = 3;
-
-
-    pub fn get_client_id(&self) -> u64 {
-        self.client_id
-    }
-    pub fn clear_client_id(&mut self) {
-        self.client_id = 0;
-    }
-
-    // Param is passed by value, moved
-    pub fn set_client_id(&mut self, v: u64) {
-        self.client_id = v;
+    pub fn take_value(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.value, ::std::vec::Vec::new())
     }
 }
 
@@ -584,17 +533,10 @@ impl ::protobuf::Message for PutReq {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.key)?;
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.key)?;
                 },
                 2 => {
-                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.value)?;
-                },
-                3 => {
-                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
-                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
-                    }
-                    let tmp = is.read_uint64()?;
-                    self.client_id = tmp;
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.value)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -609,13 +551,10 @@ impl ::protobuf::Message for PutReq {
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
         if !self.key.is_empty() {
-            my_size += ::protobuf::rt::string_size(1, &self.key);
+            my_size += ::protobuf::rt::bytes_size(1, &self.key);
         }
         if !self.value.is_empty() {
-            my_size += ::protobuf::rt::string_size(2, &self.value);
-        }
-        if self.client_id != 0 {
-            my_size += ::protobuf::rt::value_size(3, self.client_id, ::protobuf::wire_format::WireTypeVarint);
+            my_size += ::protobuf::rt::bytes_size(2, &self.value);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -624,13 +563,10 @@ impl ::protobuf::Message for PutReq {
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
         if !self.key.is_empty() {
-            os.write_string(1, &self.key)?;
+            os.write_bytes(1, &self.key)?;
         }
         if !self.value.is_empty() {
-            os.write_string(2, &self.value)?;
-        }
-        if self.client_id != 0 {
-            os.write_uint64(3, self.client_id)?;
+            os.write_bytes(2, &self.value)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -670,20 +606,15 @@ impl ::protobuf::Message for PutReq {
         static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                 "key",
                 |m: &PutReq| { &m.key },
                 |m: &mut PutReq| { &mut m.key },
             ));
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                 "value",
                 |m: &PutReq| { &m.value },
                 |m: &mut PutReq| { &mut m.value },
-            ));
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeUint64>(
-                "client_id",
-                |m: &PutReq| { &m.client_id },
-                |m: &mut PutReq| { &mut m.client_id },
             ));
             ::protobuf::reflect::MessageDescriptor::new_pb_name::<PutReq>(
                 "PutReq",
@@ -703,7 +634,6 @@ impl ::protobuf::Clear for PutReq {
     fn clear(&mut self) {
         self.key.clear();
         self.value.clear();
-        self.client_id = 0;
         self.unknown_fields.clear();
     }
 }
@@ -749,7 +679,7 @@ impl PutReply {
         self.state
     }
     pub fn clear_state(&mut self) {
-        self.state = super::common::State::OK;
+        self.state = super::common::State::UNKNOWN;
     }
 
     // Param is passed by value, moved
@@ -833,7 +763,7 @@ impl ::protobuf::Message for PutReply {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.state != super::common::State::OK {
+        if self.state != super::common::State::UNKNOWN {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
         if !self.address_map.is_empty() {
@@ -848,7 +778,7 @@ impl ::protobuf::Message for PutReply {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if self.state != super::common::State::OK {
+        if self.state != super::common::State::UNKNOWN {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
         if !self.address_map.is_empty() {
@@ -926,7 +856,7 @@ impl ::protobuf::Message for PutReply {
 
 impl ::protobuf::Clear for PutReply {
     fn clear(&mut self) {
-        self.state = super::common::State::OK;
+        self.state = super::common::State::UNKNOWN;
         self.address_map.clear();
         self.leader_id = 0;
         self.unknown_fields.clear();
@@ -948,8 +878,7 @@ impl ::protobuf::reflect::ProtobufValue for PutReply {
 #[derive(PartialEq,Clone,Default)]
 pub struct DeleteReq {
     // message fields
-    pub key: ::std::string::String,
-    pub client_id: u64,
+    pub key: ::std::vec::Vec<u8>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -966,10 +895,10 @@ impl DeleteReq {
         ::std::default::Default::default()
     }
 
-    // string key = 1;
+    // bytes key = 1;
 
 
-    pub fn get_key(&self) -> &str {
+    pub fn get_key(&self) -> &[u8] {
         &self.key
     }
     pub fn clear_key(&mut self) {
@@ -977,34 +906,19 @@ impl DeleteReq {
     }
 
     // Param is passed by value, moved
-    pub fn set_key(&mut self, v: ::std::string::String) {
+    pub fn set_key(&mut self, v: ::std::vec::Vec<u8>) {
         self.key = v;
     }
 
     // Mutable pointer to the field.
     // If field is not initialized, it is initialized with default value first.
-    pub fn mut_key(&mut self) -> &mut ::std::string::String {
+    pub fn mut_key(&mut self) -> &mut ::std::vec::Vec<u8> {
         &mut self.key
     }
 
     // Take field
-    pub fn take_key(&mut self) -> ::std::string::String {
-        ::std::mem::replace(&mut self.key, ::std::string::String::new())
-    }
-
-    // uint64 client_id = 2;
-
-
-    pub fn get_client_id(&self) -> u64 {
-        self.client_id
-    }
-    pub fn clear_client_id(&mut self) {
-        self.client_id = 0;
-    }
-
-    // Param is passed by value, moved
-    pub fn set_client_id(&mut self, v: u64) {
-        self.client_id = v;
+    pub fn take_key(&mut self) -> ::std::vec::Vec<u8> {
+        ::std::mem::replace(&mut self.key, ::std::vec::Vec::new())
     }
 }
 
@@ -1018,14 +932,7 @@ impl ::protobuf::Message for DeleteReq {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.key)?;
-                },
-                2 => {
-                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
-                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
-                    }
-                    let tmp = is.read_uint64()?;
-                    self.client_id = tmp;
+                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.key)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -1040,10 +947,7 @@ impl ::protobuf::Message for DeleteReq {
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
         if !self.key.is_empty() {
-            my_size += ::protobuf::rt::string_size(1, &self.key);
-        }
-        if self.client_id != 0 {
-            my_size += ::protobuf::rt::value_size(2, self.client_id, ::protobuf::wire_format::WireTypeVarint);
+            my_size += ::protobuf::rt::bytes_size(1, &self.key);
         }
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
@@ -1052,10 +956,7 @@ impl ::protobuf::Message for DeleteReq {
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
         if !self.key.is_empty() {
-            os.write_string(1, &self.key)?;
-        }
-        if self.client_id != 0 {
-            os.write_uint64(2, self.client_id)?;
+            os.write_bytes(1, &self.key)?;
         }
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
@@ -1095,15 +996,10 @@ impl ::protobuf::Message for DeleteReq {
         static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
                 "key",
                 |m: &DeleteReq| { &m.key },
                 |m: &mut DeleteReq| { &mut m.key },
-            ));
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeUint64>(
-                "client_id",
-                |m: &DeleteReq| { &m.client_id },
-                |m: &mut DeleteReq| { &mut m.client_id },
             ));
             ::protobuf::reflect::MessageDescriptor::new_pb_name::<DeleteReq>(
                 "DeleteReq",
@@ -1122,7 +1018,6 @@ impl ::protobuf::Message for DeleteReq {
 impl ::protobuf::Clear for DeleteReq {
     fn clear(&mut self) {
         self.key.clear();
-        self.client_id = 0;
         self.unknown_fields.clear();
     }
 }
@@ -1168,7 +1063,7 @@ impl DeleteReply {
         self.state
     }
     pub fn clear_state(&mut self) {
-        self.state = super::common::State::OK;
+        self.state = super::common::State::UNKNOWN;
     }
 
     // Param is passed by value, moved
@@ -1252,7 +1147,7 @@ impl ::protobuf::Message for DeleteReply {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.state != super::common::State::OK {
+        if self.state != super::common::State::UNKNOWN {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
         if !self.address_map.is_empty() {
@@ -1267,7 +1162,7 @@ impl ::protobuf::Message for DeleteReply {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if self.state != super::common::State::OK {
+        if self.state != super::common::State::UNKNOWN {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
         if !self.address_map.is_empty() {
@@ -1345,7 +1240,7 @@ impl ::protobuf::Message for DeleteReply {
 
 impl ::protobuf::Clear for DeleteReply {
     fn clear(&mut self) {
-        self.state = super::common::State::OK;
+        self.state = super::common::State::UNKNOWN;
         self.address_map.clear();
         self.leader_id = 0;
         self.unknown_fields.clear();
@@ -1365,102 +1260,89 @@ impl ::protobuf::reflect::ProtobufValue for DeleteReply {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x08kv.proto\x12\nmeteora.kv\x1a\x0ccommon.proto\"7\n\x06GetReq\x12\
-    \x10\n\x03key\x18\x01\x20\x01(\tR\x03key\x12\x1b\n\tclient_id\x18\x02\
-    \x20\x01(\x04R\x08clientId\"\x8b\x01\n\x08GetReply\x12+\n\x05state\x18\
-    \x01\x20\x01(\x0e2\x15.meteora.common.StateR\x05state\x12\x14\n\x05value\
-    \x18\x02\x20\x01(\tR\x05value\x12\x1f\n\x0baddress_map\x18\x03\x20\x01(\
-    \x0cR\naddressMap\x12\x1b\n\tleader_id\x18\x04\x20\x01(\x04R\x08leaderId\
-    \"M\n\x06PutReq\x12\x10\n\x03key\x18\x01\x20\x01(\tR\x03key\x12\x14\n\
-    \x05value\x18\x02\x20\x01(\tR\x05value\x12\x1b\n\tclient_id\x18\x03\x20\
-    \x01(\x04R\x08clientId\"u\n\x08PutReply\x12+\n\x05state\x18\x01\x20\x01(\
-    \x0e2\x15.meteora.common.StateR\x05state\x12\x1f\n\x0baddress_map\x18\
-    \x02\x20\x01(\x0cR\naddressMap\x12\x1b\n\tleader_id\x18\x03\x20\x01(\x04\
-    R\x08leaderId\":\n\tDeleteReq\x12\x10\n\x03key\x18\x01\x20\x01(\tR\x03ke\
-    y\x12\x1b\n\tclient_id\x18\x02\x20\x01(\x04R\x08clientId\"x\n\x0bDeleteR\
-    eply\x12+\n\x05state\x18\x01\x20\x01(\x0e2\x15.meteora.common.StateR\x05\
-    state\x12\x1f\n\x0baddress_map\x18\x02\x20\x01(\x0cR\naddressMap\x12\x1b\
-    \n\tleader_id\x18\x03\x20\x01(\x04R\x08leaderId2\xad\x01\n\tKvService\
-    \x121\n\x03Get\x12\x12.meteora.kv.GetReq\x1a\x14.meteora.kv.GetReply\"\0\
-    \x121\n\x03Put\x12\x12.meteora.kv.PutReq\x1a\x14.meteora.kv.PutReply\"\0\
-    \x12:\n\x06Delete\x12\x15.meteora.kv.DeleteReq\x1a\x17.meteora.kv.Delete\
-    Reply\"\0J\x9a\x0c\n\x06\x12\x04\0\0-\x01\n\x08\n\x01\x0c\x12\x03\0\0\
-    \x12\n\t\n\x02\x03\0\x12\x03\x02\x07\x15\n\x08\n\x01\x02\x12\x03\x04\x08\
-    \x12\n\n\n\x02\x06\0\x12\x04\x06\0\n\x01\n\n\n\x03\x06\0\x01\x12\x03\x06\
-    \x08\x11\n\x0b\n\x04\x06\0\x02\0\x12\x03\x07\x04)\n\x0c\n\x05\x06\0\x02\
-    \0\x01\x12\x03\x07\x08\x0b\n\x0c\n\x05\x06\0\x02\0\x02\x12\x03\x07\x0c\
-    \x12\n\x0c\n\x05\x06\0\x02\0\x03\x12\x03\x07\x1d%\n\x0b\n\x04\x06\0\x02\
-    \x01\x12\x03\x08\x04)\n\x0c\n\x05\x06\0\x02\x01\x01\x12\x03\x08\x08\x0b\
-    \n\x0c\n\x05\x06\0\x02\x01\x02\x12\x03\x08\x0c\x12\n\x0c\n\x05\x06\0\x02\
-    \x01\x03\x12\x03\x08\x1d%\n\x0b\n\x04\x06\0\x02\x02\x12\x03\t\x042\n\x0c\
-    \n\x05\x06\0\x02\x02\x01\x12\x03\t\x08\x0e\n\x0c\n\x05\x06\0\x02\x02\x02\
-    \x12\x03\t\x0f\x18\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\t#.\n\n\n\x02\
-    \x04\0\x12\x04\x0c\0\x0f\x01\n\n\n\x03\x04\0\x01\x12\x03\x0c\x08\x0e\n\
-    \x0b\n\x04\x04\0\x02\0\x12\x03\r\x04\x13\n\r\n\x05\x04\0\x02\0\x04\x12\
-    \x04\r\x04\x0c\x10\n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\r\x04\n\n\x0c\n\
-    \x05\x04\0\x02\0\x01\x12\x03\r\x0b\x0e\n\x0c\n\x05\x04\0\x02\0\x03\x12\
-    \x03\r\x11\x12\n\x0b\n\x04\x04\0\x02\x01\x12\x03\x0e\x04\x19\n\r\n\x05\
-    \x04\0\x02\x01\x04\x12\x04\x0e\x04\r\x13\n\x0c\n\x05\x04\0\x02\x01\x05\
-    \x12\x03\x0e\x04\n\n\x0c\n\x05\x04\0\x02\x01\x01\x12\x03\x0e\x0b\x14\n\
-    \x0c\n\x05\x04\0\x02\x01\x03\x12\x03\x0e\x17\x18\n\n\n\x02\x04\x01\x12\
-    \x04\x11\0\x16\x01\n\n\n\x03\x04\x01\x01\x12\x03\x11\x08\x10\n\x0b\n\x04\
-    \x04\x01\x02\0\x12\x03\x12\x04#\n\r\n\x05\x04\x01\x02\0\x04\x12\x04\x12\
-    \x04\x11\x12\n\x0c\n\x05\x04\x01\x02\0\x06\x12\x03\x12\x04\x18\n\x0c\n\
-    \x05\x04\x01\x02\0\x01\x12\x03\x12\x19\x1e\n\x0c\n\x05\x04\x01\x02\0\x03\
-    \x12\x03\x12!\"\n\x0b\n\x04\x04\x01\x02\x01\x12\x03\x13\x04\x15\n\r\n\
-    \x05\x04\x01\x02\x01\x04\x12\x04\x13\x04\x12#\n\x0c\n\x05\x04\x01\x02\
-    \x01\x05\x12\x03\x13\x04\n\n\x0c\n\x05\x04\x01\x02\x01\x01\x12\x03\x13\
-    \x0b\x10\n\x0c\n\x05\x04\x01\x02\x01\x03\x12\x03\x13\x13\x14\n\x0b\n\x04\
-    \x04\x01\x02\x02\x12\x03\x14\x04\x1a\n\r\n\x05\x04\x01\x02\x02\x04\x12\
-    \x04\x14\x04\x13\x15\n\x0c\n\x05\x04\x01\x02\x02\x05\x12\x03\x14\x04\t\n\
-    \x0c\n\x05\x04\x01\x02\x02\x01\x12\x03\x14\n\x15\n\x0c\n\x05\x04\x01\x02\
-    \x02\x03\x12\x03\x14\x18\x19\n\x0b\n\x04\x04\x01\x02\x03\x12\x03\x15\x04\
-    \x19\n\r\n\x05\x04\x01\x02\x03\x04\x12\x04\x15\x04\x14\x1a\n\x0c\n\x05\
-    \x04\x01\x02\x03\x05\x12\x03\x15\x04\n\n\x0c\n\x05\x04\x01\x02\x03\x01\
-    \x12\x03\x15\x0b\x14\n\x0c\n\x05\x04\x01\x02\x03\x03\x12\x03\x15\x17\x18\
-    \n\n\n\x02\x04\x02\x12\x04\x18\0\x1c\x01\n\n\n\x03\x04\x02\x01\x12\x03\
-    \x18\x08\x0e\n\x0b\n\x04\x04\x02\x02\0\x12\x03\x19\x04\x13\n\r\n\x05\x04\
-    \x02\x02\0\x04\x12\x04\x19\x04\x18\x10\n\x0c\n\x05\x04\x02\x02\0\x05\x12\
-    \x03\x19\x04\n\n\x0c\n\x05\x04\x02\x02\0\x01\x12\x03\x19\x0b\x0e\n\x0c\n\
-    \x05\x04\x02\x02\0\x03\x12\x03\x19\x11\x12\n\x0b\n\x04\x04\x02\x02\x01\
-    \x12\x03\x1a\x04\x15\n\r\n\x05\x04\x02\x02\x01\x04\x12\x04\x1a\x04\x19\
-    \x13\n\x0c\n\x05\x04\x02\x02\x01\x05\x12\x03\x1a\x04\n\n\x0c\n\x05\x04\
-    \x02\x02\x01\x01\x12\x03\x1a\x0b\x10\n\x0c\n\x05\x04\x02\x02\x01\x03\x12\
-    \x03\x1a\x13\x14\n\x0b\n\x04\x04\x02\x02\x02\x12\x03\x1b\x04\x19\n\r\n\
-    \x05\x04\x02\x02\x02\x04\x12\x04\x1b\x04\x1a\x15\n\x0c\n\x05\x04\x02\x02\
-    \x02\x05\x12\x03\x1b\x04\n\n\x0c\n\x05\x04\x02\x02\x02\x01\x12\x03\x1b\
-    \x0b\x14\n\x0c\n\x05\x04\x02\x02\x02\x03\x12\x03\x1b\x17\x18\n\n\n\x02\
-    \x04\x03\x12\x04\x1e\0\"\x01\n\n\n\x03\x04\x03\x01\x12\x03\x1e\x08\x10\n\
-    \x0b\n\x04\x04\x03\x02\0\x12\x03\x1f\x04#\n\r\n\x05\x04\x03\x02\0\x04\
-    \x12\x04\x1f\x04\x1e\x12\n\x0c\n\x05\x04\x03\x02\0\x06\x12\x03\x1f\x04\
-    \x18\n\x0c\n\x05\x04\x03\x02\0\x01\x12\x03\x1f\x19\x1e\n\x0c\n\x05\x04\
-    \x03\x02\0\x03\x12\x03\x1f!\"\n\x0b\n\x04\x04\x03\x02\x01\x12\x03\x20\
-    \x04\x1a\n\r\n\x05\x04\x03\x02\x01\x04\x12\x04\x20\x04\x1f#\n\x0c\n\x05\
-    \x04\x03\x02\x01\x05\x12\x03\x20\x04\t\n\x0c\n\x05\x04\x03\x02\x01\x01\
-    \x12\x03\x20\n\x15\n\x0c\n\x05\x04\x03\x02\x01\x03\x12\x03\x20\x18\x19\n\
-    \x0b\n\x04\x04\x03\x02\x02\x12\x03!\x04\x19\n\r\n\x05\x04\x03\x02\x02\
-    \x04\x12\x04!\x04\x20\x1a\n\x0c\n\x05\x04\x03\x02\x02\x05\x12\x03!\x04\n\
-    \n\x0c\n\x05\x04\x03\x02\x02\x01\x12\x03!\x0b\x14\n\x0c\n\x05\x04\x03\
-    \x02\x02\x03\x12\x03!\x17\x18\n\n\n\x02\x04\x04\x12\x04$\0'\x01\n\n\n\
-    \x03\x04\x04\x01\x12\x03$\x08\x11\n\x0b\n\x04\x04\x04\x02\0\x12\x03%\x04\
-    \x13\n\r\n\x05\x04\x04\x02\0\x04\x12\x04%\x04$\x13\n\x0c\n\x05\x04\x04\
-    \x02\0\x05\x12\x03%\x04\n\n\x0c\n\x05\x04\x04\x02\0\x01\x12\x03%\x0b\x0e\
-    \n\x0c\n\x05\x04\x04\x02\0\x03\x12\x03%\x11\x12\n\x0b\n\x04\x04\x04\x02\
-    \x01\x12\x03&\x04\x19\n\r\n\x05\x04\x04\x02\x01\x04\x12\x04&\x04%\x13\n\
-    \x0c\n\x05\x04\x04\x02\x01\x05\x12\x03&\x04\n\n\x0c\n\x05\x04\x04\x02\
-    \x01\x01\x12\x03&\x0b\x14\n\x0c\n\x05\x04\x04\x02\x01\x03\x12\x03&\x17\
-    \x18\n\n\n\x02\x04\x05\x12\x04)\0-\x01\n\n\n\x03\x04\x05\x01\x12\x03)\
-    \x08\x13\n\x0b\n\x04\x04\x05\x02\0\x12\x03*\x04#\n\r\n\x05\x04\x05\x02\0\
-    \x04\x12\x04*\x04)\x15\n\x0c\n\x05\x04\x05\x02\0\x06\x12\x03*\x04\x18\n\
-    \x0c\n\x05\x04\x05\x02\0\x01\x12\x03*\x19\x1e\n\x0c\n\x05\x04\x05\x02\0\
-    \x03\x12\x03*!\"\n\x0b\n\x04\x04\x05\x02\x01\x12\x03+\x04\x1a\n\r\n\x05\
-    \x04\x05\x02\x01\x04\x12\x04+\x04*#\n\x0c\n\x05\x04\x05\x02\x01\x05\x12\
-    \x03+\x04\t\n\x0c\n\x05\x04\x05\x02\x01\x01\x12\x03+\n\x15\n\x0c\n\x05\
-    \x04\x05\x02\x01\x03\x12\x03+\x18\x19\n\x0b\n\x04\x04\x05\x02\x02\x12\
-    \x03,\x04\x19\n\r\n\x05\x04\x05\x02\x02\x04\x12\x04,\x04+\x1a\n\x0c\n\
-    \x05\x04\x05\x02\x02\x05\x12\x03,\x04\n\n\x0c\n\x05\x04\x05\x02\x02\x01\
-    \x12\x03,\x0b\x14\n\x0c\n\x05\x04\x05\x02\x02\x03\x12\x03,\x17\x18b\x06p\
-    roto3\
+    \n\x08kv.proto\x12\nmeteora.kv\x1a\x0ccommon.proto\"\x1a\n\x06GetReq\x12\
+    \x10\n\x03key\x18\x01\x20\x01(\x0cR\x03key\"\x8b\x01\n\x08GetReply\x12\
+    \x14\n\x05value\x18\x01\x20\x01(\x0cR\x05value\x12+\n\x05state\x18\x02\
+    \x20\x01(\x0e2\x15.meteora.common.StateR\x05state\x12\x1f\n\x0baddress_m\
+    ap\x18\x03\x20\x01(\x0cR\naddressMap\x12\x1b\n\tleader_id\x18\x04\x20\
+    \x01(\x04R\x08leaderId\"0\n\x06PutReq\x12\x10\n\x03key\x18\x01\x20\x01(\
+    \x0cR\x03key\x12\x14\n\x05value\x18\x02\x20\x01(\x0cR\x05value\"u\n\x08P\
+    utReply\x12+\n\x05state\x18\x01\x20\x01(\x0e2\x15.meteora.common.StateR\
+    \x05state\x12\x1f\n\x0baddress_map\x18\x02\x20\x01(\x0cR\naddressMap\x12\
+    \x1b\n\tleader_id\x18\x03\x20\x01(\x04R\x08leaderId\"\x1d\n\tDeleteReq\
+    \x12\x10\n\x03key\x18\x01\x20\x01(\x0cR\x03key\"x\n\x0bDeleteReply\x12+\
+    \n\x05state\x18\x01\x20\x01(\x0e2\x15.meteora.common.StateR\x05state\x12\
+    \x1f\n\x0baddress_map\x18\x02\x20\x01(\x0cR\naddressMap\x12\x1b\n\tleade\
+    r_id\x18\x03\x20\x01(\x04R\x08leaderId2\xad\x01\n\tKvService\x121\n\x03G\
+    et\x12\x12.meteora.kv.GetReq\x1a\x14.meteora.kv.GetReply\"\0\x121\n\x03P\
+    ut\x12\x12.meteora.kv.PutReq\x1a\x14.meteora.kv.PutReply\"\0\x12:\n\x06D\
+    elete\x12\x15.meteora.kv.DeleteReq\x1a\x17.meteora.kv.DeleteReply\"\0J\
+    \xc8\n\n\x06\x12\x04\0\0*\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\
+    \x03\0\x12\x03\x02\x07\x15\n\x08\n\x01\x02\x12\x03\x04\x08\x12\n\n\n\x02\
+    \x06\0\x12\x04\x06\0\n\x01\n\n\n\x03\x06\0\x01\x12\x03\x06\x08\x11\n\x0b\
+    \n\x04\x06\0\x02\0\x12\x03\x07\x04)\n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\
+    \x07\x08\x0b\n\x0c\n\x05\x06\0\x02\0\x02\x12\x03\x07\x0c\x12\n\x0c\n\x05\
+    \x06\0\x02\0\x03\x12\x03\x07\x1d%\n\x0b\n\x04\x06\0\x02\x01\x12\x03\x08\
+    \x04)\n\x0c\n\x05\x06\0\x02\x01\x01\x12\x03\x08\x08\x0b\n\x0c\n\x05\x06\
+    \0\x02\x01\x02\x12\x03\x08\x0c\x12\n\x0c\n\x05\x06\0\x02\x01\x03\x12\x03\
+    \x08\x1d%\n\x0b\n\x04\x06\0\x02\x02\x12\x03\t\x042\n\x0c\n\x05\x06\0\x02\
+    \x02\x01\x12\x03\t\x08\x0e\n\x0c\n\x05\x06\0\x02\x02\x02\x12\x03\t\x0f\
+    \x18\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\t#.\n\n\n\x02\x04\0\x12\x04\
+    \x0c\0\x0e\x01\n\n\n\x03\x04\0\x01\x12\x03\x0c\x08\x0e\n\x0b\n\x04\x04\0\
+    \x02\0\x12\x03\r\x04\x12\n\r\n\x05\x04\0\x02\0\x04\x12\x04\r\x04\x0c\x10\
+    \n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\r\x04\t\n\x0c\n\x05\x04\0\x02\0\x01\
+    \x12\x03\r\n\r\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\r\x10\x11\n\n\n\x02\
+    \x04\x01\x12\x04\x10\0\x15\x01\n\n\n\x03\x04\x01\x01\x12\x03\x10\x08\x10\
+    \n\x0b\n\x04\x04\x01\x02\0\x12\x03\x11\x04\x14\n\r\n\x05\x04\x01\x02\0\
+    \x04\x12\x04\x11\x04\x10\x12\n\x0c\n\x05\x04\x01\x02\0\x05\x12\x03\x11\
+    \x04\t\n\x0c\n\x05\x04\x01\x02\0\x01\x12\x03\x11\n\x0f\n\x0c\n\x05\x04\
+    \x01\x02\0\x03\x12\x03\x11\x12\x13\n\x0b\n\x04\x04\x01\x02\x01\x12\x03\
+    \x12\x04#\n\r\n\x05\x04\x01\x02\x01\x04\x12\x04\x12\x04\x11\x14\n\x0c\n\
+    \x05\x04\x01\x02\x01\x06\x12\x03\x12\x04\x18\n\x0c\n\x05\x04\x01\x02\x01\
+    \x01\x12\x03\x12\x19\x1e\n\x0c\n\x05\x04\x01\x02\x01\x03\x12\x03\x12!\"\
+    \n\x0b\n\x04\x04\x01\x02\x02\x12\x03\x13\x04\x1a\n\r\n\x05\x04\x01\x02\
+    \x02\x04\x12\x04\x13\x04\x12#\n\x0c\n\x05\x04\x01\x02\x02\x05\x12\x03\
+    \x13\x04\t\n\x0c\n\x05\x04\x01\x02\x02\x01\x12\x03\x13\n\x15\n\x0c\n\x05\
+    \x04\x01\x02\x02\x03\x12\x03\x13\x18\x19\n\x0b\n\x04\x04\x01\x02\x03\x12\
+    \x03\x14\x04\x19\n\r\n\x05\x04\x01\x02\x03\x04\x12\x04\x14\x04\x13\x1a\n\
+    \x0c\n\x05\x04\x01\x02\x03\x05\x12\x03\x14\x04\n\n\x0c\n\x05\x04\x01\x02\
+    \x03\x01\x12\x03\x14\x0b\x14\n\x0c\n\x05\x04\x01\x02\x03\x03\x12\x03\x14\
+    \x17\x18\n\n\n\x02\x04\x02\x12\x04\x17\0\x1a\x01\n\n\n\x03\x04\x02\x01\
+    \x12\x03\x17\x08\x0e\n\x0b\n\x04\x04\x02\x02\0\x12\x03\x18\x04\x12\n\r\n\
+    \x05\x04\x02\x02\0\x04\x12\x04\x18\x04\x17\x10\n\x0c\n\x05\x04\x02\x02\0\
+    \x05\x12\x03\x18\x04\t\n\x0c\n\x05\x04\x02\x02\0\x01\x12\x03\x18\n\r\n\
+    \x0c\n\x05\x04\x02\x02\0\x03\x12\x03\x18\x10\x11\n\x0b\n\x04\x04\x02\x02\
+    \x01\x12\x03\x19\x04\x14\n\r\n\x05\x04\x02\x02\x01\x04\x12\x04\x19\x04\
+    \x18\x12\n\x0c\n\x05\x04\x02\x02\x01\x05\x12\x03\x19\x04\t\n\x0c\n\x05\
+    \x04\x02\x02\x01\x01\x12\x03\x19\n\x0f\n\x0c\n\x05\x04\x02\x02\x01\x03\
+    \x12\x03\x19\x12\x13\n\n\n\x02\x04\x03\x12\x04\x1c\0\x20\x01\n\n\n\x03\
+    \x04\x03\x01\x12\x03\x1c\x08\x10\n\x0b\n\x04\x04\x03\x02\0\x12\x03\x1d\
+    \x04#\n\r\n\x05\x04\x03\x02\0\x04\x12\x04\x1d\x04\x1c\x12\n\x0c\n\x05\
+    \x04\x03\x02\0\x06\x12\x03\x1d\x04\x18\n\x0c\n\x05\x04\x03\x02\0\x01\x12\
+    \x03\x1d\x19\x1e\n\x0c\n\x05\x04\x03\x02\0\x03\x12\x03\x1d!\"\n\x0b\n\
+    \x04\x04\x03\x02\x01\x12\x03\x1e\x04\x1a\n\r\n\x05\x04\x03\x02\x01\x04\
+    \x12\x04\x1e\x04\x1d#\n\x0c\n\x05\x04\x03\x02\x01\x05\x12\x03\x1e\x04\t\
+    \n\x0c\n\x05\x04\x03\x02\x01\x01\x12\x03\x1e\n\x15\n\x0c\n\x05\x04\x03\
+    \x02\x01\x03\x12\x03\x1e\x18\x19\n\x0b\n\x04\x04\x03\x02\x02\x12\x03\x1f\
+    \x04\x19\n\r\n\x05\x04\x03\x02\x02\x04\x12\x04\x1f\x04\x1e\x1a\n\x0c\n\
+    \x05\x04\x03\x02\x02\x05\x12\x03\x1f\x04\n\n\x0c\n\x05\x04\x03\x02\x02\
+    \x01\x12\x03\x1f\x0b\x14\n\x0c\n\x05\x04\x03\x02\x02\x03\x12\x03\x1f\x17\
+    \x18\n\n\n\x02\x04\x04\x12\x04\"\0$\x01\n\n\n\x03\x04\x04\x01\x12\x03\"\
+    \x08\x11\n\x0b\n\x04\x04\x04\x02\0\x12\x03#\x04\x12\n\r\n\x05\x04\x04\
+    \x02\0\x04\x12\x04#\x04\"\x13\n\x0c\n\x05\x04\x04\x02\0\x05\x12\x03#\x04\
+    \t\n\x0c\n\x05\x04\x04\x02\0\x01\x12\x03#\n\r\n\x0c\n\x05\x04\x04\x02\0\
+    \x03\x12\x03#\x10\x11\n\n\n\x02\x04\x05\x12\x04&\0*\x01\n\n\n\x03\x04\
+    \x05\x01\x12\x03&\x08\x13\n\x0b\n\x04\x04\x05\x02\0\x12\x03'\x04#\n\r\n\
+    \x05\x04\x05\x02\0\x04\x12\x04'\x04&\x15\n\x0c\n\x05\x04\x05\x02\0\x06\
+    \x12\x03'\x04\x18\n\x0c\n\x05\x04\x05\x02\0\x01\x12\x03'\x19\x1e\n\x0c\n\
+    \x05\x04\x05\x02\0\x03\x12\x03'!\"\n\x0b\n\x04\x04\x05\x02\x01\x12\x03(\
+    \x04\x1a\n\r\n\x05\x04\x05\x02\x01\x04\x12\x04(\x04'#\n\x0c\n\x05\x04\
+    \x05\x02\x01\x05\x12\x03(\x04\t\n\x0c\n\x05\x04\x05\x02\x01\x01\x12\x03(\
+    \n\x15\n\x0c\n\x05\x04\x05\x02\x01\x03\x12\x03(\x18\x19\n\x0b\n\x04\x04\
+    \x05\x02\x02\x12\x03)\x04\x19\n\r\n\x05\x04\x05\x02\x02\x04\x12\x04)\x04\
+    (\x1a\n\x0c\n\x05\x04\x05\x02\x02\x05\x12\x03)\x04\n\n\x0c\n\x05\x04\x05\
+    \x02\x02\x01\x12\x03)\x0b\x14\n\x0c\n\x05\x04\x05\x02\x02\x03\x12\x03)\
+    \x17\x18b\x06proto3\
 ";
 
 static file_descriptor_proto_lazy: ::protobuf::rt::LazyV2<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::rt::LazyV2::INIT;

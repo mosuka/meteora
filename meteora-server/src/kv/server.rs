@@ -12,7 +12,7 @@ use rocksdb::DB;
 use serde::{Deserialize, Serialize};
 
 use meteora_proto::proto::common::State;
-use meteora_proto::proto::kv::{DeleteReply, DeleteReq, GetReply, GetReq, PutReq, PutReply};
+use meteora_proto::proto::kv::{DeleteReply, DeleteReq, GetReply, GetReq, PutReply, PutReq};
 use meteora_proto::proto::kv_grpc::KvService;
 
 use crate::raft::config;
@@ -24,20 +24,21 @@ pub struct KVServer {
     db: Arc<DB>,
     sender: Sender<config::Msg>,
     seq: u64,
+    node_id: u64,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
 pub enum Op {
-    Put { key: String, val: String },
-    Get { key: String },
-    Delete { key: String },
+    Put { key: Vec<u8>, val: Vec<u8> },
+    Get { key: Vec<u8> },
+    Delete { key: Vec<u8> },
 }
 
 impl KVServer {
     pub fn new(
         db_path: String,
         raft_storage: MemStorage,
-        server_id: u64,
+        node_id: u64,
         node_address: NodeAddress,
         addresses: HashMap<u64, NodeAddress>,
     ) -> (KVServer, RaftServer) {
@@ -46,20 +47,14 @@ impl KVServer {
         let (rs, rr) = mpsc::channel();
         let (apply_s, apply_r) = mpsc::channel();
         thread::spawn(move || {
-            config::init_and_run(
-                raft_storage,
-                rr,
-                apply_s,
-                server_id,
-                node_address,
-                addresses,
-            );
+            config::init_and_run(raft_storage, rr, apply_s, node_id, node_address, addresses);
         });
 
         let kv_server = KVServer {
             db: Arc::new(db),
             sender: rs.clone(),
             seq: 0,
+            node_id,
         };
         let raft_server = RaftServer::new(rs);
 
@@ -78,9 +73,11 @@ impl KvService for KVServer {
         let db = Arc::clone(&self.db);
         let sender = self.sender.clone();
         let op = Op::Get {
-            key: String::from(req.get_key()),
+            key: req.get_key().to_vec(),
         };
         let seq = self.seq;
+        let node_id = self.node_id;
+
         self.seq += 1;
 
         sender
@@ -90,13 +87,22 @@ impl KvService for KVServer {
                 cb: Box::new(move |leader_id: i32, addresses: Vec<u8>| {
                     // Get
                     let mut reply = GetReply::new();
-                    let (state, value) = match db.get(req.get_key().as_bytes()) {
-                        Ok(Some(v)) => (State::OK, String::from_utf8(v).unwrap()),
-                        Ok(None) => (State::NOT_FOUND, "".to_string()),
-                        Err(e) => (State::IO_ERROR, String::from(e)),
+                    let (state, value) = match db.get(req.get_key()) {
+                        Ok(Some(v)) => (State::OK, v),
+                        Ok(None) => (State::NOT_FOUND, Vec::new()),
+                        Err(e) => {
+                            error!("failed to get value: {:?}", e);
+                            (State::IO_ERROR, Vec::new())
+                        }
                     };
                     reply.set_state(state);
-                    reply.set_leader_id(leader_id as u64);
+                    if leader_id >= 0 {
+                        // follower
+                        reply.set_leader_id(leader_id as u64);
+                    } else {
+                        // leader
+                        reply.set_leader_id(node_id);
+                    }
                     reply.set_value(value);
                     reply.set_address_map(addresses);
                     s1.send(reply).expect("cb channel closed");
@@ -123,10 +129,12 @@ impl KvService for KVServer {
         let (s1, r1) = mpsc::channel();
         let sender = self.sender.clone();
         let op = Op::Put {
-            key: String::from(req.get_key()),
-            val: String::from(req.get_value()),
+            key: req.get_key().to_vec(),
+            val: req.get_value().to_vec(),
         };
         let seq = self.seq;
+        let node_id = self.node_id;
+
         self.seq += 1;
 
         sender
@@ -136,13 +144,15 @@ impl KvService for KVServer {
                 cb: Box::new(move |leader_id: i32, addresses: Vec<u8>| {
                     let mut reply = PutReply::new();
                     if leader_id >= 0 {
+                        // follower
                         reply.set_state(State::WRONG_LEADER);
                         reply.set_leader_id(leader_id as u64);
                     } else {
+                        // leader
                         reply.set_state(State::OK);
+                        reply.set_leader_id(node_id);
                     }
                     reply.set_address_map(addresses);
-                    // done job, wake
                     s1.send(reply).expect("cb channel closed");
                 }),
             })
@@ -167,9 +177,11 @@ impl KvService for KVServer {
         let (s1, r1) = mpsc::channel();
         let sender = self.sender.clone();
         let op = Op::Delete {
-            key: String::from(req.get_key()),
+            key: req.get_key().to_vec(),
         };
         let seq = self.seq;
+        let node_id = self.node_id;
+
         self.seq += 1;
 
         sender
@@ -179,13 +191,15 @@ impl KvService for KVServer {
                 cb: Box::new(move |leader_id: i32, addresses: Vec<u8>| {
                     let mut reply = DeleteReply::new();
                     if leader_id >= 0 {
+                        // follower
                         reply.set_state(State::WRONG_LEADER);
                         reply.set_leader_id(leader_id as u64);
                     } else {
+                        // leader
                         reply.set_state(State::OK);
+                        reply.set_leader_id(node_id);
                     }
                     reply.set_address_map(addresses);
-                    // done job, wake
                     s1.send(reply).expect("cb channel closed");
                 }),
             })
@@ -221,10 +235,10 @@ fn apply_daemon(receiver: Receiver<Op>, db: Arc<DB>) {
                 // noop
             }
             Op::Put { key, val } => {
-                db.put(key.as_bytes(), val.as_bytes()).unwrap();
+                db.put(key.as_slice(), val.as_slice()).unwrap();
             }
             Op::Delete { key } => {
-                db.delete(key.as_bytes()).unwrap();
+                db.delete(key.as_slice()).unwrap();
             }
         }
     }

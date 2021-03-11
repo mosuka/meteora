@@ -13,5 +13,5 @@ pub fn run_put_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
 
     let mut kv_client = KVClient::new(server);
 
-    kv_client.put(key.to_string(), value.to_string())
+    kv_client.put(key.as_bytes().to_vec(), value.as_bytes().to_vec())
 }

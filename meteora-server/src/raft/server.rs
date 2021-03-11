@@ -40,6 +40,7 @@ impl RaftService for RaftServer {
                     let mut reply = ChangeReply::new();
                     if leader_id >= 0 {
                         reply.set_state(State::WRONG_LEADER);
+                        // reply.set_leader_id(leader_id as u64);
                         reply.set_leader_id(leader_id as u64);
                     } else {
                         reply.set_state(State::OK);

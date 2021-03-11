@@ -141,10 +141,11 @@ impl ::protobuf::reflect::ProtobufValue for Null {
 
 #[derive(Clone,PartialEq,Eq,Debug,Hash)]
 pub enum State {
-    OK = 0,
-    WRONG_LEADER = 1,
-    NOT_FOUND = 2,
-    IO_ERROR = 3,
+    UNKNOWN = 0,
+    OK = 1,
+    WRONG_LEADER = 2,
+    NOT_FOUND = 3,
+    IO_ERROR = 4,
 }
 
 impl ::protobuf::ProtobufEnum for State {
@@ -154,16 +155,18 @@ impl ::protobuf::ProtobufEnum for State {
 
     fn from_i32(value: i32) -> ::std::option::Option<State> {
         match value {
-            0 => ::std::option::Option::Some(State::OK),
-            1 => ::std::option::Option::Some(State::WRONG_LEADER),
-            2 => ::std::option::Option::Some(State::NOT_FOUND),
-            3 => ::std::option::Option::Some(State::IO_ERROR),
+            0 => ::std::option::Option::Some(State::UNKNOWN),
+            1 => ::std::option::Option::Some(State::OK),
+            2 => ::std::option::Option::Some(State::WRONG_LEADER),
+            3 => ::std::option::Option::Some(State::NOT_FOUND),
+            4 => ::std::option::Option::Some(State::IO_ERROR),
             _ => ::std::option::Option::None
         }
     }
 
     fn values() -> &'static [Self] {
         static values: &'static [State] = &[
+            State::UNKNOWN,
             State::OK,
             State::WRONG_LEADER,
             State::NOT_FOUND,
@@ -185,7 +188,7 @@ impl ::std::marker::Copy for State {
 
 impl ::std::default::Default for State {
     fn default() -> Self {
-        State::OK
+        State::UNKNOWN
     }
 }
 
@@ -196,21 +199,23 @@ impl ::protobuf::reflect::ProtobufValue for State {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x0ccommon.proto\x12\x0emeteora.common\"\x06\n\x04Null*>\n\x05State\
-    \x12\x06\n\x02OK\x10\0\x12\x10\n\x0cWRONG_LEADER\x10\x01\x12\r\n\tNOT_FO\
-    UND\x10\x02\x12\x0c\n\x08IO_ERROR\x10\x03J\xef\x01\n\x06\x12\x04\0\0\x0b\
-    \x0f\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\x08\n\x01\x02\x12\x03\x02\x08\x16\
-    \n\n\n\x02\x05\0\x12\x04\x04\0\t\x01\n\n\n\x03\x05\0\x01\x12\x03\x04\x05\
-    \n\n\x0b\n\x04\x05\0\x02\0\x12\x03\x05\x04\x0b\n\x0c\n\x05\x05\0\x02\0\
-    \x01\x12\x03\x05\x04\x06\n\x0c\n\x05\x05\0\x02\0\x02\x12\x03\x05\t\n\n\
-    \x0b\n\x04\x05\0\x02\x01\x12\x03\x06\x04\x15\n\x0c\n\x05\x05\0\x02\x01\
-    \x01\x12\x03\x06\x04\x10\n\x0c\n\x05\x05\0\x02\x01\x02\x12\x03\x06\x13\
-    \x14\n\x0b\n\x04\x05\0\x02\x02\x12\x03\x07\x04\x12\n\x0c\n\x05\x05\0\x02\
-    \x02\x01\x12\x03\x07\x04\r\n\x0c\n\x05\x05\0\x02\x02\x02\x12\x03\x07\x10\
-    \x11\n\x0b\n\x04\x05\0\x02\x03\x12\x03\x08\x04\x11\n\x0c\n\x05\x05\0\x02\
-    \x03\x01\x12\x03\x08\x04\x0c\n\x0c\n\x05\x05\0\x02\x03\x02\x12\x03\x08\
-    \x0f\x10\n\t\n\x02\x04\0\x12\x03\x0b\0\x0f\n\n\n\x03\x04\0\x01\x12\x03\
-    \x0b\x08\x0cb\x06proto3\
+    \n\x0ccommon.proto\x12\x0emeteora.common\"\x06\n\x04Null*K\n\x05State\
+    \x12\x0b\n\x07UNKNOWN\x10\0\x12\x06\n\x02OK\x10\x01\x12\x10\n\x0cWRONG_L\
+    EADER\x10\x02\x12\r\n\tNOT_FOUND\x10\x03\x12\x0c\n\x08IO_ERROR\x10\x04J\
+    \x98\x02\n\x06\x12\x04\0\0\x0c\x0f\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\x08\
+    \n\x01\x02\x12\x03\x02\x08\x16\n\n\n\x02\x05\0\x12\x04\x04\0\n\x01\n\n\n\
+    \x03\x05\0\x01\x12\x03\x04\x05\n\n\x0b\n\x04\x05\0\x02\0\x12\x03\x05\x04\
+    \x10\n\x0c\n\x05\x05\0\x02\0\x01\x12\x03\x05\x04\x0b\n\x0c\n\x05\x05\0\
+    \x02\0\x02\x12\x03\x05\x0e\x0f\n\x0b\n\x04\x05\0\x02\x01\x12\x03\x06\x04\
+    \x0b\n\x0c\n\x05\x05\0\x02\x01\x01\x12\x03\x06\x04\x06\n\x0c\n\x05\x05\0\
+    \x02\x01\x02\x12\x03\x06\t\n\n\x0b\n\x04\x05\0\x02\x02\x12\x03\x07\x04\
+    \x15\n\x0c\n\x05\x05\0\x02\x02\x01\x12\x03\x07\x04\x10\n\x0c\n\x05\x05\0\
+    \x02\x02\x02\x12\x03\x07\x13\x14\n\x0b\n\x04\x05\0\x02\x03\x12\x03\x08\
+    \x04\x12\n\x0c\n\x05\x05\0\x02\x03\x01\x12\x03\x08\x04\r\n\x0c\n\x05\x05\
+    \0\x02\x03\x02\x12\x03\x08\x10\x11\n\x0b\n\x04\x05\0\x02\x04\x12\x03\t\
+    \x04\x11\n\x0c\n\x05\x05\0\x02\x04\x01\x12\x03\t\x04\x0c\n\x0c\n\x05\x05\
+    \0\x02\x04\x02\x12\x03\t\x0f\x10\n\t\n\x02\x04\0\x12\x03\x0c\0\x0f\n\n\n\
+    \x03\x04\0\x01\x12\x03\x0c\x08\x0cb\x06proto3\
 ";
 
 static file_descriptor_proto_lazy: ::protobuf::rt::LazyV2<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::rt::LazyV2::INIT;

@@ -19,3 +19,9 @@ $ ./bin/meteora get -a 0.0.0.0:5001 key1
 $ ./bin/meteora get -a 0.0.0.0:5002 key1
 $ ./bin/meteora get -a 0.0.0.0:5003 key1
 ```
+
+```shell
+$ export KEY="key1" && export VALUE="value1" && grpcurl -import-path meteora-proto/proto -proto meteora-proto/proto/kv.proto -d "{ \"key\": \"$(echo -n $KEY | base64 -)\", \"value\": \"$(echo -n $VALUE | base64 -)\"}" -plaintext 0.0.0.0:5001 meteora.kv.KvService/Put | jq .
+$ export KEY="key1" && grpcurl -import-path meteora-proto/proto -proto meteora-proto/proto/kv.proto -d "{ \"key\": \"$(echo -n $KEY | base64 -)\" }" -plaintext 0.0.0.0:5001 meteora.kv.KvService/Get | jq '. | { "value" : .value | @base64d }'
+$ export KEY="key1" && grpcurl -import-path meteora-proto/proto -proto meteora-proto/proto/kv.proto -d "{ \"key\": \"$(echo -n $KEY | base64 -)\" }" -plaintext 0.0.0.0:5001 meteora.kv.KvService/Delete | jq .
+```
