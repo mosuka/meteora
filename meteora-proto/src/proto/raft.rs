@@ -211,7 +211,7 @@ impl ChangeReply {
         self.state
     }
     pub fn clear_state(&mut self) {
-        self.state = super::common::State::OK;
+        self.state = super::common::State::UNKNOWN;
     }
 
     // Param is passed by value, moved
@@ -295,7 +295,7 @@ impl ::protobuf::Message for ChangeReply {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if self.state != super::common::State::OK {
+        if self.state != super::common::State::UNKNOWN {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
         if !self.address_map.is_empty() {
@@ -310,7 +310,7 @@ impl ::protobuf::Message for ChangeReply {
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if self.state != super::common::State::OK {
+        if self.state != super::common::State::UNKNOWN {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
         if !self.address_map.is_empty() {
@@ -388,7 +388,7 @@ impl ::protobuf::Message for ChangeReply {
 
 impl ::protobuf::Clear for ChangeReply {
     fn clear(&mut self) {
-        self.state = super::common::State::OK;
+        self.state = super::common::State::UNKNOWN;
         self.address_map.clear();
         self.leader_id = 0;
         self.unknown_fields.clear();
@@ -423,11 +423,11 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \x06\0\x01\x12\x03\x07\x08\x13\n\x0b\n\x04\x06\0\x02\0\x12\x03\x08\x04@\
     \n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\x08\x08\x14\n\x0c\n\x05\x06\0\x02\0\
     \x02\x12\x03\x08\x15'\n\x0c\n\x05\x06\0\x02\0\x03\x12\x03\x081<\n\x0b\n\
-    \x04\x06\0\x02\x01\x12\x03\t\x048\n\x0c\n\x05\x06\0\x02\x01\x01\x12\x03\
+    \x04\x06\0\x02\x01\x12\x03\t\x04@\n\x0c\n\x05\x06\0\x02\x01\x01\x12\x03\
     \t\x08\x0f\n\x0c\n\x05\x06\0\x02\x01\x02\x12\x03\t\x10\x1f\n\x0c\n\x05\
-    \x06\0\x02\x01\x03\x12\x03\t)4\n\x0b\n\x04\x06\0\x02\x02\x12\x03\n\x049\
+    \x06\0\x02\x01\x03\x12\x03\t)<\n\x0b\n\x04\x06\0\x02\x02\x12\x03\n\x04A\
     \n\x0c\n\x05\x06\0\x02\x02\x01\x12\x03\n\x08\x13\n\x0c\n\x05\x06\0\x02\
-    \x02\x02\x12\x03\n\x14\x20\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\n*5\n\n\
+    \x02\x02\x12\x03\n\x14\x20\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\n*=\n\n\
     \n\x02\x04\0\x12\x04\r\0\x0f\x01\n\n\n\x03\x04\0\x01\x12\x03\r\x08\x14\n\
     \x0b\n\x04\x04\0\x02\0\x12\x03\x0e\x04\x1a\n\r\n\x05\x04\0\x02\0\x04\x12\
     \x04\x0e\x04\r\x16\n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\x0e\x04\t\n\x0c\n\

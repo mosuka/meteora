@@ -11,21 +11,19 @@ service KvService {
 }
 
 message GetReq {
-    string key = 1;
-    uint64 client_id = 2;
+    bytes key = 1;
 }
 
 message GetReply {
-    meteora.common.State state = 1;
-    string value = 2;
+    bytes value = 1;
+    meteora.common.State state = 2;
     bytes address_map = 3;
     uint64 leader_id = 4;
 }
 
 message PutReq {
-    string key = 1;
-    string value = 2;
-    uint64 client_id = 3;
+    bytes key = 1;
+    bytes value = 2;
 }
 
 message PutReply {
@@ -35,8 +33,7 @@ message PutReply {
 }
 
 message DeleteReq {
-    string key = 1;
-    uint64 client_id = 2;
+    bytes key = 1;
 }
 
 message DeleteReply {

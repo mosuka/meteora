@@ -3,10 +3,11 @@ syntax = "proto3";
 package meteora.common;
 
 enum State {
-    OK = 0;
-    WRONG_LEADER = 1;
-    NOT_FOUND = 2;
-    IO_ERROR = 3;
+    UNKNOWN = 0;
+    OK = 1;
+    WRONG_LEADER = 2;
+    NOT_FOUND = 3;
+    IO_ERROR = 4;
 }
 
 message Null {}

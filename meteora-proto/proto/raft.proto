@@ -7,8 +7,8 @@ package meteora.raft;
 
 service RaftService {
     rpc ChangeConfig(eraftpb.ConfChange) returns(ChangeReply) {}
-    rpc SendMsg(eraftpb.Message) returns(common.Null) {}
-    rpc SendAddress(AddressState) returns(common.Null) {}
+    rpc SendMsg(eraftpb.Message) returns(meteora.common.Null) {}
+    rpc SendAddress(AddressState) returns(meteora.common.Null) {}
 }
 
 message AddressState {

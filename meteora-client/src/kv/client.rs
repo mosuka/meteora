@@ -46,7 +46,7 @@ impl KVClient {
         }
     }
 
-    pub fn get(&mut self, key: String) -> Result<String, std::io::Error> {
+    pub fn get(&mut self, key: Vec<u8>) -> Result<Vec<u8>, std::io::Error> {
         let mut req = GetReq::new();
         req.set_key(key);
 
@@ -73,10 +73,10 @@ impl KVClient {
 
             let reply = match client.get(&req) {
                 Ok(r) => r,
-                _ => {
+                Err(e) => {
                     return Err(Error::new(
                         ErrorKind::Other,
-                        format!("failed to get value: key={}", req.get_key()),
+                        format!("failed to get value: {:?}", e),
                     ));
                 }
             };
@@ -134,23 +134,23 @@ impl KVClient {
 
             match reply.get_state() {
                 State::OK => {
-                    return Ok(String::from(reply.get_value()));
+                    return Ok(reply.get_value().to_vec());
                 }
                 State::NOT_FOUND => {
                     return Err(Error::new(
                         ErrorKind::NotFound,
-                        format!("not found: key={}", req.get_key()),
+                        format!("not found: key={:?}", req.get_key()),
                     ));
                 }
                 _ => {
                     cnt_retry += 1;
-                    warn!("failed to get value: key={}", req.get_key());
+                    warn!("failed to get value: key={:?}", req.get_key());
                 }
             }
         }
     }
 
-    pub fn put(&mut self, key: String, value: String) -> Result<(), std::io::Error> {
+    pub fn put(&mut self, key: Vec<u8>, value: Vec<u8>) -> Result<(), std::io::Error> {
         let mut req = PutReq::new();
         req.set_key(key);
         req.set_value(value);
@@ -178,10 +178,10 @@ impl KVClient {
 
             let reply = match client.put(&req) {
                 Ok(r) => r,
-                _ => {
+                Err(e) => {
                     return Err(Error::new(
                         ErrorKind::Other,
-                        format!("failed to set value: key={}", req.get_key()),
+                        format!("failed to set value: {:?}", e),
                     ));
                 }
             };
@@ -250,16 +250,16 @@ impl KVClient {
                 _ => {
                     return Err(Error::new(
                         ErrorKind::Other,
-                        format!("failed to set value: key={}", req.get_key()),
+                        format!("failed to set value: key={:?}", req.get_key()),
                     ));
                 }
             };
         }
     }
 
-    pub fn delete(&mut self, key: String) -> Result<(), std::io::Error> {
+    pub fn delete(&mut self, key: Vec<u8>) -> Result<(), std::io::Error> {
         let mut req = DeleteReq::new();
-        req.set_key(key);
+        req.set_key(key.to_vec());
 
         let max_retry = 10;
         let mut cnt_retry = 0;
@@ -274,7 +274,7 @@ impl KVClient {
 
             let client = match self.clients.get(&self.leader_id) {
                 Some(c) => c,
-                _ => {
+                None => {
                     return Err(Error::new(
                         ErrorKind::Other,
                         format!("failed to get client for node: id={}", self.leader_id),
@@ -284,10 +284,10 @@ impl KVClient {
 
             let reply = match client.delete(&req) {
                 Ok(r) => r,
-                _ => {
+                Err(e) => {
                     return Err(Error::new(
                         ErrorKind::Other,
-                        format!("failed to delete value: key={}", req.get_key()),
+                        format!("failed to delete value: {:?}", e),
                     ));
                 }
             };
@@ -356,7 +356,7 @@ impl KVClient {
                 _ => {
                     return Err(Error::new(
                         ErrorKind::Other,
-                        format!("failed to delete value: key={}", req.get_key()),
+                        format!("failed to delete value: key={:?}", req.get_key()),
                     ));
                 }
             };

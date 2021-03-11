@@ -12,5 +12,5 @@ pub fn run_delete_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
 
     let mut kv_client = KVClient::new(server);
 
-    kv_client.delete(key.to_string())
+    kv_client.delete(key.as_bytes().to_vec())
 }
