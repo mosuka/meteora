@@ -12,11 +12,11 @@ service RaftService {
 }
 
 message AddressState {
-    bytes address_map = 1;
+    map<uint64, meteora.common.NodeAddress> address_map = 1;
 }
 
 message ChangeReply {
     meteora.common.State state = 1;
-    bytes address_map = 2;
+    map<uint64, meteora.common.NodeAddress> address_map = 2;
     uint64 leader_id = 3;
 }

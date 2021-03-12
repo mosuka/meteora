@@ -11,12 +11,11 @@ use raft::storage::MemStorage;
 use rocksdb::DB;
 use serde::{Deserialize, Serialize};
 
-use meteora_proto::proto::common::State;
+use meteora_proto::proto::common::{NodeAddress, State};
 use meteora_proto::proto::kv::{DeleteReply, DeleteReq, GetReply, GetReq, PutReply, PutReq};
 use meteora_proto::proto::kv_grpc::KvService;
 
 use crate::raft::config;
-use crate::raft::config::NodeAddress;
 use crate::raft::server::RaftServer;
 
 #[derive(Clone)]
@@ -84,29 +83,31 @@ impl KvService for KVServer {
             .send(config::Msg::Propose {
                 seq,
                 op,
-                cb: Box::new(move |leader_id: i32, addresses: Vec<u8>| {
-                    // Get
-                    let mut reply = GetReply::new();
-                    let (state, value) = match db.get(req.get_key()) {
-                        Ok(Some(v)) => (State::OK, v),
-                        Ok(None) => (State::NOT_FOUND, Vec::new()),
-                        Err(e) => {
-                            error!("failed to get value: {:?}", e);
-                            (State::IO_ERROR, Vec::new())
+                cb: Box::new(
+                    move |leader_id: i32, addresses: HashMap<u64, NodeAddress>| {
+                        // Get
+                        let mut reply = GetReply::new();
+                        let (state, value) = match db.get(req.get_key()) {
+                            Ok(Some(v)) => (State::OK, v),
+                            Ok(None) => (State::NOT_FOUND, Vec::new()),
+                            Err(e) => {
+                                error!("failed to get value: {:?}", e);
+                                (State::IO_ERROR, Vec::new())
+                            }
+                        };
+                        reply.set_state(state);
+                        if leader_id >= 0 {
+                            // follower
+                            reply.set_leader_id(leader_id as u64);
+                        } else {
+                            // leader
+                            reply.set_leader_id(node_id);
                         }
-                    };
-                    reply.set_state(state);
-                    if leader_id >= 0 {
-                        // follower
-                        reply.set_leader_id(leader_id as u64);
-                    } else {
-                        // leader
-                        reply.set_leader_id(node_id);
-                    }
-                    reply.set_value(value);
-                    reply.set_address_map(addresses);
-                    s1.send(reply).expect("cb channel closed");
-                }),
+                        reply.set_value(value);
+                        reply.set_address_map(addresses);
+                        s1.send(reply).expect("cb channel closed");
+                    },
+                ),
             })
             .unwrap();
 
@@ -141,20 +142,22 @@ impl KvService for KVServer {
             .send(config::Msg::Propose {
                 seq,
                 op,
-                cb: Box::new(move |leader_id: i32, addresses: Vec<u8>| {
-                    let mut reply = PutReply::new();
-                    if leader_id >= 0 {
-                        // follower
-                        reply.set_state(State::WRONG_LEADER);
-                        reply.set_leader_id(leader_id as u64);
-                    } else {
-                        // leader
-                        reply.set_state(State::OK);
-                        reply.set_leader_id(node_id);
-                    }
-                    reply.set_address_map(addresses);
-                    s1.send(reply).expect("cb channel closed");
-                }),
+                cb: Box::new(
+                    move |leader_id: i32, addresses: HashMap<u64, NodeAddress>| {
+                        let mut reply = PutReply::new();
+                        if leader_id >= 0 {
+                            // follower
+                            reply.set_state(State::WRONG_LEADER);
+                            reply.set_leader_id(leader_id as u64);
+                        } else {
+                            // leader
+                            reply.set_state(State::OK);
+                            reply.set_leader_id(node_id);
+                        }
+                        reply.set_address_map(addresses);
+                        s1.send(reply).expect("cb channel closed");
+                    },
+                ),
             })
             .unwrap();
 
@@ -188,20 +191,22 @@ impl KvService for KVServer {
             .send(config::Msg::Propose {
                 seq,
                 op,
-                cb: Box::new(move |leader_id: i32, addresses: Vec<u8>| {
-                    let mut reply = DeleteReply::new();
-                    if leader_id >= 0 {
-                        // follower
-                        reply.set_state(State::WRONG_LEADER);
-                        reply.set_leader_id(leader_id as u64);
-                    } else {
-                        // leader
-                        reply.set_state(State::OK);
-                        reply.set_leader_id(node_id);
-                    }
-                    reply.set_address_map(addresses);
-                    s1.send(reply).expect("cb channel closed");
-                }),
+                cb: Box::new(
+                    move |leader_id: i32, addresses: HashMap<u64, NodeAddress>| {
+                        let mut reply = DeleteReply::new();
+                        if leader_id >= 0 {
+                            // follower
+                            reply.set_state(State::WRONG_LEADER);
+                            reply.set_leader_id(leader_id as u64);
+                        } else {
+                            // leader
+                            reply.set_state(State::OK);
+                            reply.set_leader_id(node_id);
+                        }
+                        reply.set_address_map(addresses);
+                        s1.send(reply).expect("cb channel closed");
+                    },
+                ),
             })
             .unwrap();
 

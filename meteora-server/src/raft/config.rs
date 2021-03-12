@@ -10,14 +10,14 @@ use log::*;
 use protobuf::Message as PMessage;
 use raft::prelude::*;
 use raft::storage::MemStorage;
-use serde::{Deserialize, Serialize};
 
+use meteora_proto::proto::common::NodeAddress;
 use meteora_proto::proto::raft::AddressState;
 use meteora_proto::proto::raft_grpc::RaftServiceClient;
 
 use crate::kv::server::Op;
 
-type ProposeCallback = Box<dyn Fn(i32, Vec<u8>) + Send>;
+type ProposeCallback = Box<dyn Fn(i32, HashMap<u64, NodeAddress>) + Send>;
 
 pub enum Msg {
     Propose {
@@ -35,12 +35,6 @@ pub enum Msg {
     // avoid the compiler warning.
     #[allow(dead_code)]
     Raft(Message),
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct NodeAddress {
-    pub kv_address: String,
-    pub raft_address: String,
 }
 
 pub fn init_and_run(
@@ -98,35 +92,43 @@ pub fn init_and_run(
     let mut timeout = Duration::from_millis(100);
 
     // Use a HashMap to hold the `propose` callbacks.
-    let mut cbs = HashMap::new();
+    let mut callbacks = HashMap::new();
 
     loop {
         match receiver.recv_timeout(timeout) {
-            Ok(Msg::Propose { seq, op, cb }) => {
+            Ok(Msg::Propose {
+                seq,
+                op,
+                cb: callback,
+            }) => {
                 debug!("receive propose message");
                 let leader_id = r.raft.leader_id;
                 if r.raft.leader_id != r.raft.id {
                     // not leader, callback to notify client
                     debug!("not a leader");
-                    cb(leader_id as i32, serialize(&addresses).unwrap());
+                    callback(leader_id as i32, addresses.clone());
                     continue;
                 }
                 let serialized_op = serialize(&op).unwrap();
-                cbs.insert(seq, cb);
+                callbacks.insert(seq, callback);
                 debug!("propose");
                 r.propose(serialize(&seq).unwrap(), serialized_op).unwrap();
             }
-            Ok(Msg::ConfigChange { seq, change, cb }) => {
+            Ok(Msg::ConfigChange {
+                seq,
+                change,
+                cb: callback,
+            }) => {
                 debug!("receive config change message");
                 let leader_id = r.raft.leader_id;
                 if r.raft.leader_id != r.raft.id {
                     // not leader, callback to notify client
                     debug!("not a leader");
-                    cb(leader_id as i32, serialize(&addresses).unwrap());
+                    callback(leader_id as i32, addresses.clone());
                     continue;
                 } else {
                     // TODO add address to map
-                    cbs.insert(seq, cb);
+                    callbacks.insert(seq, callback);
                     debug!("propose config change");
                     r.propose_conf_change(serialize(&seq).unwrap(), change)
                         .unwrap();
@@ -138,10 +140,9 @@ pub fn init_and_run(
             }
             Ok(Msg::Address(address_state)) => {
                 debug!("receive address message");
-                let new_addresses: HashMap<u64, NodeAddress> =
-                    deserialize(address_state.get_address_map()).unwrap();
-                for (id, address) in &new_addresses {
-                    let insert = match addresses.get(id) {
+                let new_addresses = address_state.get_address_map();
+                for (id, address) in new_addresses {
+                    let address_changed = match addresses.get(id) {
                         Some(a) => {
                             if a.raft_address == address.raft_address {
                                 false
@@ -151,11 +152,11 @@ pub fn init_and_run(
                         }
                         None => true,
                     };
-                    if insert {
+                    if address_changed {
                         insert_client(id.clone(), address.raft_address.as_str(), &mut rpc_clients);
                     }
                 }
-                addresses = new_addresses;
+                addresses = new_addresses.clone();
             }
             Err(RecvTimeoutError::Timeout) => {
                 debug!("timeout");
@@ -177,7 +178,7 @@ pub fn init_and_run(
 
         on_ready(
             &mut r,
-            &mut cbs,
+            &mut callbacks,
             &mut addresses,
             &mut rpc_clients,
             apply_sender.clone(),
@@ -187,7 +188,7 @@ pub fn init_and_run(
 
 fn on_ready(
     r: &mut RawNode<MemStorage>,
-    cbs: &mut HashMap<u64, ProposeCallback>,
+    callbacks: &mut HashMap<u64, ProposeCallback>,
     addresses: &mut HashMap<u64, NodeAddress>,
     clients: &mut HashMap<u64, Arc<RaftServiceClient>>,
     apply_sender: Sender<Op>,
@@ -211,7 +212,7 @@ fn on_ready(
                 }
             };
             let mut address_state = AddressState::new();
-            address_state.set_address_map(serialize(&addresses).unwrap());
+            address_state.set_address_map(addresses.clone());
             thread::spawn(move || {
                 let msg = msg;
                 let address_state = address_state;
@@ -277,8 +278,8 @@ fn on_ready(
                 match apply_sender.send(op) {
                     _ => {}
                 }
-                if let Some(cb) = cbs.remove(&seq) {
-                    cb(-1, serialize(addresses).unwrap());
+                if let Some(callback) = callbacks.remove(&seq) {
+                    callback(-1, addresses.clone());
                 }
             }
 
@@ -301,8 +302,8 @@ fn on_ready(
                 }
 
                 r.apply_conf_change(&change);
-                if let Some(cb) = cbs.remove(&seq) {
-                    cb(-1, serialize(addresses).unwrap());
+                if let Some(callback) = callbacks.remove(&seq) {
+                    callback(-1, addresses.clone());
                 }
             }
         }

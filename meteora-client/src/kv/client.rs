@@ -2,14 +2,12 @@ use std::collections::HashMap;
 use std::io::{Error, ErrorKind};
 use std::sync::Arc;
 
-use bincode::deserialize;
 use grpcio::{ChannelBuilder, EnvBuilder};
 use log::*;
 
 use meteora_proto::proto::common::State;
 use meteora_proto::proto::kv::{DeleteReq, GetReq, PutReq};
 use meteora_proto::proto::kv_grpc::KvServiceClient;
-use meteora_server::raft::config::NodeAddress;
 
 fn create_client(address: String) -> KvServiceClient {
     let env = Arc::new(EnvBuilder::new().build());
@@ -82,28 +80,16 @@ impl KVClient {
             };
 
             // update address list and clients
-            if reply.get_address_map().len() > 0 {
-                let address_map: HashMap<u64, NodeAddress> =
-                    deserialize(&reply.get_address_map()).unwrap();
-                // add new ids
-                for (id, address) in &address_map {
-                    if let Some(grpc_address) = self.addresses.get(&id) {
-                        if grpc_address == address.kv_address.as_str() {
-                            debug!(
-                                "node has not been changed: id={}, address={}",
-                                id, grpc_address
-                            );
-                        } else {
-                            debug!("update node: id={}, address={}", id, address.kv_address);
-                            self.addresses
-                                .insert(id.clone(), address.kv_address.clone());
-                            self.clients.insert(
-                                id.clone(),
-                                Arc::new(create_client(address.kv_address.clone())),
-                            );
-                        }
+            // add new ids
+            for (id, address) in reply.get_address_map() {
+                if let Some(grpc_address) = self.addresses.get(&id) {
+                    if grpc_address == address.kv_address.as_str() {
+                        debug!(
+                            "node has not been changed: id={}, address={}",
+                            id, grpc_address
+                        );
                     } else {
-                        debug!("add node: id={}, address={}", id, address.kv_address);
+                        debug!("update node: id={}, address={}", id, address.kv_address);
                         self.addresses
                             .insert(id.clone(), address.kv_address.clone());
                         self.clients.insert(
@@ -111,21 +97,29 @@ impl KVClient {
                             Arc::new(create_client(address.kv_address.clone())),
                         );
                     }
+                } else {
+                    debug!("add node: id={}, address={}", id, address.kv_address);
+                    self.addresses
+                        .insert(id.clone(), address.kv_address.clone());
+                    self.clients.insert(
+                        id.clone(),
+                        Arc::new(create_client(address.kv_address.clone())),
+                    );
                 }
-
-                // remove unused ids
-                for (id, address) in &self.addresses.clone() {
-                    if let Some(_) = address_map.get(&id) {
-                        debug!("node is in use: id={}, address={}", id, address);
-                    } else {
-                        debug!("node is not in use: id={}, address={}", id, address);
-                        self.addresses.remove(id);
-                        self.clients.remove(id);
-                    }
-                }
-
-                debug!("addresses={:?}", self.addresses);
             }
+
+            // remove unused ids
+            for (id, address) in &self.addresses.clone() {
+                if reply.get_address_map().contains_key(&id) {
+                    debug!("node is in use: id={}, address={}", id, address);
+                } else {
+                    debug!("node is not in use: id={}, address={}", id, address);
+                    self.addresses.remove(id);
+                    self.clients.remove(id);
+                }
+            }
+
+            debug!("addresses={:?}", self.addresses);
 
             // change node id
             let keys: Vec<u64> = self.addresses.keys().map(|i| i.clone()).collect();
@@ -187,28 +181,16 @@ impl KVClient {
             };
 
             // update address list and clients
-            if reply.get_address_map().len() > 0 {
-                let address_map: HashMap<u64, NodeAddress> =
-                    deserialize(&reply.get_address_map()).unwrap();
-                // add new ids
-                for (id, address) in &address_map {
-                    if let Some(grpc_address) = self.addresses.get(&id) {
-                        if grpc_address == address.kv_address.as_str() {
-                            debug!(
-                                "node has not been changed: id={}, address={}",
-                                id, grpc_address
-                            );
-                        } else {
-                            debug!("update node: id={}, address={}", id, address.kv_address);
-                            self.addresses
-                                .insert(id.clone(), address.kv_address.clone());
-                            self.clients.insert(
-                                id.clone(),
-                                Arc::new(create_client(address.kv_address.clone())),
-                            );
-                        }
+            // add new ids
+            for (id, address) in reply.get_address_map() {
+                if let Some(grpc_address) = self.addresses.get(&id) {
+                    if grpc_address == address.kv_address.as_str() {
+                        debug!(
+                            "node has not been changed: id={}, address={}",
+                            id, grpc_address
+                        );
                     } else {
-                        debug!("add node: id={}, address={}", id, address.kv_address);
+                        debug!("update node: id={}, address={}", id, address.kv_address);
                         self.addresses
                             .insert(id.clone(), address.kv_address.clone());
                         self.clients.insert(
@@ -216,21 +198,29 @@ impl KVClient {
                             Arc::new(create_client(address.kv_address.clone())),
                         );
                     }
+                } else {
+                    debug!("add node: id={}, address={}", id, address.kv_address);
+                    self.addresses
+                        .insert(id.clone(), address.kv_address.clone());
+                    self.clients.insert(
+                        id.clone(),
+                        Arc::new(create_client(address.kv_address.clone())),
+                    );
                 }
-
-                // remove unused ids
-                for (id, address) in &self.addresses.clone() {
-                    if let Some(_) = address_map.get(&id) {
-                        debug!("node is in use: id={}, address={}", id, address);
-                    } else {
-                        debug!("node is not in use: id={}, address={}", id, address);
-                        self.addresses.remove(id);
-                        self.clients.remove(id);
-                    }
-                }
-
-                debug!("addresses={:?}", self.addresses);
             }
+
+            // remove unused ids
+            for (id, address) in &self.addresses.clone() {
+                if reply.get_address_map().contains_key(&id) {
+                    debug!("node is in use: id={}, address={}", id, address);
+                } else {
+                    debug!("node is not in use: id={}, address={}", id, address);
+                    self.addresses.remove(id);
+                    self.clients.remove(id);
+                }
+            }
+
+            debug!("addresses={:?}", self.addresses);
 
             match reply.get_state() {
                 State::OK => {
@@ -293,28 +283,16 @@ impl KVClient {
             };
 
             // update address list and clients
-            if reply.get_address_map().len() > 0 {
-                let address_map: HashMap<u64, NodeAddress> =
-                    deserialize(&reply.get_address_map()).unwrap();
-                // add new ids
-                for (id, address) in &address_map {
-                    if let Some(grpc_address) = self.addresses.get(&id) {
-                        if grpc_address == address.kv_address.as_str() {
-                            debug!(
-                                "node has not been changed: id={}, address={}",
-                                id, grpc_address
-                            );
-                        } else {
-                            debug!("update node: id={}, address={}", id, address.kv_address);
-                            self.addresses
-                                .insert(id.clone(), address.kv_address.clone());
-                            self.clients.insert(
-                                id.clone(),
-                                Arc::new(create_client(address.kv_address.clone())),
-                            );
-                        }
+            // add new ids
+            for (id, address) in reply.get_address_map() {
+                if let Some(grpc_address) = self.addresses.get(&id) {
+                    if grpc_address == address.kv_address.as_str() {
+                        debug!(
+                            "node has not been changed: id={}, address={}",
+                            id, grpc_address
+                        );
                     } else {
-                        debug!("add node: id={}, address={}", id, address.kv_address);
+                        debug!("update node: id={}, address={}", id, address.kv_address);
                         self.addresses
                             .insert(id.clone(), address.kv_address.clone());
                         self.clients.insert(
@@ -322,21 +300,29 @@ impl KVClient {
                             Arc::new(create_client(address.kv_address.clone())),
                         );
                     }
+                } else {
+                    debug!("add node: id={}, address={}", id, address.kv_address);
+                    self.addresses
+                        .insert(id.clone(), address.kv_address.clone());
+                    self.clients.insert(
+                        id.clone(),
+                        Arc::new(create_client(address.kv_address.clone())),
+                    );
                 }
-
-                // remove unused ids
-                for (id, address) in &self.addresses.clone() {
-                    if let Some(_) = address_map.get(&id) {
-                        debug!("node is in use: id={}, address={}", id, address);
-                    } else {
-                        debug!("node is not in use: id={}, address={}", id, address);
-                        self.addresses.remove(id);
-                        self.clients.remove(id);
-                    }
-                }
-
-                debug!("addresses={:?}", self.addresses);
             }
+
+            // remove unused ids
+            for (id, address) in &self.addresses.clone() {
+                if reply.get_address_map().contains_key(&id) {
+                    debug!("node is in use: id={}, address={}", id, address);
+                } else {
+                    debug!("node is not in use: id={}, address={}", id, address);
+                    self.addresses.remove(id);
+                    self.clients.remove(id);
+                }
+            }
+
+            debug!("addresses={:?}", self.addresses);
 
             match reply.get_state() {
                 State::OK => {

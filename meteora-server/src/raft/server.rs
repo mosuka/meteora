@@ -7,11 +7,12 @@ use grpcio::{RpcContext, UnarySink};
 use log::*;
 use raft::eraftpb::{ConfChange, Message};
 
-use meteora_proto::proto::common::{Null, State};
+use meteora_proto::proto::common::{NodeAddress, Null, State};
 use meteora_proto::proto::raft::{AddressState, ChangeReply};
 use meteora_proto::proto::raft_grpc::RaftService;
 
 use crate::raft::config;
+use std::collections::HashMap;
 
 #[derive(Clone)]
 pub struct RaftServer {
@@ -36,18 +37,20 @@ impl RaftService for RaftServer {
             .send(config::Msg::ConfigChange {
                 seq,
                 change: req,
-                cb: Box::new(move |leader_id: i32, addresses: Vec<u8>| {
-                    let mut reply = ChangeReply::new();
-                    if leader_id >= 0 {
-                        reply.set_state(State::WRONG_LEADER);
-                        // reply.set_leader_id(leader_id as u64);
-                        reply.set_leader_id(leader_id as u64);
-                    } else {
-                        reply.set_state(State::OK);
-                    }
-                    reply.set_address_map(addresses);
-                    s1.send(reply).expect("cb channel closed");
-                }),
+                cb: Box::new(
+                    move |leader_id: i32, addresses: HashMap<u64, NodeAddress>| {
+                        let mut reply = ChangeReply::new();
+                        if leader_id >= 0 {
+                            reply.set_state(State::WRONG_LEADER);
+                            // reply.set_leader_id(leader_id as u64);
+                            reply.set_leader_id(leader_id as u64);
+                        } else {
+                            reply.set_state(State::OK);
+                        }
+                        reply.set_address_map(addresses);
+                        s1.send(reply).expect("cb channel closed");
+                    },
+                ),
             })
             .unwrap();
         let reply = match r1.recv_timeout(Duration::from_secs(2)) {

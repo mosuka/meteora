@@ -26,7 +26,7 @@
 #[derive(PartialEq,Clone,Default)]
 pub struct AddressState {
     // message fields
-    pub address_map: ::std::vec::Vec<u8>,
+    pub address_map: ::std::collections::HashMap<u64, super::common::NodeAddress>,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
     pub cached_size: ::protobuf::CachedSize,
@@ -43,10 +43,10 @@ impl AddressState {
         ::std::default::Default::default()
     }
 
-    // bytes address_map = 1;
+    // repeated .meteora.raft.AddressState.AddressMapEntry address_map = 1;
 
 
-    pub fn get_address_map(&self) -> &[u8] {
+    pub fn get_address_map(&self) -> &::std::collections::HashMap<u64, super::common::NodeAddress> {
         &self.address_map
     }
     pub fn clear_address_map(&mut self) {
@@ -54,19 +54,18 @@ impl AddressState {
     }
 
     // Param is passed by value, moved
-    pub fn set_address_map(&mut self, v: ::std::vec::Vec<u8>) {
+    pub fn set_address_map(&mut self, v: ::std::collections::HashMap<u64, super::common::NodeAddress>) {
         self.address_map = v;
     }
 
     // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_address_map(&mut self) -> &mut ::std::vec::Vec<u8> {
+    pub fn mut_address_map(&mut self) -> &mut ::std::collections::HashMap<u64, super::common::NodeAddress> {
         &mut self.address_map
     }
 
     // Take field
-    pub fn take_address_map(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.address_map, ::std::vec::Vec::new())
+    pub fn take_address_map(&mut self) -> ::std::collections::HashMap<u64, super::common::NodeAddress> {
+        ::std::mem::replace(&mut self.address_map, ::std::collections::HashMap::new())
     }
 }
 
@@ -80,7 +79,7 @@ impl ::protobuf::Message for AddressState {
             let (field_number, wire_type) = is.read_tag_unpack()?;
             match field_number {
                 1 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.address_map)?;
+                    ::protobuf::rt::read_map_into::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(wire_type, is, &mut self.address_map)?;
                 },
                 _ => {
                     ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
@@ -94,18 +93,14 @@ impl ::protobuf::Message for AddressState {
     #[allow(unused_variables)]
     fn compute_size(&self) -> u32 {
         let mut my_size = 0;
-        if !self.address_map.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(1, &self.address_map);
-        }
+        my_size += ::protobuf::rt::compute_map_size::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(1, &self.address_map);
         my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
         self.cached_size.set(my_size);
         my_size
     }
 
     fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
-        if !self.address_map.is_empty() {
-            os.write_bytes(1, &self.address_map)?;
-        }
+        ::protobuf::rt::write_map_with_cached_sizes::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(1, &self.address_map, os)?;
         os.write_unknown_fields(self.get_unknown_fields())?;
         ::std::result::Result::Ok(())
     }
@@ -144,7 +139,7 @@ impl ::protobuf::Message for AddressState {
         static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
         descriptor.get(|| {
             let mut fields = ::std::vec::Vec::new();
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+            fields.push(::protobuf::reflect::accessor::make_map_accessor::<_, ::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(
                 "address_map",
                 |m: &AddressState| { &m.address_map },
                 |m: &mut AddressState| { &mut m.address_map },
@@ -186,7 +181,7 @@ impl ::protobuf::reflect::ProtobufValue for AddressState {
 pub struct ChangeReply {
     // message fields
     pub state: super::common::State,
-    pub address_map: ::std::vec::Vec<u8>,
+    pub address_map: ::std::collections::HashMap<u64, super::common::NodeAddress>,
     pub leader_id: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
@@ -219,10 +214,10 @@ impl ChangeReply {
         self.state = v;
     }
 
-    // bytes address_map = 2;
+    // repeated .meteora.raft.ChangeReply.AddressMapEntry address_map = 2;
 
 
-    pub fn get_address_map(&self) -> &[u8] {
+    pub fn get_address_map(&self) -> &::std::collections::HashMap<u64, super::common::NodeAddress> {
         &self.address_map
     }
     pub fn clear_address_map(&mut self) {
@@ -230,19 +225,18 @@ impl ChangeReply {
     }
 
     // Param is passed by value, moved
-    pub fn set_address_map(&mut self, v: ::std::vec::Vec<u8>) {
+    pub fn set_address_map(&mut self, v: ::std::collections::HashMap<u64, super::common::NodeAddress>) {
         self.address_map = v;
     }
 
     // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_address_map(&mut self) -> &mut ::std::vec::Vec<u8> {
+    pub fn mut_address_map(&mut self) -> &mut ::std::collections::HashMap<u64, super::common::NodeAddress> {
         &mut self.address_map
     }
 
     // Take field
-    pub fn take_address_map(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.address_map, ::std::vec::Vec::new())
+    pub fn take_address_map(&mut self) -> ::std::collections::HashMap<u64, super::common::NodeAddress> {
+        ::std::mem::replace(&mut self.address_map, ::std::collections::HashMap::new())
     }
 
     // uint64 leader_id = 3;
@@ -274,7 +268,7 @@ impl ::protobuf::Message for ChangeReply {
                     ::protobuf::rt::read_proto3_enum_with_unknown_fields_into(wire_type, is, &mut self.state, 1, &mut self.unknown_fields)?
                 },
                 2 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.address_map)?;
+                    ::protobuf::rt::read_map_into::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(wire_type, is, &mut self.address_map)?;
                 },
                 3 => {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
@@ -298,9 +292,7 @@ impl ::protobuf::Message for ChangeReply {
         if self.state != super::common::State::UNKNOWN {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
-        if !self.address_map.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(2, &self.address_map);
-        }
+        my_size += ::protobuf::rt::compute_map_size::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(2, &self.address_map);
         if self.leader_id != 0 {
             my_size += ::protobuf::rt::value_size(3, self.leader_id, ::protobuf::wire_format::WireTypeVarint);
         }
@@ -313,9 +305,7 @@ impl ::protobuf::Message for ChangeReply {
         if self.state != super::common::State::UNKNOWN {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
-        if !self.address_map.is_empty() {
-            os.write_bytes(2, &self.address_map)?;
-        }
+        ::protobuf::rt::write_map_with_cached_sizes::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(2, &self.address_map, os)?;
         if self.leader_id != 0 {
             os.write_uint64(3, self.leader_id)?;
         }
@@ -362,7 +352,7 @@ impl ::protobuf::Message for ChangeReply {
                 |m: &ChangeReply| { &m.state },
                 |m: &mut ChangeReply| { &mut m.state },
             ));
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+            fields.push(::protobuf::reflect::accessor::make_map_accessor::<_, ::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(
                 "address_map",
                 |m: &ChangeReply| { &m.address_map },
                 |m: &mut ChangeReply| { &mut m.address_map },
@@ -409,16 +399,22 @@ impl ::protobuf::reflect::ProtobufValue for ChangeReply {
 
 static file_descriptor_proto_data: &'static [u8] = b"\
     \n\nraft.proto\x12\x0cmeteora.raft\x1a\reraftpb.proto\x1a\x0ccommon.prot\
-    o\"/\n\x0cAddressState\x12\x1f\n\x0baddress_map\x18\x01\x20\x01(\x0cR\na\
-    ddressMap\"x\n\x0bChangeReply\x12+\n\x05state\x18\x01\x20\x01(\x0e2\x15.\
-    meteora.common.StateR\x05state\x12\x1f\n\x0baddress_map\x18\x02\x20\x01(\
-    \x0cR\naddressMap\x12\x1b\n\tleader_id\x18\x03\x20\x01(\x04R\x08leaderId\
-    2\xc7\x01\n\x0bRaftService\x12@\n\x0cChangeConfig\x12\x13.eraftpb.ConfCh\
-    ange\x1a\x19.meteora.raft.ChangeReply\"\0\x123\n\x07SendMsg\x12\x10.eraf\
-    tpb.Message\x1a\x14.meteora.common.Null\"\0\x12A\n\x0bSendAddress\x12\
-    \x1a.meteora.raft.AddressState\x1a\x14.meteora.common.Null\"\0J\xb7\x04\
-    \n\x06\x12\x04\0\0\x15\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\x03\
-    \0\x12\x03\x02\x07\x16\n\t\n\x02\x03\x01\x12\x03\x03\x07\x15\n\x08\n\x01\
+    o\"\xb7\x01\n\x0cAddressState\x12K\n\x0baddress_map\x18\x01\x20\x03(\x0b\
+    2*.meteora.raft.AddressState.AddressMapEntryR\naddressMap\x1aZ\n\x0fAddr\
+    essMapEntry\x12\x10\n\x03key\x18\x01\x20\x01(\x04R\x03key\x121\n\x05valu\
+    e\x18\x02\x20\x01(\x0b2\x1b.meteora.common.NodeAddressR\x05value:\x028\
+    \x01\"\xff\x01\n\x0bChangeReply\x12+\n\x05state\x18\x01\x20\x01(\x0e2\
+    \x15.meteora.common.StateR\x05state\x12J\n\x0baddress_map\x18\x02\x20\
+    \x03(\x0b2).meteora.raft.ChangeReply.AddressMapEntryR\naddressMap\x12\
+    \x1b\n\tleader_id\x18\x03\x20\x01(\x04R\x08leaderId\x1aZ\n\x0fAddressMap\
+    Entry\x12\x10\n\x03key\x18\x01\x20\x01(\x04R\x03key\x121\n\x05value\x18\
+    \x02\x20\x01(\x0b2\x1b.meteora.common.NodeAddressR\x05value:\x028\x012\
+    \xc7\x01\n\x0bRaftService\x12@\n\x0cChangeConfig\x12\x13.eraftpb.ConfCha\
+    nge\x1a\x19.meteora.raft.ChangeReply\"\0\x123\n\x07SendMsg\x12\x10.eraft\
+    pb.Message\x1a\x14.meteora.common.Null\"\0\x12A\n\x0bSendAddress\x12\x1a\
+    .meteora.raft.AddressState\x1a\x14.meteora.common.Null\"\0J\xb7\x04\n\
+    \x06\x12\x04\0\0\x15\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\x03\0\
+    \x12\x03\x02\x07\x16\n\t\n\x02\x03\x01\x12\x03\x03\x07\x15\n\x08\n\x01\
     \x02\x12\x03\x05\x08\x14\n\n\n\x02\x06\0\x12\x04\x07\0\x0b\x01\n\n\n\x03\
     \x06\0\x01\x12\x03\x07\x08\x13\n\x0b\n\x04\x06\0\x02\0\x12\x03\x08\x04@\
     \n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\x08\x08\x14\n\x0c\n\x05\x06\0\x02\0\
@@ -429,22 +425,21 @@ static file_descriptor_proto_data: &'static [u8] = b"\
     \n\x0c\n\x05\x06\0\x02\x02\x01\x12\x03\n\x08\x13\n\x0c\n\x05\x06\0\x02\
     \x02\x02\x12\x03\n\x14\x20\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\n*=\n\n\
     \n\x02\x04\0\x12\x04\r\0\x0f\x01\n\n\n\x03\x04\0\x01\x12\x03\r\x08\x14\n\
-    \x0b\n\x04\x04\0\x02\0\x12\x03\x0e\x04\x1a\n\r\n\x05\x04\0\x02\0\x04\x12\
-    \x04\x0e\x04\r\x16\n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\x0e\x04\t\n\x0c\n\
-    \x05\x04\0\x02\0\x01\x12\x03\x0e\n\x15\n\x0c\n\x05\x04\0\x02\0\x03\x12\
-    \x03\x0e\x18\x19\n\n\n\x02\x04\x01\x12\x04\x11\0\x15\x01\n\n\n\x03\x04\
-    \x01\x01\x12\x03\x11\x08\x13\n\x0b\n\x04\x04\x01\x02\0\x12\x03\x12\x04#\
-    \n\r\n\x05\x04\x01\x02\0\x04\x12\x04\x12\x04\x11\x15\n\x0c\n\x05\x04\x01\
-    \x02\0\x06\x12\x03\x12\x04\x18\n\x0c\n\x05\x04\x01\x02\0\x01\x12\x03\x12\
-    \x19\x1e\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x12!\"\n\x0b\n\x04\x04\
-    \x01\x02\x01\x12\x03\x13\x04\x1a\n\r\n\x05\x04\x01\x02\x01\x04\x12\x04\
-    \x13\x04\x12#\n\x0c\n\x05\x04\x01\x02\x01\x05\x12\x03\x13\x04\t\n\x0c\n\
-    \x05\x04\x01\x02\x01\x01\x12\x03\x13\n\x15\n\x0c\n\x05\x04\x01\x02\x01\
-    \x03\x12\x03\x13\x18\x19\n\x0b\n\x04\x04\x01\x02\x02\x12\x03\x14\x04\x19\
-    \n\r\n\x05\x04\x01\x02\x02\x04\x12\x04\x14\x04\x13\x1a\n\x0c\n\x05\x04\
-    \x01\x02\x02\x05\x12\x03\x14\x04\n\n\x0c\n\x05\x04\x01\x02\x02\x01\x12\
-    \x03\x14\x0b\x14\n\x0c\n\x05\x04\x01\x02\x02\x03\x12\x03\x14\x17\x18b\
-    \x06proto3\
+    \x0b\n\x04\x04\0\x02\0\x12\x03\x0e\x04<\n\r\n\x05\x04\0\x02\0\x04\x12\
+    \x04\x0e\x04\r\x16\n\x0c\n\x05\x04\0\x02\0\x06\x12\x03\x0e\x04+\n\x0c\n\
+    \x05\x04\0\x02\0\x01\x12\x03\x0e,7\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\
+    \x0e:;\n\n\n\x02\x04\x01\x12\x04\x11\0\x15\x01\n\n\n\x03\x04\x01\x01\x12\
+    \x03\x11\x08\x13\n\x0b\n\x04\x04\x01\x02\0\x12\x03\x12\x04#\n\r\n\x05\
+    \x04\x01\x02\0\x04\x12\x04\x12\x04\x11\x15\n\x0c\n\x05\x04\x01\x02\0\x06\
+    \x12\x03\x12\x04\x18\n\x0c\n\x05\x04\x01\x02\0\x01\x12\x03\x12\x19\x1e\n\
+    \x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x12!\"\n\x0b\n\x04\x04\x01\x02\x01\
+    \x12\x03\x13\x04<\n\r\n\x05\x04\x01\x02\x01\x04\x12\x04\x13\x04\x12#\n\
+    \x0c\n\x05\x04\x01\x02\x01\x06\x12\x03\x13\x04+\n\x0c\n\x05\x04\x01\x02\
+    \x01\x01\x12\x03\x13,7\n\x0c\n\x05\x04\x01\x02\x01\x03\x12\x03\x13:;\n\
+    \x0b\n\x04\x04\x01\x02\x02\x12\x03\x14\x04\x19\n\r\n\x05\x04\x01\x02\x02\
+    \x04\x12\x04\x14\x04\x13<\n\x0c\n\x05\x04\x01\x02\x02\x05\x12\x03\x14\
+    \x04\n\n\x0c\n\x05\x04\x01\x02\x02\x01\x12\x03\x14\x0b\x14\n\x0c\n\x05\
+    \x04\x01\x02\x02\x03\x12\x03\x14\x17\x18b\x06proto3\
 ";
 
 static file_descriptor_proto_lazy: ::protobuf::rt::LazyV2<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::rt::LazyV2::INIT;
