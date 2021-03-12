@@ -370,6 +370,7 @@ dependencies = [
  "grpcio",
  "protobuf",
  "raft",
+ "serde",
 ]
 
 [[package]]

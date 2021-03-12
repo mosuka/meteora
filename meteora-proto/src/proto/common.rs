@@ -139,6 +139,207 @@ impl ::protobuf::reflect::ProtobufValue for Null {
     }
 }
 
+#[derive(PartialEq,Clone,Default)]
+pub struct NodeAddress {
+    // message fields
+    pub kv_address: ::std::string::String,
+    pub raft_address: ::std::string::String,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a NodeAddress {
+    fn default() -> &'a NodeAddress {
+        <NodeAddress as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl NodeAddress {
+    pub fn new() -> NodeAddress {
+        ::std::default::Default::default()
+    }
+
+    // string kv_address = 1;
+
+
+    pub fn get_kv_address(&self) -> &str {
+        &self.kv_address
+    }
+    pub fn clear_kv_address(&mut self) {
+        self.kv_address.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_kv_address(&mut self, v: ::std::string::String) {
+        self.kv_address = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_kv_address(&mut self) -> &mut ::std::string::String {
+        &mut self.kv_address
+    }
+
+    // Take field
+    pub fn take_kv_address(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.kv_address, ::std::string::String::new())
+    }
+
+    // string raft_address = 2;
+
+
+    pub fn get_raft_address(&self) -> &str {
+        &self.raft_address
+    }
+    pub fn clear_raft_address(&mut self) {
+        self.raft_address.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_raft_address(&mut self, v: ::std::string::String) {
+        self.raft_address = v;
+    }
+
+    // Mutable pointer to the field.
+    // If field is not initialized, it is initialized with default value first.
+    pub fn mut_raft_address(&mut self) -> &mut ::std::string::String {
+        &mut self.raft_address
+    }
+
+    // Take field
+    pub fn take_raft_address(&mut self) -> ::std::string::String {
+        ::std::mem::replace(&mut self.raft_address, ::std::string::String::new())
+    }
+}
+
+impl ::protobuf::Message for NodeAddress {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.kv_address)?;
+                },
+                2 => {
+                    ::protobuf::rt::read_singular_proto3_string_into(wire_type, is, &mut self.raft_address)?;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if !self.kv_address.is_empty() {
+            my_size += ::protobuf::rt::string_size(1, &self.kv_address);
+        }
+        if !self.raft_address.is_empty() {
+            my_size += ::protobuf::rt::string_size(2, &self.raft_address);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        if !self.kv_address.is_empty() {
+            os.write_string(1, &self.kv_address)?;
+        }
+        if !self.raft_address.is_empty() {
+            os.write_string(2, &self.raft_address)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: ::std::boxed::Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> NodeAddress {
+        NodeAddress::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
+        descriptor.get(|| {
+            let mut fields = ::std::vec::Vec::new();
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                "kv_address",
+                |m: &NodeAddress| { &m.kv_address },
+                |m: &mut NodeAddress| { &mut m.kv_address },
+            ));
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeString>(
+                "raft_address",
+                |m: &NodeAddress| { &m.raft_address },
+                |m: &mut NodeAddress| { &mut m.raft_address },
+            ));
+            ::protobuf::reflect::MessageDescriptor::new_pb_name::<NodeAddress>(
+                "NodeAddress",
+                fields,
+                file_descriptor_proto()
+            )
+        })
+    }
+
+    fn default_instance() -> &'static NodeAddress {
+        static instance: ::protobuf::rt::LazyV2<NodeAddress> = ::protobuf::rt::LazyV2::INIT;
+        instance.get(NodeAddress::new)
+    }
+}
+
+impl ::protobuf::Clear for NodeAddress {
+    fn clear(&mut self) {
+        self.kv_address.clear();
+        self.raft_address.clear();
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for NodeAddress {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for NodeAddress {
+    fn as_ref(&self) -> ::protobuf::reflect::ReflectValueRef {
+        ::protobuf::reflect::ReflectValueRef::Message(self)
+    }
+}
+
 #[derive(Clone,PartialEq,Eq,Debug,Hash)]
 pub enum State {
     UNKNOWN = 0,
@@ -199,23 +400,33 @@ impl ::protobuf::reflect::ProtobufValue for State {
 }
 
 static file_descriptor_proto_data: &'static [u8] = b"\
-    \n\x0ccommon.proto\x12\x0emeteora.common\"\x06\n\x04Null*K\n\x05State\
-    \x12\x0b\n\x07UNKNOWN\x10\0\x12\x06\n\x02OK\x10\x01\x12\x10\n\x0cWRONG_L\
-    EADER\x10\x02\x12\r\n\tNOT_FOUND\x10\x03\x12\x0c\n\x08IO_ERROR\x10\x04J\
-    \x98\x02\n\x06\x12\x04\0\0\x0c\x0f\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\x08\
-    \n\x01\x02\x12\x03\x02\x08\x16\n\n\n\x02\x05\0\x12\x04\x04\0\n\x01\n\n\n\
-    \x03\x05\0\x01\x12\x03\x04\x05\n\n\x0b\n\x04\x05\0\x02\0\x12\x03\x05\x04\
-    \x10\n\x0c\n\x05\x05\0\x02\0\x01\x12\x03\x05\x04\x0b\n\x0c\n\x05\x05\0\
-    \x02\0\x02\x12\x03\x05\x0e\x0f\n\x0b\n\x04\x05\0\x02\x01\x12\x03\x06\x04\
-    \x0b\n\x0c\n\x05\x05\0\x02\x01\x01\x12\x03\x06\x04\x06\n\x0c\n\x05\x05\0\
-    \x02\x01\x02\x12\x03\x06\t\n\n\x0b\n\x04\x05\0\x02\x02\x12\x03\x07\x04\
-    \x15\n\x0c\n\x05\x05\0\x02\x02\x01\x12\x03\x07\x04\x10\n\x0c\n\x05\x05\0\
-    \x02\x02\x02\x12\x03\x07\x13\x14\n\x0b\n\x04\x05\0\x02\x03\x12\x03\x08\
-    \x04\x12\n\x0c\n\x05\x05\0\x02\x03\x01\x12\x03\x08\x04\r\n\x0c\n\x05\x05\
-    \0\x02\x03\x02\x12\x03\x08\x10\x11\n\x0b\n\x04\x05\0\x02\x04\x12\x03\t\
-    \x04\x11\n\x0c\n\x05\x05\0\x02\x04\x01\x12\x03\t\x04\x0c\n\x0c\n\x05\x05\
-    \0\x02\x04\x02\x12\x03\t\x0f\x10\n\t\n\x02\x04\0\x12\x03\x0c\0\x0f\n\n\n\
-    \x03\x04\0\x01\x12\x03\x0c\x08\x0cb\x06proto3\
+    \n\x0ccommon.proto\x12\x0emeteora.common\"\x06\n\x04Null\"O\n\x0bNodeAdd\
+    ress\x12\x1d\n\nkv_address\x18\x01\x20\x01(\tR\tkvAddress\x12!\n\x0craft\
+    _address\x18\x02\x20\x01(\tR\x0braftAddress*K\n\x05State\x12\x0b\n\x07UN\
+    KNOWN\x10\0\x12\x06\n\x02OK\x10\x01\x12\x10\n\x0cWRONG_LEADER\x10\x02\
+    \x12\r\n\tNOT_FOUND\x10\x03\x12\x0c\n\x08IO_ERROR\x10\x04J\xbc\x03\n\x06\
+    \x12\x04\0\0\x11\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\x08\n\x01\x02\x12\
+    \x03\x02\x08\x16\n\n\n\x02\x05\0\x12\x04\x04\0\n\x01\n\n\n\x03\x05\0\x01\
+    \x12\x03\x04\x05\n\n\x0b\n\x04\x05\0\x02\0\x12\x03\x05\x04\x10\n\x0c\n\
+    \x05\x05\0\x02\0\x01\x12\x03\x05\x04\x0b\n\x0c\n\x05\x05\0\x02\0\x02\x12\
+    \x03\x05\x0e\x0f\n\x0b\n\x04\x05\0\x02\x01\x12\x03\x06\x04\x0b\n\x0c\n\
+    \x05\x05\0\x02\x01\x01\x12\x03\x06\x04\x06\n\x0c\n\x05\x05\0\x02\x01\x02\
+    \x12\x03\x06\t\n\n\x0b\n\x04\x05\0\x02\x02\x12\x03\x07\x04\x15\n\x0c\n\
+    \x05\x05\0\x02\x02\x01\x12\x03\x07\x04\x10\n\x0c\n\x05\x05\0\x02\x02\x02\
+    \x12\x03\x07\x13\x14\n\x0b\n\x04\x05\0\x02\x03\x12\x03\x08\x04\x12\n\x0c\
+    \n\x05\x05\0\x02\x03\x01\x12\x03\x08\x04\r\n\x0c\n\x05\x05\0\x02\x03\x02\
+    \x12\x03\x08\x10\x11\n\x0b\n\x04\x05\0\x02\x04\x12\x03\t\x04\x11\n\x0c\n\
+    \x05\x05\0\x02\x04\x01\x12\x03\t\x04\x0c\n\x0c\n\x05\x05\0\x02\x04\x02\
+    \x12\x03\t\x0f\x10\n\t\n\x02\x04\0\x12\x03\x0c\0\x0f\n\n\n\x03\x04\0\x01\
+    \x12\x03\x0c\x08\x0c\n\n\n\x02\x04\x01\x12\x04\x0e\0\x11\x01\n\n\n\x03\
+    \x04\x01\x01\x12\x03\x0e\x08\x13\n\x0b\n\x04\x04\x01\x02\0\x12\x03\x0f\
+    \x04\x1a\n\r\n\x05\x04\x01\x02\0\x04\x12\x04\x0f\x04\x0e\x15\n\x0c\n\x05\
+    \x04\x01\x02\0\x05\x12\x03\x0f\x04\n\n\x0c\n\x05\x04\x01\x02\0\x01\x12\
+    \x03\x0f\x0b\x15\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x0f\x18\x19\n\x0b\
+    \n\x04\x04\x01\x02\x01\x12\x03\x10\x04\x1c\n\r\n\x05\x04\x01\x02\x01\x04\
+    \x12\x04\x10\x04\x0f\x1a\n\x0c\n\x05\x04\x01\x02\x01\x05\x12\x03\x10\x04\
+    \n\n\x0c\n\x05\x04\x01\x02\x01\x01\x12\x03\x10\x0b\x17\n\x0c\n\x05\x04\
+    \x01\x02\x01\x03\x12\x03\x10\x1a\x1bb\x06proto3\
 ";
 
 static file_descriptor_proto_lazy: ::protobuf::rt::LazyV2<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::rt::LazyV2::INIT;

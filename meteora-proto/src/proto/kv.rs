@@ -187,7 +187,7 @@ pub struct GetReply {
     // message fields
     pub value: ::std::vec::Vec<u8>,
     pub state: super::common::State,
-    pub address_map: ::std::vec::Vec<u8>,
+    pub address_map: ::std::collections::HashMap<u64, super::common::NodeAddress>,
     pub leader_id: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
@@ -246,10 +246,10 @@ impl GetReply {
         self.state = v;
     }
 
-    // bytes address_map = 3;
+    // repeated .meteora.kv.GetReply.AddressMapEntry address_map = 3;
 
 
-    pub fn get_address_map(&self) -> &[u8] {
+    pub fn get_address_map(&self) -> &::std::collections::HashMap<u64, super::common::NodeAddress> {
         &self.address_map
     }
     pub fn clear_address_map(&mut self) {
@@ -257,19 +257,18 @@ impl GetReply {
     }
 
     // Param is passed by value, moved
-    pub fn set_address_map(&mut self, v: ::std::vec::Vec<u8>) {
+    pub fn set_address_map(&mut self, v: ::std::collections::HashMap<u64, super::common::NodeAddress>) {
         self.address_map = v;
     }
 
     // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_address_map(&mut self) -> &mut ::std::vec::Vec<u8> {
+    pub fn mut_address_map(&mut self) -> &mut ::std::collections::HashMap<u64, super::common::NodeAddress> {
         &mut self.address_map
     }
 
     // Take field
-    pub fn take_address_map(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.address_map, ::std::vec::Vec::new())
+    pub fn take_address_map(&mut self) -> ::std::collections::HashMap<u64, super::common::NodeAddress> {
+        ::std::mem::replace(&mut self.address_map, ::std::collections::HashMap::new())
     }
 
     // uint64 leader_id = 4;
@@ -304,7 +303,7 @@ impl ::protobuf::Message for GetReply {
                     ::protobuf::rt::read_proto3_enum_with_unknown_fields_into(wire_type, is, &mut self.state, 2, &mut self.unknown_fields)?
                 },
                 3 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.address_map)?;
+                    ::protobuf::rt::read_map_into::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(wire_type, is, &mut self.address_map)?;
                 },
                 4 => {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
@@ -331,9 +330,7 @@ impl ::protobuf::Message for GetReply {
         if self.state != super::common::State::UNKNOWN {
             my_size += ::protobuf::rt::enum_size(2, self.state);
         }
-        if !self.address_map.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(3, &self.address_map);
-        }
+        my_size += ::protobuf::rt::compute_map_size::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(3, &self.address_map);
         if self.leader_id != 0 {
             my_size += ::protobuf::rt::value_size(4, self.leader_id, ::protobuf::wire_format::WireTypeVarint);
         }
@@ -349,9 +346,7 @@ impl ::protobuf::Message for GetReply {
         if self.state != super::common::State::UNKNOWN {
             os.write_enum(2, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
-        if !self.address_map.is_empty() {
-            os.write_bytes(3, &self.address_map)?;
-        }
+        ::protobuf::rt::write_map_with_cached_sizes::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(3, &self.address_map, os)?;
         if self.leader_id != 0 {
             os.write_uint64(4, self.leader_id)?;
         }
@@ -403,7 +398,7 @@ impl ::protobuf::Message for GetReply {
                 |m: &GetReply| { &m.state },
                 |m: &mut GetReply| { &mut m.state },
             ));
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+            fields.push(::protobuf::reflect::accessor::make_map_accessor::<_, ::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(
                 "address_map",
                 |m: &GetReply| { &m.address_map },
                 |m: &mut GetReply| { &mut m.address_map },
@@ -654,7 +649,7 @@ impl ::protobuf::reflect::ProtobufValue for PutReq {
 pub struct PutReply {
     // message fields
     pub state: super::common::State,
-    pub address_map: ::std::vec::Vec<u8>,
+    pub address_map: ::std::collections::HashMap<u64, super::common::NodeAddress>,
     pub leader_id: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
@@ -687,10 +682,10 @@ impl PutReply {
         self.state = v;
     }
 
-    // bytes address_map = 2;
+    // repeated .meteora.kv.PutReply.AddressMapEntry address_map = 2;
 
 
-    pub fn get_address_map(&self) -> &[u8] {
+    pub fn get_address_map(&self) -> &::std::collections::HashMap<u64, super::common::NodeAddress> {
         &self.address_map
     }
     pub fn clear_address_map(&mut self) {
@@ -698,19 +693,18 @@ impl PutReply {
     }
 
     // Param is passed by value, moved
-    pub fn set_address_map(&mut self, v: ::std::vec::Vec<u8>) {
+    pub fn set_address_map(&mut self, v: ::std::collections::HashMap<u64, super::common::NodeAddress>) {
         self.address_map = v;
     }
 
     // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_address_map(&mut self) -> &mut ::std::vec::Vec<u8> {
+    pub fn mut_address_map(&mut self) -> &mut ::std::collections::HashMap<u64, super::common::NodeAddress> {
         &mut self.address_map
     }
 
     // Take field
-    pub fn take_address_map(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.address_map, ::std::vec::Vec::new())
+    pub fn take_address_map(&mut self) -> ::std::collections::HashMap<u64, super::common::NodeAddress> {
+        ::std::mem::replace(&mut self.address_map, ::std::collections::HashMap::new())
     }
 
     // uint64 leader_id = 3;
@@ -742,7 +736,7 @@ impl ::protobuf::Message for PutReply {
                     ::protobuf::rt::read_proto3_enum_with_unknown_fields_into(wire_type, is, &mut self.state, 1, &mut self.unknown_fields)?
                 },
                 2 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.address_map)?;
+                    ::protobuf::rt::read_map_into::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(wire_type, is, &mut self.address_map)?;
                 },
                 3 => {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
@@ -766,9 +760,7 @@ impl ::protobuf::Message for PutReply {
         if self.state != super::common::State::UNKNOWN {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
-        if !self.address_map.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(2, &self.address_map);
-        }
+        my_size += ::protobuf::rt::compute_map_size::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(2, &self.address_map);
         if self.leader_id != 0 {
             my_size += ::protobuf::rt::value_size(3, self.leader_id, ::protobuf::wire_format::WireTypeVarint);
         }
@@ -781,9 +773,7 @@ impl ::protobuf::Message for PutReply {
         if self.state != super::common::State::UNKNOWN {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
-        if !self.address_map.is_empty() {
-            os.write_bytes(2, &self.address_map)?;
-        }
+        ::protobuf::rt::write_map_with_cached_sizes::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(2, &self.address_map, os)?;
         if self.leader_id != 0 {
             os.write_uint64(3, self.leader_id)?;
         }
@@ -830,7 +820,7 @@ impl ::protobuf::Message for PutReply {
                 |m: &PutReply| { &m.state },
                 |m: &mut PutReply| { &mut m.state },
             ));
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+            fields.push(::protobuf::reflect::accessor::make_map_accessor::<_, ::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(
                 "address_map",
                 |m: &PutReply| { &m.address_map },
                 |m: &mut PutReply| { &mut m.address_map },
@@ -1038,7 +1028,7 @@ impl ::protobuf::reflect::ProtobufValue for DeleteReq {
 pub struct DeleteReply {
     // message fields
     pub state: super::common::State,
-    pub address_map: ::std::vec::Vec<u8>,
+    pub address_map: ::std::collections::HashMap<u64, super::common::NodeAddress>,
     pub leader_id: u64,
     // special fields
     pub unknown_fields: ::protobuf::UnknownFields,
@@ -1071,10 +1061,10 @@ impl DeleteReply {
         self.state = v;
     }
 
-    // bytes address_map = 2;
+    // repeated .meteora.kv.DeleteReply.AddressMapEntry address_map = 2;
 
 
-    pub fn get_address_map(&self) -> &[u8] {
+    pub fn get_address_map(&self) -> &::std::collections::HashMap<u64, super::common::NodeAddress> {
         &self.address_map
     }
     pub fn clear_address_map(&mut self) {
@@ -1082,19 +1072,18 @@ impl DeleteReply {
     }
 
     // Param is passed by value, moved
-    pub fn set_address_map(&mut self, v: ::std::vec::Vec<u8>) {
+    pub fn set_address_map(&mut self, v: ::std::collections::HashMap<u64, super::common::NodeAddress>) {
         self.address_map = v;
     }
 
     // Mutable pointer to the field.
-    // If field is not initialized, it is initialized with default value first.
-    pub fn mut_address_map(&mut self) -> &mut ::std::vec::Vec<u8> {
+    pub fn mut_address_map(&mut self) -> &mut ::std::collections::HashMap<u64, super::common::NodeAddress> {
         &mut self.address_map
     }
 
     // Take field
-    pub fn take_address_map(&mut self) -> ::std::vec::Vec<u8> {
-        ::std::mem::replace(&mut self.address_map, ::std::vec::Vec::new())
+    pub fn take_address_map(&mut self) -> ::std::collections::HashMap<u64, super::common::NodeAddress> {
+        ::std::mem::replace(&mut self.address_map, ::std::collections::HashMap::new())
     }
 
     // uint64 leader_id = 3;
@@ -1126,7 +1115,7 @@ impl ::protobuf::Message for DeleteReply {
                     ::protobuf::rt::read_proto3_enum_with_unknown_fields_into(wire_type, is, &mut self.state, 1, &mut self.unknown_fields)?
                 },
                 2 => {
-                    ::protobuf::rt::read_singular_proto3_bytes_into(wire_type, is, &mut self.address_map)?;
+                    ::protobuf::rt::read_map_into::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(wire_type, is, &mut self.address_map)?;
                 },
                 3 => {
                     if wire_type != ::protobuf::wire_format::WireTypeVarint {
@@ -1150,9 +1139,7 @@ impl ::protobuf::Message for DeleteReply {
         if self.state != super::common::State::UNKNOWN {
             my_size += ::protobuf::rt::enum_size(1, self.state);
         }
-        if !self.address_map.is_empty() {
-            my_size += ::protobuf::rt::bytes_size(2, &self.address_map);
-        }
+        my_size += ::protobuf::rt::compute_map_size::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(2, &self.address_map);
         if self.leader_id != 0 {
             my_size += ::protobuf::rt::value_size(3, self.leader_id, ::protobuf::wire_format::WireTypeVarint);
         }
@@ -1165,9 +1152,7 @@ impl ::protobuf::Message for DeleteReply {
         if self.state != super::common::State::UNKNOWN {
             os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
         }
-        if !self.address_map.is_empty() {
-            os.write_bytes(2, &self.address_map)?;
-        }
+        ::protobuf::rt::write_map_with_cached_sizes::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(2, &self.address_map, os)?;
         if self.leader_id != 0 {
             os.write_uint64(3, self.leader_id)?;
         }
@@ -1214,7 +1199,7 @@ impl ::protobuf::Message for DeleteReply {
                 |m: &DeleteReply| { &m.state },
                 |m: &mut DeleteReply| { &mut m.state },
             ));
-            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeBytes>(
+            fields.push(::protobuf::reflect::accessor::make_map_accessor::<_, ::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(
                 "address_map",
                 |m: &DeleteReply| { &m.address_map },
                 |m: &mut DeleteReply| { &mut m.address_map },
@@ -1261,86 +1246,94 @@ impl ::protobuf::reflect::ProtobufValue for DeleteReply {
 
 static file_descriptor_proto_data: &'static [u8] = b"\
     \n\x08kv.proto\x12\nmeteora.kv\x1a\x0ccommon.proto\"\x1a\n\x06GetReq\x12\
-    \x10\n\x03key\x18\x01\x20\x01(\x0cR\x03key\"\x8b\x01\n\x08GetReply\x12\
+    \x10\n\x03key\x18\x01\x20\x01(\x0cR\x03key\"\x8d\x02\n\x08GetReply\x12\
     \x14\n\x05value\x18\x01\x20\x01(\x0cR\x05value\x12+\n\x05state\x18\x02\
-    \x20\x01(\x0e2\x15.meteora.common.StateR\x05state\x12\x1f\n\x0baddress_m\
-    ap\x18\x03\x20\x01(\x0cR\naddressMap\x12\x1b\n\tleader_id\x18\x04\x20\
-    \x01(\x04R\x08leaderId\"0\n\x06PutReq\x12\x10\n\x03key\x18\x01\x20\x01(\
-    \x0cR\x03key\x12\x14\n\x05value\x18\x02\x20\x01(\x0cR\x05value\"u\n\x08P\
-    utReply\x12+\n\x05state\x18\x01\x20\x01(\x0e2\x15.meteora.common.StateR\
-    \x05state\x12\x1f\n\x0baddress_map\x18\x02\x20\x01(\x0cR\naddressMap\x12\
-    \x1b\n\tleader_id\x18\x03\x20\x01(\x04R\x08leaderId\"\x1d\n\tDeleteReq\
-    \x12\x10\n\x03key\x18\x01\x20\x01(\x0cR\x03key\"x\n\x0bDeleteReply\x12+\
-    \n\x05state\x18\x01\x20\x01(\x0e2\x15.meteora.common.StateR\x05state\x12\
-    \x1f\n\x0baddress_map\x18\x02\x20\x01(\x0cR\naddressMap\x12\x1b\n\tleade\
-    r_id\x18\x03\x20\x01(\x04R\x08leaderId2\xad\x01\n\tKvService\x121\n\x03G\
-    et\x12\x12.meteora.kv.GetReq\x1a\x14.meteora.kv.GetReply\"\0\x121\n\x03P\
-    ut\x12\x12.meteora.kv.PutReq\x1a\x14.meteora.kv.PutReply\"\0\x12:\n\x06D\
-    elete\x12\x15.meteora.kv.DeleteReq\x1a\x17.meteora.kv.DeleteReply\"\0J\
-    \xc8\n\n\x06\x12\x04\0\0*\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\
-    \x03\0\x12\x03\x02\x07\x15\n\x08\n\x01\x02\x12\x03\x04\x08\x12\n\n\n\x02\
-    \x06\0\x12\x04\x06\0\n\x01\n\n\n\x03\x06\0\x01\x12\x03\x06\x08\x11\n\x0b\
-    \n\x04\x06\0\x02\0\x12\x03\x07\x04)\n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\
-    \x07\x08\x0b\n\x0c\n\x05\x06\0\x02\0\x02\x12\x03\x07\x0c\x12\n\x0c\n\x05\
-    \x06\0\x02\0\x03\x12\x03\x07\x1d%\n\x0b\n\x04\x06\0\x02\x01\x12\x03\x08\
-    \x04)\n\x0c\n\x05\x06\0\x02\x01\x01\x12\x03\x08\x08\x0b\n\x0c\n\x05\x06\
-    \0\x02\x01\x02\x12\x03\x08\x0c\x12\n\x0c\n\x05\x06\0\x02\x01\x03\x12\x03\
-    \x08\x1d%\n\x0b\n\x04\x06\0\x02\x02\x12\x03\t\x042\n\x0c\n\x05\x06\0\x02\
-    \x02\x01\x12\x03\t\x08\x0e\n\x0c\n\x05\x06\0\x02\x02\x02\x12\x03\t\x0f\
-    \x18\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\t#.\n\n\n\x02\x04\0\x12\x04\
-    \x0c\0\x0e\x01\n\n\n\x03\x04\0\x01\x12\x03\x0c\x08\x0e\n\x0b\n\x04\x04\0\
-    \x02\0\x12\x03\r\x04\x12\n\r\n\x05\x04\0\x02\0\x04\x12\x04\r\x04\x0c\x10\
-    \n\x0c\n\x05\x04\0\x02\0\x05\x12\x03\r\x04\t\n\x0c\n\x05\x04\0\x02\0\x01\
-    \x12\x03\r\n\r\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\r\x10\x11\n\n\n\x02\
-    \x04\x01\x12\x04\x10\0\x15\x01\n\n\n\x03\x04\x01\x01\x12\x03\x10\x08\x10\
-    \n\x0b\n\x04\x04\x01\x02\0\x12\x03\x11\x04\x14\n\r\n\x05\x04\x01\x02\0\
-    \x04\x12\x04\x11\x04\x10\x12\n\x0c\n\x05\x04\x01\x02\0\x05\x12\x03\x11\
-    \x04\t\n\x0c\n\x05\x04\x01\x02\0\x01\x12\x03\x11\n\x0f\n\x0c\n\x05\x04\
-    \x01\x02\0\x03\x12\x03\x11\x12\x13\n\x0b\n\x04\x04\x01\x02\x01\x12\x03\
-    \x12\x04#\n\r\n\x05\x04\x01\x02\x01\x04\x12\x04\x12\x04\x11\x14\n\x0c\n\
-    \x05\x04\x01\x02\x01\x06\x12\x03\x12\x04\x18\n\x0c\n\x05\x04\x01\x02\x01\
-    \x01\x12\x03\x12\x19\x1e\n\x0c\n\x05\x04\x01\x02\x01\x03\x12\x03\x12!\"\
-    \n\x0b\n\x04\x04\x01\x02\x02\x12\x03\x13\x04\x1a\n\r\n\x05\x04\x01\x02\
-    \x02\x04\x12\x04\x13\x04\x12#\n\x0c\n\x05\x04\x01\x02\x02\x05\x12\x03\
-    \x13\x04\t\n\x0c\n\x05\x04\x01\x02\x02\x01\x12\x03\x13\n\x15\n\x0c\n\x05\
-    \x04\x01\x02\x02\x03\x12\x03\x13\x18\x19\n\x0b\n\x04\x04\x01\x02\x03\x12\
-    \x03\x14\x04\x19\n\r\n\x05\x04\x01\x02\x03\x04\x12\x04\x14\x04\x13\x1a\n\
-    \x0c\n\x05\x04\x01\x02\x03\x05\x12\x03\x14\x04\n\n\x0c\n\x05\x04\x01\x02\
-    \x03\x01\x12\x03\x14\x0b\x14\n\x0c\n\x05\x04\x01\x02\x03\x03\x12\x03\x14\
-    \x17\x18\n\n\n\x02\x04\x02\x12\x04\x17\0\x1a\x01\n\n\n\x03\x04\x02\x01\
-    \x12\x03\x17\x08\x0e\n\x0b\n\x04\x04\x02\x02\0\x12\x03\x18\x04\x12\n\r\n\
-    \x05\x04\x02\x02\0\x04\x12\x04\x18\x04\x17\x10\n\x0c\n\x05\x04\x02\x02\0\
-    \x05\x12\x03\x18\x04\t\n\x0c\n\x05\x04\x02\x02\0\x01\x12\x03\x18\n\r\n\
-    \x0c\n\x05\x04\x02\x02\0\x03\x12\x03\x18\x10\x11\n\x0b\n\x04\x04\x02\x02\
-    \x01\x12\x03\x19\x04\x14\n\r\n\x05\x04\x02\x02\x01\x04\x12\x04\x19\x04\
-    \x18\x12\n\x0c\n\x05\x04\x02\x02\x01\x05\x12\x03\x19\x04\t\n\x0c\n\x05\
-    \x04\x02\x02\x01\x01\x12\x03\x19\n\x0f\n\x0c\n\x05\x04\x02\x02\x01\x03\
-    \x12\x03\x19\x12\x13\n\n\n\x02\x04\x03\x12\x04\x1c\0\x20\x01\n\n\n\x03\
-    \x04\x03\x01\x12\x03\x1c\x08\x10\n\x0b\n\x04\x04\x03\x02\0\x12\x03\x1d\
-    \x04#\n\r\n\x05\x04\x03\x02\0\x04\x12\x04\x1d\x04\x1c\x12\n\x0c\n\x05\
-    \x04\x03\x02\0\x06\x12\x03\x1d\x04\x18\n\x0c\n\x05\x04\x03\x02\0\x01\x12\
-    \x03\x1d\x19\x1e\n\x0c\n\x05\x04\x03\x02\0\x03\x12\x03\x1d!\"\n\x0b\n\
-    \x04\x04\x03\x02\x01\x12\x03\x1e\x04\x1a\n\r\n\x05\x04\x03\x02\x01\x04\
-    \x12\x04\x1e\x04\x1d#\n\x0c\n\x05\x04\x03\x02\x01\x05\x12\x03\x1e\x04\t\
-    \n\x0c\n\x05\x04\x03\x02\x01\x01\x12\x03\x1e\n\x15\n\x0c\n\x05\x04\x03\
-    \x02\x01\x03\x12\x03\x1e\x18\x19\n\x0b\n\x04\x04\x03\x02\x02\x12\x03\x1f\
-    \x04\x19\n\r\n\x05\x04\x03\x02\x02\x04\x12\x04\x1f\x04\x1e\x1a\n\x0c\n\
-    \x05\x04\x03\x02\x02\x05\x12\x03\x1f\x04\n\n\x0c\n\x05\x04\x03\x02\x02\
-    \x01\x12\x03\x1f\x0b\x14\n\x0c\n\x05\x04\x03\x02\x02\x03\x12\x03\x1f\x17\
-    \x18\n\n\n\x02\x04\x04\x12\x04\"\0$\x01\n\n\n\x03\x04\x04\x01\x12\x03\"\
-    \x08\x11\n\x0b\n\x04\x04\x04\x02\0\x12\x03#\x04\x12\n\r\n\x05\x04\x04\
-    \x02\0\x04\x12\x04#\x04\"\x13\n\x0c\n\x05\x04\x04\x02\0\x05\x12\x03#\x04\
-    \t\n\x0c\n\x05\x04\x04\x02\0\x01\x12\x03#\n\r\n\x0c\n\x05\x04\x04\x02\0\
-    \x03\x12\x03#\x10\x11\n\n\n\x02\x04\x05\x12\x04&\0*\x01\n\n\n\x03\x04\
-    \x05\x01\x12\x03&\x08\x13\n\x0b\n\x04\x04\x05\x02\0\x12\x03'\x04#\n\r\n\
-    \x05\x04\x05\x02\0\x04\x12\x04'\x04&\x15\n\x0c\n\x05\x04\x05\x02\0\x06\
-    \x12\x03'\x04\x18\n\x0c\n\x05\x04\x05\x02\0\x01\x12\x03'\x19\x1e\n\x0c\n\
-    \x05\x04\x05\x02\0\x03\x12\x03'!\"\n\x0b\n\x04\x04\x05\x02\x01\x12\x03(\
-    \x04\x1a\n\r\n\x05\x04\x05\x02\x01\x04\x12\x04(\x04'#\n\x0c\n\x05\x04\
-    \x05\x02\x01\x05\x12\x03(\x04\t\n\x0c\n\x05\x04\x05\x02\x01\x01\x12\x03(\
-    \n\x15\n\x0c\n\x05\x04\x05\x02\x01\x03\x12\x03(\x18\x19\n\x0b\n\x04\x04\
+    \x20\x01(\x0e2\x15.meteora.common.StateR\x05state\x12E\n\x0baddress_map\
+    \x18\x03\x20\x03(\x0b2$.meteora.kv.GetReply.AddressMapEntryR\naddressMap\
+    \x12\x1b\n\tleader_id\x18\x04\x20\x01(\x04R\x08leaderId\x1aZ\n\x0fAddres\
+    sMapEntry\x12\x10\n\x03key\x18\x01\x20\x01(\x04R\x03key\x121\n\x05value\
+    \x18\x02\x20\x01(\x0b2\x1b.meteora.common.NodeAddressR\x05value:\x028\
+    \x01\"0\n\x06PutReq\x12\x10\n\x03key\x18\x01\x20\x01(\x0cR\x03key\x12\
+    \x14\n\x05value\x18\x02\x20\x01(\x0cR\x05value\"\xf7\x01\n\x08PutReply\
+    \x12+\n\x05state\x18\x01\x20\x01(\x0e2\x15.meteora.common.StateR\x05stat\
+    e\x12E\n\x0baddress_map\x18\x02\x20\x03(\x0b2$.meteora.kv.PutReply.Addre\
+    ssMapEntryR\naddressMap\x12\x1b\n\tleader_id\x18\x03\x20\x01(\x04R\x08le\
+    aderId\x1aZ\n\x0fAddressMapEntry\x12\x10\n\x03key\x18\x01\x20\x01(\x04R\
+    \x03key\x121\n\x05value\x18\x02\x20\x01(\x0b2\x1b.meteora.common.NodeAdd\
+    ressR\x05value:\x028\x01\"\x1d\n\tDeleteReq\x12\x10\n\x03key\x18\x01\x20\
+    \x01(\x0cR\x03key\"\xfd\x01\n\x0bDeleteReply\x12+\n\x05state\x18\x01\x20\
+    \x01(\x0e2\x15.meteora.common.StateR\x05state\x12H\n\x0baddress_map\x18\
+    \x02\x20\x03(\x0b2'.meteora.kv.DeleteReply.AddressMapEntryR\naddressMap\
+    \x12\x1b\n\tleader_id\x18\x03\x20\x01(\x04R\x08leaderId\x1aZ\n\x0fAddres\
+    sMapEntry\x12\x10\n\x03key\x18\x01\x20\x01(\x04R\x03key\x121\n\x05value\
+    \x18\x02\x20\x01(\x0b2\x1b.meteora.common.NodeAddressR\x05value:\x028\
+    \x012\xad\x01\n\tKvService\x121\n\x03Get\x12\x12.meteora.kv.GetReq\x1a\
+    \x14.meteora.kv.GetReply\"\0\x121\n\x03Put\x12\x12.meteora.kv.PutReq\x1a\
+    \x14.meteora.kv.PutReply\"\0\x12:\n\x06Delete\x12\x15.meteora.kv.DeleteR\
+    eq\x1a\x17.meteora.kv.DeleteReply\"\0J\xc8\n\n\x06\x12\x04\0\0*\x01\n\
+    \x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\x03\0\x12\x03\x02\x07\x15\n\x08\
+    \n\x01\x02\x12\x03\x04\x08\x12\n\n\n\x02\x06\0\x12\x04\x06\0\n\x01\n\n\n\
+    \x03\x06\0\x01\x12\x03\x06\x08\x11\n\x0b\n\x04\x06\0\x02\0\x12\x03\x07\
+    \x04)\n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\x07\x08\x0b\n\x0c\n\x05\x06\0\
+    \x02\0\x02\x12\x03\x07\x0c\x12\n\x0c\n\x05\x06\0\x02\0\x03\x12\x03\x07\
+    \x1d%\n\x0b\n\x04\x06\0\x02\x01\x12\x03\x08\x04)\n\x0c\n\x05\x06\0\x02\
+    \x01\x01\x12\x03\x08\x08\x0b\n\x0c\n\x05\x06\0\x02\x01\x02\x12\x03\x08\
+    \x0c\x12\n\x0c\n\x05\x06\0\x02\x01\x03\x12\x03\x08\x1d%\n\x0b\n\x04\x06\
+    \0\x02\x02\x12\x03\t\x042\n\x0c\n\x05\x06\0\x02\x02\x01\x12\x03\t\x08\
+    \x0e\n\x0c\n\x05\x06\0\x02\x02\x02\x12\x03\t\x0f\x18\n\x0c\n\x05\x06\0\
+    \x02\x02\x03\x12\x03\t#.\n\n\n\x02\x04\0\x12\x04\x0c\0\x0e\x01\n\n\n\x03\
+    \x04\0\x01\x12\x03\x0c\x08\x0e\n\x0b\n\x04\x04\0\x02\0\x12\x03\r\x04\x12\
+    \n\r\n\x05\x04\0\x02\0\x04\x12\x04\r\x04\x0c\x10\n\x0c\n\x05\x04\0\x02\0\
+    \x05\x12\x03\r\x04\t\n\x0c\n\x05\x04\0\x02\0\x01\x12\x03\r\n\r\n\x0c\n\
+    \x05\x04\0\x02\0\x03\x12\x03\r\x10\x11\n\n\n\x02\x04\x01\x12\x04\x10\0\
+    \x15\x01\n\n\n\x03\x04\x01\x01\x12\x03\x10\x08\x10\n\x0b\n\x04\x04\x01\
+    \x02\0\x12\x03\x11\x04\x14\n\r\n\x05\x04\x01\x02\0\x04\x12\x04\x11\x04\
+    \x10\x12\n\x0c\n\x05\x04\x01\x02\0\x05\x12\x03\x11\x04\t\n\x0c\n\x05\x04\
+    \x01\x02\0\x01\x12\x03\x11\n\x0f\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03\
+    \x11\x12\x13\n\x0b\n\x04\x04\x01\x02\x01\x12\x03\x12\x04#\n\r\n\x05\x04\
+    \x01\x02\x01\x04\x12\x04\x12\x04\x11\x14\n\x0c\n\x05\x04\x01\x02\x01\x06\
+    \x12\x03\x12\x04\x18\n\x0c\n\x05\x04\x01\x02\x01\x01\x12\x03\x12\x19\x1e\
+    \n\x0c\n\x05\x04\x01\x02\x01\x03\x12\x03\x12!\"\n\x0b\n\x04\x04\x01\x02\
+    \x02\x12\x03\x13\x04<\n\r\n\x05\x04\x01\x02\x02\x04\x12\x04\x13\x04\x12#\
+    \n\x0c\n\x05\x04\x01\x02\x02\x06\x12\x03\x13\x04+\n\x0c\n\x05\x04\x01\
+    \x02\x02\x01\x12\x03\x13,7\n\x0c\n\x05\x04\x01\x02\x02\x03\x12\x03\x13:;\
+    \n\x0b\n\x04\x04\x01\x02\x03\x12\x03\x14\x04\x19\n\r\n\x05\x04\x01\x02\
+    \x03\x04\x12\x04\x14\x04\x13<\n\x0c\n\x05\x04\x01\x02\x03\x05\x12\x03\
+    \x14\x04\n\n\x0c\n\x05\x04\x01\x02\x03\x01\x12\x03\x14\x0b\x14\n\x0c\n\
+    \x05\x04\x01\x02\x03\x03\x12\x03\x14\x17\x18\n\n\n\x02\x04\x02\x12\x04\
+    \x17\0\x1a\x01\n\n\n\x03\x04\x02\x01\x12\x03\x17\x08\x0e\n\x0b\n\x04\x04\
+    \x02\x02\0\x12\x03\x18\x04\x12\n\r\n\x05\x04\x02\x02\0\x04\x12\x04\x18\
+    \x04\x17\x10\n\x0c\n\x05\x04\x02\x02\0\x05\x12\x03\x18\x04\t\n\x0c\n\x05\
+    \x04\x02\x02\0\x01\x12\x03\x18\n\r\n\x0c\n\x05\x04\x02\x02\0\x03\x12\x03\
+    \x18\x10\x11\n\x0b\n\x04\x04\x02\x02\x01\x12\x03\x19\x04\x14\n\r\n\x05\
+    \x04\x02\x02\x01\x04\x12\x04\x19\x04\x18\x12\n\x0c\n\x05\x04\x02\x02\x01\
+    \x05\x12\x03\x19\x04\t\n\x0c\n\x05\x04\x02\x02\x01\x01\x12\x03\x19\n\x0f\
+    \n\x0c\n\x05\x04\x02\x02\x01\x03\x12\x03\x19\x12\x13\n\n\n\x02\x04\x03\
+    \x12\x04\x1c\0\x20\x01\n\n\n\x03\x04\x03\x01\x12\x03\x1c\x08\x10\n\x0b\n\
+    \x04\x04\x03\x02\0\x12\x03\x1d\x04#\n\r\n\x05\x04\x03\x02\0\x04\x12\x04\
+    \x1d\x04\x1c\x12\n\x0c\n\x05\x04\x03\x02\0\x06\x12\x03\x1d\x04\x18\n\x0c\
+    \n\x05\x04\x03\x02\0\x01\x12\x03\x1d\x19\x1e\n\x0c\n\x05\x04\x03\x02\0\
+    \x03\x12\x03\x1d!\"\n\x0b\n\x04\x04\x03\x02\x01\x12\x03\x1e\x04<\n\r\n\
+    \x05\x04\x03\x02\x01\x04\x12\x04\x1e\x04\x1d#\n\x0c\n\x05\x04\x03\x02\
+    \x01\x06\x12\x03\x1e\x04+\n\x0c\n\x05\x04\x03\x02\x01\x01\x12\x03\x1e,7\
+    \n\x0c\n\x05\x04\x03\x02\x01\x03\x12\x03\x1e:;\n\x0b\n\x04\x04\x03\x02\
+    \x02\x12\x03\x1f\x04\x19\n\r\n\x05\x04\x03\x02\x02\x04\x12\x04\x1f\x04\
+    \x1e<\n\x0c\n\x05\x04\x03\x02\x02\x05\x12\x03\x1f\x04\n\n\x0c\n\x05\x04\
+    \x03\x02\x02\x01\x12\x03\x1f\x0b\x14\n\x0c\n\x05\x04\x03\x02\x02\x03\x12\
+    \x03\x1f\x17\x18\n\n\n\x02\x04\x04\x12\x04\"\0$\x01\n\n\n\x03\x04\x04\
+    \x01\x12\x03\"\x08\x11\n\x0b\n\x04\x04\x04\x02\0\x12\x03#\x04\x12\n\r\n\
+    \x05\x04\x04\x02\0\x04\x12\x04#\x04\"\x13\n\x0c\n\x05\x04\x04\x02\0\x05\
+    \x12\x03#\x04\t\n\x0c\n\x05\x04\x04\x02\0\x01\x12\x03#\n\r\n\x0c\n\x05\
+    \x04\x04\x02\0\x03\x12\x03#\x10\x11\n\n\n\x02\x04\x05\x12\x04&\0*\x01\n\
+    \n\n\x03\x04\x05\x01\x12\x03&\x08\x13\n\x0b\n\x04\x04\x05\x02\0\x12\x03'\
+    \x04#\n\r\n\x05\x04\x05\x02\0\x04\x12\x04'\x04&\x15\n\x0c\n\x05\x04\x05\
+    \x02\0\x06\x12\x03'\x04\x18\n\x0c\n\x05\x04\x05\x02\0\x01\x12\x03'\x19\
+    \x1e\n\x0c\n\x05\x04\x05\x02\0\x03\x12\x03'!\"\n\x0b\n\x04\x04\x05\x02\
+    \x01\x12\x03(\x04<\n\r\n\x05\x04\x05\x02\x01\x04\x12\x04(\x04'#\n\x0c\n\
+    \x05\x04\x05\x02\x01\x06\x12\x03(\x04+\n\x0c\n\x05\x04\x05\x02\x01\x01\
+    \x12\x03(,7\n\x0c\n\x05\x04\x05\x02\x01\x03\x12\x03(:;\n\x0b\n\x04\x04\
     \x05\x02\x02\x12\x03)\x04\x19\n\r\n\x05\x04\x05\x02\x02\x04\x12\x04)\x04\
-    (\x1a\n\x0c\n\x05\x04\x05\x02\x02\x05\x12\x03)\x04\n\n\x0c\n\x05\x04\x05\
+    (<\n\x0c\n\x05\x04\x05\x02\x02\x05\x12\x03)\x04\n\n\x0c\n\x05\x04\x05\
     \x02\x02\x01\x12\x03)\x0b\x14\n\x0c\n\x05\x04\x05\x02\x02\x03\x12\x03)\
     \x17\x18b\x06proto3\
 ";

@@ -17,7 +17,7 @@ message GetReq {
 message GetReply {
     bytes value = 1;
     meteora.common.State state = 2;
-    bytes address_map = 3;
+    map<uint64, meteora.common.NodeAddress> address_map = 3;
     uint64 leader_id = 4;
 }
 
@@ -28,7 +28,7 @@ message PutReq {
 
 message PutReply {
     meteora.common.State state = 1;
-    bytes address_map = 2;
+    map<uint64, meteora.common.NodeAddress> address_map = 2;
     uint64 leader_id = 3;
 }
 
@@ -38,6 +38,6 @@ message DeleteReq {
 
 message DeleteReply {
     meteora.common.State state = 1;
-    bytes address_map = 2;
+    map<uint64, meteora.common.NodeAddress> address_map = 2;
     uint64 leader_id = 3;
 }

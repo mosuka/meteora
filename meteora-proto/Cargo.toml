@@ -17,3 +17,4 @@ futures = "0.1.29"
 grpcio = { version = "0.4.7", features = [ "secure" ] }
 protobuf = "2.22.0"
 raft = "0.4.3"
+serde = { version = "1.0", features = ["derive"] }

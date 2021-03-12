@@ -10,10 +10,10 @@ use log::*;
 use raft::storage::MemStorage;
 
 use meteora_client::raft::client::RaftClient;
+use meteora_proto::proto::common::NodeAddress;
 use meteora_proto::proto::kv_grpc::create_kv_service;
 use meteora_proto::proto::raft_grpc::create_raft_service;
 use meteora_server::kv::server::KVServer;
-use meteora_server::raft::config::NodeAddress;
 
 use crate::log::set_logger;
 use crate::signal::sigterm_channel;
@@ -39,8 +39,10 @@ pub fn run_start_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
     let kv_address = format!("{}:{}", address, kv_port);
 
     let node_address = NodeAddress {
-        kv_address: kv_address,
+        kv_address,
         raft_address,
+        unknown_fields: Default::default(),
+        cached_size: Default::default(),
     };
 
     let mut addresses = HashMap::new();

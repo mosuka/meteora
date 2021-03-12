@@ -2,14 +2,13 @@ use std::collections::HashMap;
 use std::io::{Error, ErrorKind};
 use std::sync::Arc;
 
-use bincode::{deserialize, serialize};
+use bincode::serialize;
 use grpcio::{ChannelBuilder, EnvBuilder};
 use log::*;
 use raft::eraftpb::{ConfChange, ConfChangeType};
 
-use meteora_proto::proto::common::State;
+use meteora_proto::proto::common::{NodeAddress, State};
 use meteora_proto::proto::raft_grpc::RaftServiceClient;
-use meteora_server::raft::config::NodeAddress;
 
 fn create_client(address: String) -> RaftServiceClient {
     let env = Arc::new(EnvBuilder::new().build());
@@ -87,28 +86,16 @@ impl RaftClient {
             };
 
             // update address list and clients
-            if reply.get_address_map().len() > 0 {
-                let address_map: HashMap<u64, NodeAddress> =
-                    deserialize(&reply.get_address_map()).unwrap();
-                // add new ids
-                for (id, address) in &address_map {
-                    if let Some(grpc_address) = self.addresses.get(&id) {
-                        if grpc_address == address.raft_address.as_str() {
-                            debug!(
-                                "node has not been changed: id={}, address={}",
-                                id, grpc_address
-                            );
-                        } else {
-                            debug!("update node: id={}, address={}", id, address.raft_address);
-                            self.addresses
-                                .insert(id.clone(), address.raft_address.clone());
-                            self.clients.insert(
-                                id.clone(),
-                                Arc::new(create_client(address.raft_address.clone())),
-                            );
-                        }
+            // add new ids
+            for (id, address) in reply.get_address_map() {
+                if let Some(grpc_address) = self.addresses.get(&id) {
+                    if grpc_address == address.raft_address.as_str() {
+                        debug!(
+                            "node has not been changed: id={}, address={}",
+                            id, grpc_address
+                        );
                     } else {
-                        debug!("add node: id={}, address={}", id, address.raft_address);
+                        debug!("update node: id={}, address={}", id, address.raft_address);
                         self.addresses
                             .insert(id.clone(), address.raft_address.clone());
                         self.clients.insert(
@@ -116,25 +103,33 @@ impl RaftClient {
                             Arc::new(create_client(address.raft_address.clone())),
                         );
                     }
+                } else {
+                    debug!("add node: id={}, address={}", id, address.raft_address);
+                    self.addresses
+                        .insert(id.clone(), address.raft_address.clone());
+                    self.clients.insert(
+                        id.clone(),
+                        Arc::new(create_client(address.raft_address.clone())),
+                    );
                 }
-
-                // remove unused ids
-                for (id, address) in &self.addresses.clone() {
-                    if let Some(_) = address_map.get(&id) {
-                        debug!("node is in use: id={}, address={}", id, address);
-                    } else {
-                        debug!("node is not in use: id={}, address={}", id, address);
-                        self.addresses.remove(id);
-                        self.clients.remove(id);
-                    }
-                }
-
-                debug!("addresses={:?}", self.addresses);
             }
+
+            // remove unused ids
+            for (id, address) in &self.addresses.clone() {
+                if reply.get_address_map().contains_key(&id) {
+                    debug!("node is in use: id={}, address={}", id, address);
+                } else {
+                    debug!("node is not in use: id={}, address={}", id, address);
+                    self.addresses.remove(id);
+                    self.clients.remove(id);
+                }
+            }
+
+            debug!("addresses={:?}", self.addresses);
 
             match reply.get_state() {
                 State::OK => {
-                    return Ok(deserialize(&reply.get_address_map()).unwrap());
+                    return Ok(reply.get_address_map().clone());
                 }
                 State::WRONG_LEADER => {
                     warn!(
@@ -201,28 +196,16 @@ impl RaftClient {
             };
 
             // update address list and clients
-            if reply.get_address_map().len() > 0 {
-                let address_map: HashMap<u64, NodeAddress> =
-                    deserialize(&reply.get_address_map()).unwrap();
-                // add new ids
-                for (id, address) in &address_map {
-                    if let Some(grpc_address) = self.addresses.get(&id) {
-                        if grpc_address == address.raft_address.as_str() {
-                            debug!(
-                                "node has not been changed: id={}, address={}",
-                                id, grpc_address
-                            );
-                        } else {
-                            debug!("update node: id={}, address={}", id, address.raft_address);
-                            self.addresses
-                                .insert(id.clone(), address.raft_address.clone());
-                            self.clients.insert(
-                                id.clone(),
-                                Arc::new(create_client(address.raft_address.clone())),
-                            );
-                        }
+            // add new ids
+            for (id, address) in reply.get_address_map() {
+                if let Some(grpc_address) = self.addresses.get(&id) {
+                    if grpc_address == address.raft_address.as_str() {
+                        debug!(
+                            "node has not been changed: id={}, address={}",
+                            id, grpc_address
+                        );
                     } else {
-                        debug!("add node: id={}, address={}", id, address.raft_address);
+                        debug!("update node: id={}, address={}", id, address.raft_address);
                         self.addresses
                             .insert(id.clone(), address.raft_address.clone());
                         self.clients.insert(
@@ -230,25 +213,33 @@ impl RaftClient {
                             Arc::new(create_client(address.raft_address.clone())),
                         );
                     }
+                } else {
+                    debug!("add node: id={}, address={}", id, address.raft_address);
+                    self.addresses
+                        .insert(id.clone(), address.raft_address.clone());
+                    self.clients.insert(
+                        id.clone(),
+                        Arc::new(create_client(address.raft_address.clone())),
+                    );
                 }
-
-                // remove unused ids
-                for (id, address) in &self.addresses.clone() {
-                    if let Some(_) = address_map.get(&id) {
-                        debug!("node is in use: id={}, address={}", id, address);
-                    } else {
-                        debug!("node is not in use: id={}, address={}", id, address);
-                        self.addresses.remove(id);
-                        self.clients.remove(id);
-                    }
-                }
-
-                debug!("addresses={:?}", self.addresses);
             }
+
+            // remove unused ids
+            for (id, address) in &self.addresses.clone() {
+                if reply.get_address_map().contains_key(&id) {
+                    debug!("node is in use: id={}, address={}", id, address);
+                } else {
+                    debug!("node is not in use: id={}, address={}", id, address);
+                    self.addresses.remove(id);
+                    self.clients.remove(id);
+                }
+            }
+
+            debug!("addresses={:?}", self.addresses);
 
             match reply.get_state() {
                 State::OK => {
-                    return Ok(deserialize(&reply.get_address_map()).unwrap());
+                    return Ok(reply.get_address_map().clone());
                 }
                 State::WRONG_LEADER => {
                     warn!(
@@ -272,10 +263,5 @@ impl RaftClient {
                 }
             };
         }
-    }
-
-    pub fn snapshot(&mut self) -> Result<(), std::io::Error> {
-        // TODO
-        Ok(())
     }
 }

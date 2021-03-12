@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 mkdir -p ./src/proto
-rm -rf ./src/proto/*
+#rm -rf ./src/proto/*
 
 GRPC_RUST_PLUGIN=$(which grpc_rust_plugin)
 

@@ -11,3 +11,8 @@ enum State {
 }
 
 message Null {}
+
+message NodeAddress {
+    string kv_address = 1;
+    string raft_address = 2;
+}
