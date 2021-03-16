@@ -17,6 +17,7 @@ fn create_client(address: String) -> KvServiceClient {
 }
 
 pub struct KVClient {
+    address: String, // node address
     leader_id: u64, // leader's node id
     clients: HashMap<u64, Arc<KvServiceClient>>,
     addresses: HashMap<u64, String>,
@@ -25,17 +26,18 @@ pub struct KVClient {
 }
 
 impl KVClient {
-    pub fn new(server: &str) -> KVClient {
+    pub fn new(address: &str) -> KVClient {
         let initial_node_id = 0;
 
         let mut addresses = HashMap::new();
-        addresses.insert(initial_node_id, server.to_string());
+        addresses.insert(initial_node_id, address.to_string());
 
         let mut clients = HashMap::new();
-        let client = create_client(server.to_string());
+        let client = create_client(address.to_string());
         clients.insert(initial_node_id, Arc::new(client));
 
         KVClient {
+            address: address.to_string(),
             leader_id: initial_node_id,
             clients,
             addresses,
@@ -50,6 +52,15 @@ impl KVClient {
 
         let max_retry = 10;
         let mut cnt_retry = 0;
+
+        // set node_id
+        for (i, a) in &self.addresses {
+            if a == &self.address {
+                self.node_id = *i;
+                debug!("set node: id={}, address={}", i, a);
+                break;
+            }
+        }
 
         loop {
             if max_retry < cnt_retry {
@@ -152,6 +163,15 @@ impl KVClient {
         let max_retry = 10;
         let mut cnt_retry = 0;
 
+        // set node_id
+        for (i, a) in &self.addresses {
+            if a == &self.address {
+                self.node_id = *i;
+                debug!("set node: id={}, address={}", i, a);
+                break;
+            }
+        }
+
         loop {
             if max_retry < cnt_retry {
                 return Err(Error::new(
@@ -253,6 +273,15 @@ impl KVClient {
 
         let max_retry = 10;
         let mut cnt_retry = 0;
+
+        // set node_id
+        for (i, a) in &self.addresses {
+            if a == &self.address {
+                self.node_id = *i;
+                debug!("set node: id={}, address={}", i, a);
+                break;
+            }
+        }
 
         loop {
             if max_retry < cnt_retry {
