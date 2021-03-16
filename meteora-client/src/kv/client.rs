@@ -5,11 +5,13 @@ use std::sync::Arc;
 use grpcio::{ChannelBuilder, EnvBuilder};
 use log::*;
 
-use meteora_proto::proto::common::State;
+use meteora_proto::proto::common::{Null, State};
 use meteora_proto::proto::kv::{DeleteReq, GetReq, PutReq};
 use meteora_proto::proto::kv_grpc::KvServiceClient;
 
-fn create_client(address: String) -> KvServiceClient {
+use crate::raft::client::create_raft_client;
+
+pub fn create_kv_client(address: String) -> KvServiceClient {
     let env = Arc::new(EnvBuilder::new().build());
     let ch = ChannelBuilder::new(env).connect(&address);
     let client = KvServiceClient::new(ch);
@@ -17,7 +19,6 @@ fn create_client(address: String) -> KvServiceClient {
 }
 
 pub struct KVClient {
-    address: String, // node address
     leader_id: u64, // leader's node id
     clients: HashMap<u64, Arc<KvServiceClient>>,
     addresses: HashMap<u64, String>,
@@ -26,23 +27,41 @@ pub struct KVClient {
 }
 
 impl KVClient {
-    pub fn new(address: &str) -> KVClient {
-        let initial_node_id = 0;
+    pub fn new(raft_address: &str) -> KVClient {
+        let raft_client = create_raft_client(raft_address.to_string());
 
-        let mut addresses = HashMap::new();
-        addresses.insert(initial_node_id, address.to_string());
+        let req = Null::new();
+        let reply = raft_client.status(&req).unwrap();
+        let leader_id = reply.leader_id;
+        let addresses: HashMap<u64, String> = reply
+            .address_map
+            .iter()
+            .map(|(node_id, node_address)| (node_id.clone(), node_address.kv_address.clone()))
+            .collect();
+        let node_id = reply
+            .address_map
+            .iter()
+            .find_map(|(node_id, node_address)| {
+                if &node_address.raft_address == raft_address {
+                    Some(node_id.clone())
+                } else {
+                    None
+                }
+            })
+            .unwrap();
+
+        let kv_address = addresses.get(&node_id).unwrap();
+        let kv_client = create_kv_client(kv_address.clone());
 
         let mut clients = HashMap::new();
-        let client = create_client(address.to_string());
-        clients.insert(initial_node_id, Arc::new(client));
+        clients.insert(node_id, Arc::new(kv_client));
 
         KVClient {
-            address: address.to_string(),
-            leader_id: initial_node_id,
+            leader_id,
             clients,
             addresses,
             next_index: 0,
-            node_id: initial_node_id,
+            node_id,
         }
     }
 
@@ -52,15 +71,6 @@ impl KVClient {
 
         let max_retry = 10;
         let mut cnt_retry = 0;
-
-        // set node_id
-        for (i, a) in &self.addresses {
-            if a == &self.address {
-                self.node_id = *i;
-                debug!("set node: id={}, address={}", i, a);
-                break;
-            }
-        }
 
         loop {
             if max_retry < cnt_retry {
@@ -105,7 +115,7 @@ impl KVClient {
                             .insert(id.clone(), address.kv_address.clone());
                         self.clients.insert(
                             id.clone(),
-                            Arc::new(create_client(address.kv_address.clone())),
+                            Arc::new(create_kv_client(address.kv_address.clone())),
                         );
                     }
                 } else {
@@ -114,7 +124,7 @@ impl KVClient {
                         .insert(id.clone(), address.kv_address.clone());
                     self.clients.insert(
                         id.clone(),
-                        Arc::new(create_client(address.kv_address.clone())),
+                        Arc::new(create_kv_client(address.kv_address.clone())),
                     );
                 }
             }
@@ -163,15 +173,6 @@ impl KVClient {
         let max_retry = 10;
         let mut cnt_retry = 0;
 
-        // set node_id
-        for (i, a) in &self.addresses {
-            if a == &self.address {
-                self.node_id = *i;
-                debug!("set node: id={}, address={}", i, a);
-                break;
-            }
-        }
-
         loop {
             if max_retry < cnt_retry {
                 return Err(Error::new(
@@ -215,7 +216,7 @@ impl KVClient {
                             .insert(id.clone(), address.kv_address.clone());
                         self.clients.insert(
                             id.clone(),
-                            Arc::new(create_client(address.kv_address.clone())),
+                            Arc::new(create_kv_client(address.kv_address.clone())),
                         );
                     }
                 } else {
@@ -224,7 +225,7 @@ impl KVClient {
                         .insert(id.clone(), address.kv_address.clone());
                     self.clients.insert(
                         id.clone(),
-                        Arc::new(create_client(address.kv_address.clone())),
+                        Arc::new(create_kv_client(address.kv_address.clone())),
                     );
                 }
             }
@@ -274,15 +275,6 @@ impl KVClient {
         let max_retry = 10;
         let mut cnt_retry = 0;
 
-        // set node_id
-        for (i, a) in &self.addresses {
-            if a == &self.address {
-                self.node_id = *i;
-                debug!("set node: id={}, address={}", i, a);
-                break;
-            }
-        }
-
         loop {
             if max_retry < cnt_retry {
                 return Err(Error::new(
@@ -326,7 +318,7 @@ impl KVClient {
                             .insert(id.clone(), address.kv_address.clone());
                         self.clients.insert(
                             id.clone(),
-                            Arc::new(create_client(address.kv_address.clone())),
+                            Arc::new(create_kv_client(address.kv_address.clone())),
                         );
                     }
                 } else {
@@ -335,7 +327,7 @@ impl KVClient {
                         .insert(id.clone(), address.kv_address.clone());
                     self.clients.insert(
                         id.clone(),
-                        Arc::new(create_client(address.kv_address.clone())),
+                        Arc::new(create_kv_client(address.kv_address.clone())),
                     );
                 }
             }

@@ -4,6 +4,7 @@ use meteora::cli::delete::run_delete_cli;
 use meteora::cli::get::run_get_cli;
 use meteora::cli::put::run_put_cli;
 use meteora::cli::start::run_start_cli;
+use meteora::cli::status::run_status_cli;
 
 fn main() -> Result<(), std::io::Error> {
     let app = App::new(crate_name!())
@@ -97,11 +98,11 @@ fn main() -> Result<(), std::io::Error> {
                 .version_short("v")
                 .arg(
                     Arg::with_name("ADDRESS")
-                        .help("An address that provides the Key-Value service.")
+                        .help("An address that provides the raft service.")
                         .short("a")
                         .long("address")
                         .value_name("ADDRESS:KV_PORT")
-                        .default_value("127.0.0.1:5000")
+                        .default_value("127.0.0.1:7000")
                         .takes_value(true)
                 )
                 .arg(
@@ -129,11 +130,11 @@ fn main() -> Result<(), std::io::Error> {
                 .version_short("v")
                 .arg(
                     Arg::with_name("ADDRESS")
-                        .help("An address that provides the Key-Value service.")
+                        .help("An address that provides the raft service.")
                         .short("a")
                         .long("address")
                         .value_name("ADDRESS:KV_PORT")
-                        .default_value("127.0.0.1:5000")
+                        .default_value("127.0.0.1:7000")
                         .takes_value(true)
                 )
                 .arg(
@@ -155,11 +156,11 @@ fn main() -> Result<(), std::io::Error> {
                 .version_short("v")
                 .arg(
                     Arg::with_name("ADDRESS")
-                        .help("An address that provides the Key-Value service.")
+                        .help("An address that provides the raft service.")
                         .short("a")
                         .long("address")
                         .value_name("ADDRESS:KV_PORT")
-                        .default_value("127.0.0.1:5000")
+                        .default_value("127.0.0.1:7000")
                         .takes_value(true)
                 )
                 .arg(
@@ -167,6 +168,26 @@ fn main() -> Result<(), std::io::Error> {
                         .help("A unique key that identifies the value in the key-value store.")
                         .value_name("KEY")
                         .takes_value(true),
+                )
+        )
+        .subcommand(
+            SubCommand::with_name("status")
+                .name("status")
+                .setting(AppSettings::DeriveDisplayOrder)
+                .version(crate_version!())
+                .author(crate_authors!())
+                .about("Get status")
+                .help_message("Prints help information.")
+                .version_message("Prints version information.")
+                .version_short("v")
+                .arg(
+                    Arg::with_name("ADDRESS")
+                        .help("An address that provides the raft service.")
+                        .short("a")
+                        .long("address")
+                        .value_name("ADDRESS:KV_PORT")
+                        .default_value("127.0.0.1:7000")
+                        .takes_value(true)
                 )
         )
         .get_matches();
@@ -178,6 +199,7 @@ fn main() -> Result<(), std::io::Error> {
         "put" => run_put_cli,
         "get" => run_get_cli,
         "delete" => run_delete_cli,
+        "status" => run_status_cli,
         _ => panic!("Subcommand {} is unknown", subcommand),
     };
 

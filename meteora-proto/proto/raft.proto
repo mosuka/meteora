@@ -6,9 +6,16 @@ import "common.proto";
 package meteora.raft;
 
 service RaftService {
+    rpc Status(meteora.common.Null) returns (StatusReply) {}
     rpc ChangeConfig(eraftpb.ConfChange) returns(ChangeReply) {}
     rpc SendMsg(eraftpb.Message) returns(meteora.common.Null) {}
     rpc SendAddress(AddressState) returns(meteora.common.Null) {}
+}
+
+message StatusReply {
+    meteora.common.State state = 1;
+    map<uint64, meteora.common.NodeAddress> address_map = 2;
+    uint64 leader_id = 3;
 }
 
 message AddressState {
