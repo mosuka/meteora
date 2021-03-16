@@ -28,8 +28,9 @@ pub struct KVServer {
 
 #[derive(Serialize, Deserialize, Clone)]
 pub enum Op {
-    Put { key: Vec<u8>, val: Vec<u8> },
+    Status {},
     Get { key: Vec<u8> },
+    Put { key: Vec<u8>, val: Vec<u8> },
     Delete { key: Vec<u8> },
 }
 
@@ -55,7 +56,7 @@ impl KVServer {
             seq: 0,
             node_id,
         };
-        let raft_server = RaftServer::new(rs);
+        let raft_server = RaftServer::new(rs, node_id);
 
         let db = kv_server.db.clone();
         thread::spawn(move || {
@@ -105,7 +106,7 @@ impl KvService for KVServer {
                         }
                         reply.set_value(value);
                         reply.set_address_map(addresses);
-                        s1.send(reply).expect("cb channel closed");
+                        s1.send(reply).expect("callback channel closed");
                     },
                 ),
             })
@@ -122,7 +123,7 @@ impl KvService for KVServer {
 
         let f = sink
             .success(reply.clone())
-            .map_err(move |err| error!("Failed to reply get: {:?}", err));
+            .map_err(move |err| error!("failed to reply: {:?}", err));
         ctx.spawn(f);
     }
 
@@ -155,7 +156,7 @@ impl KvService for KVServer {
                             reply.set_leader_id(node_id);
                         }
                         reply.set_address_map(addresses);
-                        s1.send(reply).expect("cb channel closed");
+                        s1.send(reply).expect("callback channel closed");
                     },
                 ),
             })
@@ -172,7 +173,7 @@ impl KvService for KVServer {
 
         let f = sink
             .success(reply.clone())
-            .map_err(move |err| error!("Failed to reply set: {:?}", err));
+            .map_err(move |err| error!("failed to reply: {:?}", err));
         ctx.spawn(f);
     }
 
@@ -204,7 +205,7 @@ impl KvService for KVServer {
                             reply.set_leader_id(node_id);
                         }
                         reply.set_address_map(addresses);
-                        s1.send(reply).expect("cb channel closed");
+                        s1.send(reply).expect("callback channel closed");
                     },
                 ),
             })
@@ -221,7 +222,7 @@ impl KvService for KVServer {
 
         let f = sink
             .success(reply.clone())
-            .map_err(move |err| error!("Failed to reply delete: {:?}", err));
+            .map_err(move |err| error!("failed to reply: {:?}", err));
         ctx.spawn(f);
     }
 }
@@ -231,11 +232,14 @@ fn apply_daemon(receiver: Receiver<Op>, db: Arc<DB>) {
         let op = match receiver.recv() {
             Ok(o) => o,
             _ => {
-                debug!("apply dammon return");
+                debug!("exit the apply daemon");
                 return;
             }
         };
         match op {
+            Op::Status {} => {
+                // noop
+            }
             Op::Get { key: _k } => {
                 // noop
             }

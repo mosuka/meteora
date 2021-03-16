@@ -30,6 +30,9 @@ pub enum Msg {
         change: ConfChange,
         cb: ProposeCallback,
     },
+    Config {
+        cb: ProposeCallback,
+    },
     Address(AddressState),
     // Here we don't use Raft Message, so use dead_code to
     // avoid the compiler warning.
@@ -127,12 +130,16 @@ pub fn init_and_run(
                     callback(leader_id as i32, addresses.clone());
                     continue;
                 } else {
-                    // TODO add address to map
                     callbacks.insert(seq, callback);
                     debug!("propose config change");
                     r.propose_conf_change(serialize(&seq).unwrap(), change)
                         .unwrap();
                 }
+            }
+            Ok(Msg::Config { cb: callback }) => {
+                let leader_id = r.raft.leader_id;
+                callback(leader_id as i32, addresses.clone());
+                continue;
             }
             Ok(Msg::Raft(m)) => {
                 debug!("receive raft message");

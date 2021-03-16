@@ -14,7 +14,12 @@ $ ./bin/meteora start -i 3 -a 0.0.0.0 -r 7003 -k 5003 -d /tmp/meteora/3/data -p 
 ```
 
 ```shell
-$ ./bin/meteora put -a 0.0.0.0:5001 key1 "Meteora is a distributed key-value store."
+$ grpcurl -import-path meteora-proto/proto -proto meteora-proto/proto/raft.proto -plaintext 0.0.0.0:7001 meteora.raft.RaftService/Status | jq .
+```
+
+
+```shell
+$ ./bin/meteora put -a 0.0.0.0:7001 key1 "Meteora is a distributed key-value store."
 $ ./bin/meteora get -a 0.0.0.0:5001 key1
 $ ./bin/meteora get -a 0.0.0.0:5002 key1
 $ ./bin/meteora get -a 0.0.0.0:5003 key1

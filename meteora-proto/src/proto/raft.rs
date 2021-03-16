@@ -24,6 +24,226 @@
 // const _PROTOBUF_VERSION_CHECK: () = ::protobuf::VERSION_2_22_0;
 
 #[derive(PartialEq,Clone,Default)]
+pub struct StatusReply {
+    // message fields
+    pub state: super::common::State,
+    pub address_map: ::std::collections::HashMap<u64, super::common::NodeAddress>,
+    pub leader_id: u64,
+    // special fields
+    pub unknown_fields: ::protobuf::UnknownFields,
+    pub cached_size: ::protobuf::CachedSize,
+}
+
+impl<'a> ::std::default::Default for &'a StatusReply {
+    fn default() -> &'a StatusReply {
+        <StatusReply as ::protobuf::Message>::default_instance()
+    }
+}
+
+impl StatusReply {
+    pub fn new() -> StatusReply {
+        ::std::default::Default::default()
+    }
+
+    // .meteora.common.State state = 1;
+
+
+    pub fn get_state(&self) -> super::common::State {
+        self.state
+    }
+    pub fn clear_state(&mut self) {
+        self.state = super::common::State::UNKNOWN;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_state(&mut self, v: super::common::State) {
+        self.state = v;
+    }
+
+    // repeated .meteora.raft.StatusReply.AddressMapEntry address_map = 2;
+
+
+    pub fn get_address_map(&self) -> &::std::collections::HashMap<u64, super::common::NodeAddress> {
+        &self.address_map
+    }
+    pub fn clear_address_map(&mut self) {
+        self.address_map.clear();
+    }
+
+    // Param is passed by value, moved
+    pub fn set_address_map(&mut self, v: ::std::collections::HashMap<u64, super::common::NodeAddress>) {
+        self.address_map = v;
+    }
+
+    // Mutable pointer to the field.
+    pub fn mut_address_map(&mut self) -> &mut ::std::collections::HashMap<u64, super::common::NodeAddress> {
+        &mut self.address_map
+    }
+
+    // Take field
+    pub fn take_address_map(&mut self) -> ::std::collections::HashMap<u64, super::common::NodeAddress> {
+        ::std::mem::replace(&mut self.address_map, ::std::collections::HashMap::new())
+    }
+
+    // uint64 leader_id = 3;
+
+
+    pub fn get_leader_id(&self) -> u64 {
+        self.leader_id
+    }
+    pub fn clear_leader_id(&mut self) {
+        self.leader_id = 0;
+    }
+
+    // Param is passed by value, moved
+    pub fn set_leader_id(&mut self, v: u64) {
+        self.leader_id = v;
+    }
+}
+
+impl ::protobuf::Message for StatusReply {
+    fn is_initialized(&self) -> bool {
+        true
+    }
+
+    fn merge_from(&mut self, is: &mut ::protobuf::CodedInputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        while !is.eof()? {
+            let (field_number, wire_type) = is.read_tag_unpack()?;
+            match field_number {
+                1 => {
+                    ::protobuf::rt::read_proto3_enum_with_unknown_fields_into(wire_type, is, &mut self.state, 1, &mut self.unknown_fields)?
+                },
+                2 => {
+                    ::protobuf::rt::read_map_into::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(wire_type, is, &mut self.address_map)?;
+                },
+                3 => {
+                    if wire_type != ::protobuf::wire_format::WireTypeVarint {
+                        return ::std::result::Result::Err(::protobuf::rt::unexpected_wire_type(wire_type));
+                    }
+                    let tmp = is.read_uint64()?;
+                    self.leader_id = tmp;
+                },
+                _ => {
+                    ::protobuf::rt::read_unknown_or_skip_group(field_number, wire_type, is, self.mut_unknown_fields())?;
+                },
+            };
+        }
+        ::std::result::Result::Ok(())
+    }
+
+    // Compute sizes of nested messages
+    #[allow(unused_variables)]
+    fn compute_size(&self) -> u32 {
+        let mut my_size = 0;
+        if self.state != super::common::State::UNKNOWN {
+            my_size += ::protobuf::rt::enum_size(1, self.state);
+        }
+        my_size += ::protobuf::rt::compute_map_size::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(2, &self.address_map);
+        if self.leader_id != 0 {
+            my_size += ::protobuf::rt::value_size(3, self.leader_id, ::protobuf::wire_format::WireTypeVarint);
+        }
+        my_size += ::protobuf::rt::unknown_fields_size(self.get_unknown_fields());
+        self.cached_size.set(my_size);
+        my_size
+    }
+
+    fn write_to_with_cached_sizes(&self, os: &mut ::protobuf::CodedOutputStream<'_>) -> ::protobuf::ProtobufResult<()> {
+        if self.state != super::common::State::UNKNOWN {
+            os.write_enum(1, ::protobuf::ProtobufEnum::value(&self.state))?;
+        }
+        ::protobuf::rt::write_map_with_cached_sizes::<::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(2, &self.address_map, os)?;
+        if self.leader_id != 0 {
+            os.write_uint64(3, self.leader_id)?;
+        }
+        os.write_unknown_fields(self.get_unknown_fields())?;
+        ::std::result::Result::Ok(())
+    }
+
+    fn get_cached_size(&self) -> u32 {
+        self.cached_size.get()
+    }
+
+    fn get_unknown_fields(&self) -> &::protobuf::UnknownFields {
+        &self.unknown_fields
+    }
+
+    fn mut_unknown_fields(&mut self) -> &mut ::protobuf::UnknownFields {
+        &mut self.unknown_fields
+    }
+
+    fn as_any(&self) -> &dyn (::std::any::Any) {
+        self as &dyn (::std::any::Any)
+    }
+    fn as_any_mut(&mut self) -> &mut dyn (::std::any::Any) {
+        self as &mut dyn (::std::any::Any)
+    }
+    fn into_any(self: ::std::boxed::Box<Self>) -> ::std::boxed::Box<dyn (::std::any::Any)> {
+        self
+    }
+
+    fn descriptor(&self) -> &'static ::protobuf::reflect::MessageDescriptor {
+        Self::descriptor_static()
+    }
+
+    fn new() -> StatusReply {
+        StatusReply::new()
+    }
+
+    fn descriptor_static() -> &'static ::protobuf::reflect::MessageDescriptor {
+        static descriptor: ::protobuf::rt::LazyV2<::protobuf::reflect::MessageDescriptor> = ::protobuf::rt::LazyV2::INIT;
+        descriptor.get(|| {
+            let mut fields = ::std::vec::Vec::new();
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeEnum<super::common::State>>(
+                "state",
+                |m: &StatusReply| { &m.state },
+                |m: &mut StatusReply| { &mut m.state },
+            ));
+            fields.push(::protobuf::reflect::accessor::make_map_accessor::<_, ::protobuf::types::ProtobufTypeUint64, ::protobuf::types::ProtobufTypeMessage<super::common::NodeAddress>>(
+                "address_map",
+                |m: &StatusReply| { &m.address_map },
+                |m: &mut StatusReply| { &mut m.address_map },
+            ));
+            fields.push(::protobuf::reflect::accessor::make_simple_field_accessor::<_, ::protobuf::types::ProtobufTypeUint64>(
+                "leader_id",
+                |m: &StatusReply| { &m.leader_id },
+                |m: &mut StatusReply| { &mut m.leader_id },
+            ));
+            ::protobuf::reflect::MessageDescriptor::new_pb_name::<StatusReply>(
+                "StatusReply",
+                fields,
+                file_descriptor_proto()
+            )
+        })
+    }
+
+    fn default_instance() -> &'static StatusReply {
+        static instance: ::protobuf::rt::LazyV2<StatusReply> = ::protobuf::rt::LazyV2::INIT;
+        instance.get(StatusReply::new)
+    }
+}
+
+impl ::protobuf::Clear for StatusReply {
+    fn clear(&mut self) {
+        self.state = super::common::State::UNKNOWN;
+        self.address_map.clear();
+        self.leader_id = 0;
+        self.unknown_fields.clear();
+    }
+}
+
+impl ::std::fmt::Debug for StatusReply {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        ::protobuf::text_format::fmt(self, f)
+    }
+}
+
+impl ::protobuf::reflect::ProtobufValue for StatusReply {
+    fn as_ref(&self) -> ::protobuf::reflect::ReflectValueRef {
+        ::protobuf::reflect::ReflectValueRef::Message(self)
+    }
+}
+
+#[derive(PartialEq,Clone,Default)]
 pub struct AddressState {
     // message fields
     pub address_map: ::std::collections::HashMap<u64, super::common::NodeAddress>,
@@ -399,47 +619,68 @@ impl ::protobuf::reflect::ProtobufValue for ChangeReply {
 
 static file_descriptor_proto_data: &'static [u8] = b"\
     \n\nraft.proto\x12\x0cmeteora.raft\x1a\reraftpb.proto\x1a\x0ccommon.prot\
-    o\"\xb7\x01\n\x0cAddressState\x12K\n\x0baddress_map\x18\x01\x20\x03(\x0b\
-    2*.meteora.raft.AddressState.AddressMapEntryR\naddressMap\x1aZ\n\x0fAddr\
-    essMapEntry\x12\x10\n\x03key\x18\x01\x20\x01(\x04R\x03key\x121\n\x05valu\
-    e\x18\x02\x20\x01(\x0b2\x1b.meteora.common.NodeAddressR\x05value:\x028\
-    \x01\"\xff\x01\n\x0bChangeReply\x12+\n\x05state\x18\x01\x20\x01(\x0e2\
-    \x15.meteora.common.StateR\x05state\x12J\n\x0baddress_map\x18\x02\x20\
-    \x03(\x0b2).meteora.raft.ChangeReply.AddressMapEntryR\naddressMap\x12\
-    \x1b\n\tleader_id\x18\x03\x20\x01(\x04R\x08leaderId\x1aZ\n\x0fAddressMap\
-    Entry\x12\x10\n\x03key\x18\x01\x20\x01(\x04R\x03key\x121\n\x05value\x18\
-    \x02\x20\x01(\x0b2\x1b.meteora.common.NodeAddressR\x05value:\x028\x012\
-    \xc7\x01\n\x0bRaftService\x12@\n\x0cChangeConfig\x12\x13.eraftpb.ConfCha\
-    nge\x1a\x19.meteora.raft.ChangeReply\"\0\x123\n\x07SendMsg\x12\x10.eraft\
-    pb.Message\x1a\x14.meteora.common.Null\"\0\x12A\n\x0bSendAddress\x12\x1a\
-    .meteora.raft.AddressState\x1a\x14.meteora.common.Null\"\0J\xb7\x04\n\
-    \x06\x12\x04\0\0\x15\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\x03\0\
-    \x12\x03\x02\x07\x16\n\t\n\x02\x03\x01\x12\x03\x03\x07\x15\n\x08\n\x01\
-    \x02\x12\x03\x05\x08\x14\n\n\n\x02\x06\0\x12\x04\x07\0\x0b\x01\n\n\n\x03\
-    \x06\0\x01\x12\x03\x07\x08\x13\n\x0b\n\x04\x06\0\x02\0\x12\x03\x08\x04@\
-    \n\x0c\n\x05\x06\0\x02\0\x01\x12\x03\x08\x08\x14\n\x0c\n\x05\x06\0\x02\0\
-    \x02\x12\x03\x08\x15'\n\x0c\n\x05\x06\0\x02\0\x03\x12\x03\x081<\n\x0b\n\
+    o\"\xff\x01\n\x0bStatusReply\x12+\n\x05state\x18\x01\x20\x01(\x0e2\x15.m\
+    eteora.common.StateR\x05state\x12J\n\x0baddress_map\x18\x02\x20\x03(\x0b\
+    2).meteora.raft.StatusReply.AddressMapEntryR\naddressMap\x12\x1b\n\tlead\
+    er_id\x18\x03\x20\x01(\x04R\x08leaderId\x1aZ\n\x0fAddressMapEntry\x12\
+    \x10\n\x03key\x18\x01\x20\x01(\x04R\x03key\x121\n\x05value\x18\x02\x20\
+    \x01(\x0b2\x1b.meteora.common.NodeAddressR\x05value:\x028\x01\"\xb7\x01\
+    \n\x0cAddressState\x12K\n\x0baddress_map\x18\x01\x20\x03(\x0b2*.meteora.\
+    raft.AddressState.AddressMapEntryR\naddressMap\x1aZ\n\x0fAddressMapEntry\
+    \x12\x10\n\x03key\x18\x01\x20\x01(\x04R\x03key\x121\n\x05value\x18\x02\
+    \x20\x01(\x0b2\x1b.meteora.common.NodeAddressR\x05value:\x028\x01\"\xff\
+    \x01\n\x0bChangeReply\x12+\n\x05state\x18\x01\x20\x01(\x0e2\x15.meteora.\
+    common.StateR\x05state\x12J\n\x0baddress_map\x18\x02\x20\x03(\x0b2).mete\
+    ora.raft.ChangeReply.AddressMapEntryR\naddressMap\x12\x1b\n\tleader_id\
+    \x18\x03\x20\x01(\x04R\x08leaderId\x1aZ\n\x0fAddressMapEntry\x12\x10\n\
+    \x03key\x18\x01\x20\x01(\x04R\x03key\x121\n\x05value\x18\x02\x20\x01(\
+    \x0b2\x1b.meteora.common.NodeAddressR\x05value:\x028\x012\x84\x02\n\x0bR\
+    aftService\x12;\n\x06Status\x12\x14.meteora.common.Null\x1a\x19.meteora.\
+    raft.StatusReply\"\0\x12@\n\x0cChangeConfig\x12\x13.eraftpb.ConfChange\
+    \x1a\x19.meteora.raft.ChangeReply\"\0\x123\n\x07SendMsg\x12\x10.eraftpb.\
+    Message\x1a\x14.meteora.common.Null\"\0\x12A\n\x0bSendAddress\x12\x1a.me\
+    teora.raft.AddressState\x1a\x14.meteora.common.Null\"\0J\xd8\x06\n\x06\
+    \x12\x04\0\0\x1c\x01\n\x08\n\x01\x0c\x12\x03\0\0\x12\n\t\n\x02\x03\0\x12\
+    \x03\x02\x07\x16\n\t\n\x02\x03\x01\x12\x03\x03\x07\x15\n\x08\n\x01\x02\
+    \x12\x03\x05\x08\x14\n\n\n\x02\x06\0\x12\x04\x07\0\x0c\x01\n\n\n\x03\x06\
+    \0\x01\x12\x03\x07\x08\x13\n\x0b\n\x04\x06\0\x02\0\x12\x03\x08\x04<\n\
+    \x0c\n\x05\x06\0\x02\0\x01\x12\x03\x08\x08\x0e\n\x0c\n\x05\x06\0\x02\0\
+    \x02\x12\x03\x08\x0f\"\n\x0c\n\x05\x06\0\x02\0\x03\x12\x03\x08-8\n\x0b\n\
     \x04\x06\0\x02\x01\x12\x03\t\x04@\n\x0c\n\x05\x06\0\x02\x01\x01\x12\x03\
-    \t\x08\x0f\n\x0c\n\x05\x06\0\x02\x01\x02\x12\x03\t\x10\x1f\n\x0c\n\x05\
-    \x06\0\x02\x01\x03\x12\x03\t)<\n\x0b\n\x04\x06\0\x02\x02\x12\x03\n\x04A\
-    \n\x0c\n\x05\x06\0\x02\x02\x01\x12\x03\n\x08\x13\n\x0c\n\x05\x06\0\x02\
-    \x02\x02\x12\x03\n\x14\x20\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\n*=\n\n\
-    \n\x02\x04\0\x12\x04\r\0\x0f\x01\n\n\n\x03\x04\0\x01\x12\x03\r\x08\x14\n\
-    \x0b\n\x04\x04\0\x02\0\x12\x03\x0e\x04<\n\r\n\x05\x04\0\x02\0\x04\x12\
-    \x04\x0e\x04\r\x16\n\x0c\n\x05\x04\0\x02\0\x06\x12\x03\x0e\x04+\n\x0c\n\
-    \x05\x04\0\x02\0\x01\x12\x03\x0e,7\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\
-    \x0e:;\n\n\n\x02\x04\x01\x12\x04\x11\0\x15\x01\n\n\n\x03\x04\x01\x01\x12\
-    \x03\x11\x08\x13\n\x0b\n\x04\x04\x01\x02\0\x12\x03\x12\x04#\n\r\n\x05\
-    \x04\x01\x02\0\x04\x12\x04\x12\x04\x11\x15\n\x0c\n\x05\x04\x01\x02\0\x06\
-    \x12\x03\x12\x04\x18\n\x0c\n\x05\x04\x01\x02\0\x01\x12\x03\x12\x19\x1e\n\
-    \x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x12!\"\n\x0b\n\x04\x04\x01\x02\x01\
-    \x12\x03\x13\x04<\n\r\n\x05\x04\x01\x02\x01\x04\x12\x04\x13\x04\x12#\n\
-    \x0c\n\x05\x04\x01\x02\x01\x06\x12\x03\x13\x04+\n\x0c\n\x05\x04\x01\x02\
-    \x01\x01\x12\x03\x13,7\n\x0c\n\x05\x04\x01\x02\x01\x03\x12\x03\x13:;\n\
-    \x0b\n\x04\x04\x01\x02\x02\x12\x03\x14\x04\x19\n\r\n\x05\x04\x01\x02\x02\
-    \x04\x12\x04\x14\x04\x13<\n\x0c\n\x05\x04\x01\x02\x02\x05\x12\x03\x14\
-    \x04\n\n\x0c\n\x05\x04\x01\x02\x02\x01\x12\x03\x14\x0b\x14\n\x0c\n\x05\
-    \x04\x01\x02\x02\x03\x12\x03\x14\x17\x18b\x06proto3\
+    \t\x08\x14\n\x0c\n\x05\x06\0\x02\x01\x02\x12\x03\t\x15'\n\x0c\n\x05\x06\
+    \0\x02\x01\x03\x12\x03\t1<\n\x0b\n\x04\x06\0\x02\x02\x12\x03\n\x04@\n\
+    \x0c\n\x05\x06\0\x02\x02\x01\x12\x03\n\x08\x0f\n\x0c\n\x05\x06\0\x02\x02\
+    \x02\x12\x03\n\x10\x1f\n\x0c\n\x05\x06\0\x02\x02\x03\x12\x03\n)<\n\x0b\n\
+    \x04\x06\0\x02\x03\x12\x03\x0b\x04A\n\x0c\n\x05\x06\0\x02\x03\x01\x12\
+    \x03\x0b\x08\x13\n\x0c\n\x05\x06\0\x02\x03\x02\x12\x03\x0b\x14\x20\n\x0c\
+    \n\x05\x06\0\x02\x03\x03\x12\x03\x0b*=\n\n\n\x02\x04\0\x12\x04\x0e\0\x12\
+    \x01\n\n\n\x03\x04\0\x01\x12\x03\x0e\x08\x13\n\x0b\n\x04\x04\0\x02\0\x12\
+    \x03\x0f\x04#\n\r\n\x05\x04\0\x02\0\x04\x12\x04\x0f\x04\x0e\x15\n\x0c\n\
+    \x05\x04\0\x02\0\x06\x12\x03\x0f\x04\x18\n\x0c\n\x05\x04\0\x02\0\x01\x12\
+    \x03\x0f\x19\x1e\n\x0c\n\x05\x04\0\x02\0\x03\x12\x03\x0f!\"\n\x0b\n\x04\
+    \x04\0\x02\x01\x12\x03\x10\x04<\n\r\n\x05\x04\0\x02\x01\x04\x12\x04\x10\
+    \x04\x0f#\n\x0c\n\x05\x04\0\x02\x01\x06\x12\x03\x10\x04+\n\x0c\n\x05\x04\
+    \0\x02\x01\x01\x12\x03\x10,7\n\x0c\n\x05\x04\0\x02\x01\x03\x12\x03\x10:;\
+    \n\x0b\n\x04\x04\0\x02\x02\x12\x03\x11\x04\x19\n\r\n\x05\x04\0\x02\x02\
+    \x04\x12\x04\x11\x04\x10<\n\x0c\n\x05\x04\0\x02\x02\x05\x12\x03\x11\x04\
+    \n\n\x0c\n\x05\x04\0\x02\x02\x01\x12\x03\x11\x0b\x14\n\x0c\n\x05\x04\0\
+    \x02\x02\x03\x12\x03\x11\x17\x18\n\n\n\x02\x04\x01\x12\x04\x14\0\x16\x01\
+    \n\n\n\x03\x04\x01\x01\x12\x03\x14\x08\x14\n\x0b\n\x04\x04\x01\x02\0\x12\
+    \x03\x15\x04<\n\r\n\x05\x04\x01\x02\0\x04\x12\x04\x15\x04\x14\x16\n\x0c\
+    \n\x05\x04\x01\x02\0\x06\x12\x03\x15\x04+\n\x0c\n\x05\x04\x01\x02\0\x01\
+    \x12\x03\x15,7\n\x0c\n\x05\x04\x01\x02\0\x03\x12\x03\x15:;\n\n\n\x02\x04\
+    \x02\x12\x04\x18\0\x1c\x01\n\n\n\x03\x04\x02\x01\x12\x03\x18\x08\x13\n\
+    \x0b\n\x04\x04\x02\x02\0\x12\x03\x19\x04#\n\r\n\x05\x04\x02\x02\0\x04\
+    \x12\x04\x19\x04\x18\x15\n\x0c\n\x05\x04\x02\x02\0\x06\x12\x03\x19\x04\
+    \x18\n\x0c\n\x05\x04\x02\x02\0\x01\x12\x03\x19\x19\x1e\n\x0c\n\x05\x04\
+    \x02\x02\0\x03\x12\x03\x19!\"\n\x0b\n\x04\x04\x02\x02\x01\x12\x03\x1a\
+    \x04<\n\r\n\x05\x04\x02\x02\x01\x04\x12\x04\x1a\x04\x19#\n\x0c\n\x05\x04\
+    \x02\x02\x01\x06\x12\x03\x1a\x04+\n\x0c\n\x05\x04\x02\x02\x01\x01\x12\
+    \x03\x1a,7\n\x0c\n\x05\x04\x02\x02\x01\x03\x12\x03\x1a:;\n\x0b\n\x04\x04\
+    \x02\x02\x02\x12\x03\x1b\x04\x19\n\r\n\x05\x04\x02\x02\x02\x04\x12\x04\
+    \x1b\x04\x1a<\n\x0c\n\x05\x04\x02\x02\x02\x05\x12\x03\x1b\x04\n\n\x0c\n\
+    \x05\x04\x02\x02\x02\x01\x12\x03\x1b\x0b\x14\n\x0c\n\x05\x04\x02\x02\x02\
+    \x03\x12\x03\x1b\x17\x18b\x06proto3\
 ";
 
 static file_descriptor_proto_lazy: ::protobuf::rt::LazyV2<::protobuf::descriptor::FileDescriptorProto> = ::protobuf::rt::LazyV2::INIT;
