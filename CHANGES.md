@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+- Fix bug for specifying node ID #8 @mosuka
 - Update protobuf #7 @mosuka
 - Refactor protobuf #6 @mosuka
 - Refactoring #5 @mosuka
