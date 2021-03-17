@@ -30,13 +30,10 @@ pub enum Msg {
         change: ConfChange,
         cb: ProposeCallback,
     },
-    Config {
+    Read {
         cb: ProposeCallback,
     },
     Address(AddressState),
-    // Here we don't use Raft Message, so use dead_code to
-    // avoid the compiler warning.
-    #[allow(dead_code)]
     Raft(Message),
 }
 
@@ -136,7 +133,7 @@ pub fn init_and_run(
                         .unwrap();
                 }
             }
-            Ok(Msg::Config { cb: callback }) => {
+            Ok(Msg::Read { cb: callback }) => {
                 let leader_id = r.raft.leader_id;
                 callback(leader_id as i32, addresses.clone());
                 continue;

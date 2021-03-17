@@ -2,6 +2,7 @@ use clap::{crate_authors, crate_name, crate_version, App, AppSettings, Arg, SubC
 
 use meteora::cli::delete::run_delete_cli;
 use meteora::cli::get::run_get_cli;
+use meteora::cli::leave::run_leave_cli;
 use meteora::cli::put::run_put_cli;
 use meteora::cli::start::run_start_cli;
 use meteora::cli::status::run_status_cli;
@@ -33,7 +34,7 @@ fn main() -> Result<(), std::io::Error> {
                         .long("id")
                         .value_name("ID")
                         .env("METEORA_ID")
-                        .default_value("1")
+                        .required(true)
                         .takes_value(true),
                 )
                 .arg(
@@ -109,12 +110,14 @@ fn main() -> Result<(), std::io::Error> {
                     Arg::with_name("KEY")
                         .help("A unique key that identifies the value in the key-value store.")
                         .value_name("KEY")
+                        .required(true)
                         .takes_value(true),
                 )
                 .arg(
                     Arg::with_name("VALUE")
                         .help("Value in the key-value tore.")
                         .value_name("VALUE")
+                        .required(true)
                         .takes_value(true),
                 )
         )
@@ -141,6 +144,7 @@ fn main() -> Result<(), std::io::Error> {
                     Arg::with_name("KEY")
                         .help("A unique key that identifies the value in the key-value store.")
                         .value_name("KEY")
+                        .required(true)
                         .takes_value(true),
                 )
         )
@@ -167,6 +171,7 @@ fn main() -> Result<(), std::io::Error> {
                     Arg::with_name("KEY")
                         .help("A unique key that identifies the value in the key-value store.")
                         .value_name("KEY")
+                        .required(true)
                         .takes_value(true),
                 )
         )
@@ -190,6 +195,35 @@ fn main() -> Result<(), std::io::Error> {
                         .takes_value(true)
                 )
         )
+        .subcommand(
+            SubCommand::with_name("leave")
+                .name("leave")
+                .setting(AppSettings::DeriveDisplayOrder)
+                .version(crate_version!())
+                .author(crate_authors!())
+                .about("Delete the node from the cluster")
+                .help_message("Prints help information.")
+                .version_message("Prints version information.")
+                .version_short("v")
+                .arg(
+                    Arg::with_name("ADDRESS")
+                        .help("An address that provides the raft service.")
+                        .short("a")
+                        .long("address")
+                        .value_name("ADDRESS:KV_PORT")
+                        .default_value("127.0.0.1:7000")
+                        .takes_value(true)
+                )
+                .arg(
+                    Arg::with_name("ID")
+                        .help("A number that is unique ID in the cluster. It must be greater than or equal to 1.")
+                        .short("i")
+                        .long("id")
+                        .value_name("ID")
+                        .required(true)
+                        .takes_value(true),
+                )
+        )
         .get_matches();
 
     let (subcommand, some_options) = app.subcommand();
@@ -200,6 +234,7 @@ fn main() -> Result<(), std::io::Error> {
         "get" => run_get_cli,
         "delete" => run_delete_cli,
         "status" => run_status_cli,
+        "leave" => run_leave_cli,
         _ => panic!("Subcommand {} is unknown", subcommand),
     };
 

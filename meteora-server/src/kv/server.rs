@@ -28,8 +28,6 @@ pub struct KVServer {
 
 #[derive(Serialize, Deserialize, Clone)]
 pub enum Op {
-    Status {},
-    Get { key: Vec<u8> },
     Put { key: Vec<u8>, val: Vec<u8> },
     Delete { key: Vec<u8> },
 }
@@ -72,18 +70,12 @@ impl KvService for KVServer {
         let (s1, r1) = mpsc::channel();
         let db = Arc::clone(&self.db);
         let sender = self.sender.clone();
-        let op = Op::Get {
-            key: req.get_key().to_vec(),
-        };
-        let seq = self.seq;
         let node_id = self.node_id;
 
         self.seq += 1;
 
         sender
-            .send(config::Msg::Propose {
-                seq,
-                op,
+            .send(config::Msg::Read {
                 cb: Box::new(
                     move |leader_id: i32, addresses: HashMap<u64, NodeAddress>| {
                         // Get
@@ -237,12 +229,6 @@ fn apply_daemon(receiver: Receiver<Op>, db: Arc<DB>) {
             }
         };
         match op {
-            Op::Status {} => {
-                // noop
-            }
-            Op::Get { key: _k } => {
-                // noop
-            }
             Op::Put { key, val } => {
                 db.put(key.as_slice(), val.as_slice()).unwrap();
             }

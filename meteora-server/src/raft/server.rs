@@ -38,7 +38,7 @@ impl RaftService for RaftServer {
         let node_id = self.node_id;
 
         sender
-            .send(config::Msg::Config {
+            .send(config::Msg::Read {
                 cb: Box::new(
                     move |leader_id: i32, addresses: HashMap<u64, NodeAddress>| {
                         // Status
