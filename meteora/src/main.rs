@@ -83,8 +83,13 @@ fn main() -> Result<(), std::io::Error> {
                         .short("p")
                         .long("peer-raft-address")
                         .value_name("ADDRESS:RAFT_PORT")
-                        // .default_value("127.0.0.1:7000")
                         .takes_value(true),
+                )
+                .arg(
+                    Arg::with_name("ENABLE_AUTO_LEAVING")
+                        .help("Automatically delete the node from the cluster when stopped.")
+                        .short("l")
+                        .long("enable-auto-leaving"),
                 )
         )
         .subcommand(
