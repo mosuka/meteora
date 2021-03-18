@@ -49,6 +49,12 @@ impl RaftClient {
 
         let mut clients = HashMap::new();
         clients.insert(node_id, Arc::new(raft_client));
+        for (i, a) in &addresses {
+            if node_id != *i {
+                let c = create_raft_client(a.to_string());
+                clients.insert(*i, Arc::new(c));
+            }
+        }
 
         RaftClient {
             leader_id,

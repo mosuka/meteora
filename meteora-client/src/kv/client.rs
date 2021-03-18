@@ -55,6 +55,12 @@ impl KVClient {
 
         let mut clients = HashMap::new();
         clients.insert(node_id, Arc::new(kv_client));
+        for (i, a) in &addresses {
+            if node_id != *i {
+                let c = create_kv_client(a.to_string());
+                clients.insert(*i, Arc::new(c));
+            }
+        }
 
         KVClient {
             leader_id,

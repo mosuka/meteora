@@ -30,17 +30,17 @@ pub fn run_start_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
         .unwrap();
     let kv_port = matches.value_of("KV_PORT").unwrap().parse::<u16>().unwrap();
     let mut peer_address = "";
+    let data_directory = matches.value_of("DATA_DIRECTORY").unwrap();
     if let Some(_peer_address) = matches.value_of("PEER_RAFT_ADDRESS") {
         peer_address = _peer_address;
     }
-    let data_directory = matches.value_of("DATA_DIRECTORY").unwrap();
 
     let raft_address = format!("{}:{}", address, raft_port);
     let kv_address = format!("{}:{}", address, kv_port);
 
     let node_address = NodeAddress {
         kv_address,
-        raft_address,
+        raft_address: raft_address.clone(),
         unknown_fields: Default::default(),
         cached_size: Default::default(),
     };
@@ -101,6 +101,20 @@ pub fn run_start_cli(matches: &ArgMatches) -> Result<(), std::io::Error> {
             recv(sigterm_receiver) -> _ => {
                 debug!("receive signal");
                 break;
+            }
+        }
+    }
+
+    if matches.is_present("ENABLE_AUTO_LEAVING") {
+        info!("leaving from the cluster");
+        let mut raft_client = RaftClient::new(&raft_address);
+
+        match raft_client.leave(id) {
+            Ok(v) => {
+                info!("{}", serde_json::to_string(&v).unwrap());
+            }
+            Err(e) => {
+                error!("{:?}", e);
             }
         }
     }
