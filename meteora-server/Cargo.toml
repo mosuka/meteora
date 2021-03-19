@@ -13,13 +13,13 @@ categories = ["database"]
 license = "MIT"
 
 [dependencies]
-bincode = "1.2.1"
+bincode = "1.3.2"
 futures = "0.1.29"
 grpcio = { version = "0.4.7", features = [ "secure" ] }
-log = "0.4.8"
-protobuf = "2.22.0"
+log = "0.4.14"
+protobuf = "2.22.1"
 raft = "0.4.3"
 rocksdb = "0.15.0"
-serde = { version = "1.0.104", features = ["derive"] }
+serde = { version = "1.0.124", features = ["derive"] }
 
 meteora-proto = { version = "0.1.0", path = "../meteora-proto" }
