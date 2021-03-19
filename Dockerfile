@@ -33,7 +33,7 @@ RUN git clone https://github.com/facebook/rocksdb.git -b v6.11.4 \
 COPY . ./
 
 RUN rustup component add rustfmt --toolchain ${RUST_VERSION}-x86_64-unknown-linux-gnu \
-    && cargo install --version 2.22.0 protobuf-codegen \
+    && cargo install --version 2.22.1 protobuf-codegen \
     && cargo build --release
 
 FROM debian:bullseye-slim
