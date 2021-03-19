@@ -19,7 +19,7 @@ grpcio = { version = "0.4.7", features = [ "secure" ] }
 log = "0.4.8"
 protobuf = "2.22.0"
 raft = "0.4.3"
-rocksdb = "0.13.0"
+rocksdb = "0.15.0"
 serde = { version = "1.0.104", features = ["derive"] }
 
 meteora-proto = { version = "0.1.0", path = "../meteora-proto" }

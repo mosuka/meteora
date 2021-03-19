@@ -44,12 +44,12 @@ ifeq ($(shell curl -s -XGET https://crates.io/api/v1/crates/meteora-client | jq 
 endif
 
 docker-build:
-	docker build -t mosuka/meteora:latest .
-	docker tag mosuka/meteora:latest mosuka/meteora:$(VERSION)
+	docker build -t meteorakvs/meteora:latest .
+	docker tag meteorakvs/meteora:latest meteorakvs/meteora:$(VERSION)
 
 docker-push:
-	docker push mosuka/meteora:latest
-	docker push mosuka/meteora:$(VERSION)
+	docker push meteorakvs/meteora:latest
+	docker push meteorakvs/meteora:$(VERSION)
 
 docker-clean:
 	docker rmi -f $(shell docker images --filter "dangling=true" -q --no-trunc)
