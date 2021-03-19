@@ -34,7 +34,7 @@ fn main() -> Result<(), std::io::Error> {
                         .long("id")
                         .value_name("ID")
                         .env("METEORA_ID")
-                        .required(true)
+                        .default_value("1")
                         .takes_value(true),
                 )
                 .arg(
