@@ -1,6 +1,6 @@
-ARG RUST_VERSION=1.42.0
+ARG RUST_VERSION=1.50.0
 
-FROM rust:${RUST_VERSION}-slim-stretch AS builder
+FROM rust:${RUST_VERSION}-slim-buster AS builder
 
 WORKDIR /repo
 
@@ -8,38 +8,47 @@ RUN set -ex \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
        build-essential \
-       cmake \
-       # For rocksdb
        clang \
-       librocksdb-dev \
+       cmake \
+       git \
+       # For rocksdb
+       libgflags-dev \
+       libsnappy-dev \
+       zlib1g-dev \
+       libbz2-dev \
+       liblz4-dev \
+       libzstd-dev \
        # For protobuf
        protobuf-compiler \
        golang-go \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && cargo install protobuf-codegen
+    && rm -rf /var/lib/apt/lists/*
+
+# build rocksdb
+RUN git clone https://github.com/facebook/rocksdb.git -b v6.11.4 \
+    && cd rocksdb \
+    && make static_lib \
+    && make install
 
 COPY . ./
-RUN make build
 
+RUN rustup component add rustfmt --toolchain ${RUST_VERSION}-x86_64-unknown-linux-gnu \
+    && cargo install --version 2.22.0 protobuf-codegen \
+    && cargo build --release
 
-FROM debian:stretch-slim
+FROM debian:bullseye-slim
 
 WORKDIR /
 
 RUN set -ex \
     && apt-get update \
-    && apt-get install -y --no-install-recommends \
-       librocksdb-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /data
-
 COPY --from=builder /repo/bin /usr/local/bin
-#COPY --from=builder /repo/etc/* /etc/
+COPY --from=builder /usr/local/lib/librocksdb.a /usr/local/lib/librocksdb.a
 
 EXPOSE 5000 7000
 
 ENTRYPOINT [ "meteora" ]
-CMD [ "--help" ]
+CMD [ "start" ]

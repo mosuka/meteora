@@ -153,3 +153,18 @@ You'll see the result in JSON format. The result of the above command is:
 The above commands run nodes on the same host, so each node must listen on a different port. This would not be necessary if each node runs on a different host. Recommend 3 or more odd number of nodes in the cluster to avoid split-brain.
 When deploying to a single host, if that host goes down due to hardware failure, all of the servers in the cluster will be stopped, so recommend deploying to a different host.
 
+
+## Using Docker container
+
+See the available Docker container image version at the following URL:
+- [https://hub.docker.com/r/meteorakvs/meteora/tags/](https://hub.docker.com/r/meteorakvs/mteora/tags/)
+
+### Running on Docker
+
+You can run the Docker container image with the following command:
+
+```shell
+docker run --rm --name meteora \
+       -p 5000:5000 -p 7000:7000 \
+       meteorakvs/meteora:latest
+```
