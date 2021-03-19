@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+- Update Dockerfile #13 @mosuka
+- Remove required flag #12 @mosuka
 - Add enable-auto-leaving option #11 @mosuka
 - Add leave command #10 @mosuka
 - Add status command #9 @mosuka
