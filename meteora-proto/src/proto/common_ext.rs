@@ -28,7 +28,7 @@ impl<'de> Deserialize<'de> for NodeAddress {
         enum Field {
             KvAddress,
             RaftAddress,
-        };
+        }
 
         impl<'de> Deserialize<'de> for Field {
             fn deserialize<D>(deserializer: D) -> Result<Field, D::Error>

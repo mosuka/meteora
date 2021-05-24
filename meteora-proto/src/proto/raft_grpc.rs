@@ -1,12 +1,11 @@
 // This file is generated. Do not edit
 // @generated
 
-// https://github.com/rust-lang/rust-clippy/issues/702
+// https://github.com/Manishearth/rust-clippy/issues/702
 #![allow(unknown_lints)]
 #![allow(clippy::all)]
 
-#![allow(unused_attributes)]
-#![rustfmt::skip]
+#![cfg_attr(rustfmt, rustfmt_skip)]
 
 #![allow(box_pointers)]
 #![allow(dead_code)]
@@ -15,6 +14,7 @@
 #![allow(non_snake_case)]
 #![allow(non_upper_case_globals)]
 #![allow(trivial_casts)]
+#![allow(unsafe_code)]
 #![allow(unused_imports)]
 #![allow(unused_results)]
 
@@ -147,7 +147,7 @@ pub fn create_raft_service<S: RaftService + Send + Clone + 'static>(s: S) -> ::g
     builder = builder.add_unary_handler(&METHOD_RAFT_SERVICE_SEND_MSG, move |ctx, req, resp| {
         instance.send_msg(ctx, req, resp)
     });
-    let mut instance = s.clone();
+    let mut instance = s;
     builder = builder.add_unary_handler(&METHOD_RAFT_SERVICE_SEND_ADDRESS, move |ctx, req, resp| {
         instance.send_address(ctx, req, resp)
     });

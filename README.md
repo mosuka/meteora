@@ -1,4 +1,4 @@
-# Meteora
+rgo # Meteora
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -15,14 +15,15 @@ The following products are required to build Meteora:
 
 - Rust: >= 1.42.0
 - make: >= 3.81
-- protoc >= 3.9.2
+- protoc >= 3.6.1
 - rocksdb >= 5.18.3
 
 Protobuf is needed only for code generation, `rust-protobuf` runtime does not use `protobuf` library.
 Installl `protoc-gen-rust` program (which is `protoc` plugin) as follows"
 
 ```bash
-% cargo install protobuf-codegen 
+% cargo install --version 2.22.1 protobuf-codegen
+% cargo install --version 0.5.0 grpcio-compiler
 ```
 
 
